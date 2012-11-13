@@ -14,6 +14,7 @@ namespace MarkupParser.Nodes
 
 		protected override string ToString(WhitespaceMode mode, string indentation, int currentDepth)
 		{
+			// todo add indent if necessary
 			return string.Format("<![CDATA[{0}]]>", Value);
 		}
 	}
