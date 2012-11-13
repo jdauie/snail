@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MarkupParser.Nodes;
+using Snail.Nodes;
 
-namespace MarkupParser
+namespace Snail
 {
 	internal class TokenGroup
 	{

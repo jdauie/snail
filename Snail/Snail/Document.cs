@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using MarkupParser.Nodes;
+using Snail.Nodes;
 
-namespace MarkupParser
+namespace Snail
 {
 	// Why is this so slow?
 	//internal struct Substring
@@ -34,7 +34,7 @@ namespace MarkupParser
 			//string text2 = tree.ToFormattedString(WhitespaceMode.Strip);
 			//string text3 = tree.ToFormattedString(WhitespaceMode.Insert, "\t");
 
-			//string testFile = @"\projects\MarkupParser\test1.htm";
+			//string testFile = @"\projects\Snail\test1.htm";
 			//File.WriteAllText(testFile, text2);
 		}
 
