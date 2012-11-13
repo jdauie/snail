@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MarkupParser
+namespace Snail
 {
 	/// <summary>
 	/// IDL values from http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/idl-definitions.html

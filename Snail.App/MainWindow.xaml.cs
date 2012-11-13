@@ -14,9 +14,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using MarkupParser;
+using Snail;
 
-namespace MarkupParser.App
+namespace Snail.App
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MarkupParser
+namespace Snail
 {
 	/// <summary>
 	/// http://gregbeech.com/blog/from-projections-to-comparers
