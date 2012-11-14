@@ -8,19 +8,6 @@ using Snail.Nodes;
 
 namespace Snail
 {
-	// Why is this so slow?
-	//internal struct Substring
-	//{
-	//    public readonly int Index;
-	//    public readonly int Count;
-
-	//    public Substring(int index, int count)
-	//    {
-	//        Index = index;
-	//        Count = count;
-	//    }
-	//}
-
 	public class Document
 	{
 		public static void Parse(string text)
@@ -56,7 +43,7 @@ namespace Snail
 			//var tags = new List<string>(); // THIS IS FOR DEBUGGING ONLY
 			var tags = new List<long>(); // THIS IS THE BEST SO FAR, PACKING INDEX AND COUNT
 
-			var nameBuffer = new char[7];
+			//var nameBuffer = new char[6];
 
 			//var specialBlocks = new string[] { "script", "style" };
 			
@@ -95,21 +82,30 @@ namespace Snail
 					if (jc < '[')
 						jc += (char)('a' - 'A');
 
-					//if (jc == '!')
-					//{
-					//    // check if this is a comment block and find the ending "--"
-					//}
-					//if (jc == '?')
-					//{
-					//    // processing instruction
-					//}
-					//else if (jc == 's' || jc == 'S')
-					if (jc == 's')
+					if (jc == '!')
 					{
-						nameBuffer[0] = 's';
-						
+						// check if this is a comment block and find the ending "--"
+					}
+					else if (jc == 's' && tagEndIndex - i > 5)
+					{
+						//nameBuffer[0] = 's';
 
-						jc = text[j + 1];
+						//// match style/script
+						//int maxSearchLength = tagEndIndex - i - 1;
+						//if (maxSearchLength > nameBuffer.Length)
+						//    maxSearchLength = nameBuffer.Length;
+
+						//// copy the rest of the string as lowercase
+						//for (int k = 1; k < maxSearchLength; k++)
+						//{
+						//    char kc = text[j + k];
+						//    if (kc < '[')
+						//        kc += (char)('a' - 'A');
+						//    nameBuffer[k] = kc;
+						//}
+
+						//string test = new string(nameBuffer);
+						//Console.WriteLine(test.Length.ToString());
 
 						// accumulate until whitespace or end
 						int nameStartIndex = j;
@@ -122,11 +118,32 @@ namespace Snail
 
 						var tagNameLength = j - i - 1;
 
-						if (tagNameLength == 6 && String.Compare(text, i + 1, "script", 0, 6, true) == 0)
+						//if (tagNameLength == "style".Length)
+						//{
+						//    int m = 1;
+						//    while (m < "style".Length && text[nameStartIndex + m] != "style"[m])
+						//        ++m;
+						//    if (m == "style".Length)
+						//    {
+						//        // find </style>
+						//    }
+						//}
+						//else if (tagNameLength == "script".Length)
+						//{
+						//    int m = 1;
+						//    while (m < "script".Length && text[nameStartIndex + m] != "script"[m])
+						//        ++m;
+						//    if (m == "script".Length)
+						//    {
+						//        // find </script>
+						//    }
+						//}
+
+						if (tagNameLength == "script".Length && String.Compare(text, i + 1, "script", 0, 6, true) == 0)
 						{
 							// find </script>
 						}
-						else if (tagNameLength == 5 && String.Compare(text, i + 1, "style", 0, 5, true) == 0)
+						else if (tagNameLength == "style".Length && String.Compare(text, i + 1, "style", 0, 5, true) == 0)
 						{
 							// find </style>
 						}
