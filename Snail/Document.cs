@@ -58,7 +58,7 @@ namespace Snail
 						textEndIndex = text.Length;
 
 					//tags.Add(text.Substring(i, textEndIndex - i));
-					tags.Add(i | (((long)textEndIndex - i) << 32));
+					tags.Add(i | (((long)textEndIndex - i) << 24));
 
 					i = textEndIndex;
 				}
@@ -76,39 +76,22 @@ namespace Snail
 					// check if it is a script/style/comment/processing instruction
 					// (so the contents can be skipped)
 					
-					// 1) skip any whitespace? Probably not.
+					// skip whitespace? Not for now.
 					int j = i + 1;
 					char jc = text[j];
-					if (jc < '[')
-						jc += (char)('a' - 'A');
 
 					if (jc == '!')
 					{
 						// check if this is a comment block and find the ending "--"
+						if (String.Compare(text, j + 1, "--", 0, "script".Length) == 0)
+						{
+							// find -->
+						}
 					}
-					else if (jc == 's' && tagEndIndex - i > 5)
+					else if ((jc == 's' || jc == 'S') && tagEndIndex - i > 5)
 					{
-						//nameBuffer[0] = 's';
-
-						//// match style/script
-						//int maxSearchLength = tagEndIndex - i - 1;
-						//if (maxSearchLength > nameBuffer.Length)
-						//    maxSearchLength = nameBuffer.Length;
-
-						//// copy the rest of the string as lowercase
-						//for (int k = 1; k < maxSearchLength; k++)
-						//{
-						//    char kc = text[j + k];
-						//    if (kc < '[')
-						//        kc += (char)('a' - 'A');
-						//    nameBuffer[k] = kc;
-						//}
-
-						//string test = new string(nameBuffer);
-						//Console.WriteLine(test.Length.ToString());
-
 						// accumulate until whitespace or end
-						int nameStartIndex = j;
+						//int nameStartIndex = j;
 						while (j < tagEndIndex)
 						{
 							if (Char.IsWhiteSpace(text[j]))
@@ -118,90 +101,47 @@ namespace Snail
 
 						var tagNameLength = j - i - 1;
 
-						//if (tagNameLength == "style".Length)
-						//{
-						//    int m = 1;
-						//    while (m < "style".Length && text[nameStartIndex + m] != "style"[m])
-						//        ++m;
-						//    if (m == "style".Length)
-						//    {
-						//        // find </style>
-						//    }
-						//}
-						//else if (tagNameLength == "script".Length)
-						//{
-						//    int m = 1;
-						//    while (m < "script".Length && text[nameStartIndex + m] != "script"[m])
-						//        ++m;
-						//    if (m == "script".Length)
-						//    {
-						//        // find </script>
-						//    }
-						//}
-
-						if (tagNameLength == "script".Length && String.Compare(text, i + 1, "script", 0, 6, true) == 0)
+						if (tagNameLength == "script".Length && String.Compare(text, j, "script", 0, "script".Length, true) == 0)
 						{
 							// find </script>
+							//int endTagStartIndex = text.IndexOf("</script>", StringComparison.OrdinalIgnoreCase);
+							//if (endTagStartIndex != -1)
+							//{
+							//    // current (start) tag
+							//    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
+							//    // special contents
+							//    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
+							//    // closing tag
+							//    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
+							//}
 						}
-						else if (tagNameLength == "style".Length && String.Compare(text, i + 1, "style", 0, 5, true) == 0)
+						else if (tagNameLength == "style".Length && String.Compare(text, j, "style", 0, "style".Length, true) == 0)
 						{
 							// find </style>
 						}
 					}
-
-					//while (j < tagEndIndex)
-					//{
-					//    if (!Char.IsWhiteSpace(text[j]))
-					//        break;
-					//    ++j;
-					//}
-
-					// 2) accumulate until whitespace or end
-					//int nameStartIndex = j;
-					//while (j < tagEndIndex)
-					//{
-					//    if (Char.IsWhiteSpace(text[j]))
-					//        break;
-					//    ++j;
-					//}
-
-					//var tagNameLength = j - i - 1;
-
-					// debug
-					//if (jc == 's' || jc == 'S')
-					//{
-					//    var tagName = text.Substring(i + 1, j - i - 1);
-
-					//    if (tagName == "script")
-					//    {
-					//        ++i;
-					//    }
-					//}
-
-					//if (tagNameLength == 6 && String.Compare(text, i + 1, "script", 0, 6, true) == 0)
-					//{
-					//    // find </script>
-					//}
-					//else if (tagNameLength == 5 && String.Compare(text, i + 1, "style", 0, 5, true) == 0)
-					//{
-					//    // find </style>
-					//}
-
-
-
-					//tags.Add(text.Substring(i, tagEndIndex - i + 1));
-					tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
-
+					else
+					{
+						//tags.Add(text.Substring(i, tagEndIndex - i + 1));
+						tags.Add(i | (((long) tagEndIndex - i + 1) << 24));
+					}
 					i = tagEndIndex;
 				}
 
 				++i;
 			}
 
+			// low...high
+			// [  24  ][  24  ][  16  ]
+			//  index   count   other
+
 			//var sb = new StringBuilder(text.Length);
 			//foreach (var tag in tags)
 			//{
-			//    sb.Append(text.Substring((int)tag, (int)(tag >> 32)));
+			//    int index = ((int)tag << 8) >> 8;
+			//    int length = (int)((tag << 16) >> (24 + 16));
+			//    ushort other = (ushort)(tag >> 64 - 16);
+			//    sb.Append(text.Substring(index, length));
 			//}
 			//var textRecreated = sb.ToString();
 			//Console.WriteLine(textRecreated.Length);
@@ -210,29 +150,6 @@ namespace Snail
 			//Console.WriteLine(textRecreated.Length);
 
 			return tags.Count;
-		}
-
-		private static bool CompareStrings(string s1, string s2)
-		{
-			return false;
-		}
-
-		private static void IsStyleBlock(string text, int j)
-		{
-			char jc;
-			jc = text[j + 2];
-			if (jc == 'y' || jc == 'Y')
-			{
-				jc = text[j + 3];
-				if (jc == 'l' || jc == 'L')
-				{
-					jc = text[j + 4];
-					if (jc == 'e' || jc == 'E')
-					{
-						//yup
-					}
-				}
-			}
 		}
 	}
 }
