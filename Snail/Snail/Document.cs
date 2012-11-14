@@ -53,37 +53,16 @@ namespace Snail
 			#endregion
 
 			// pre-allocating is only a marginal improvement
-			//var tags = new List<string>(); // THIS IS FOR DEBUGGING ONLY, I WOULD GUESS
-			//var tags = new List<int>();
+			//var tags = new List<string>(); // THIS IS FOR DEBUGGING ONLY
 			var tags = new List<long>(); // THIS IS THE BEST SO FAR, PACKING INDEX AND COUNT
-			//var tags = new List<Substring>();
-			//var tags = new SubstringList(text);
-			//var tags = new SubstringList2();
 
-			//var name = new StringBuilder();
+			var nameBuffer = new char[7];
 
-			string[] specialBlocks = new string[] { "script", "style" };
+			//var specialBlocks = new string[] { "script", "style" };
 			
 			int i = 0;
 			while (i < text.Length)
 			{
-				#region Same performance; Different Calls
-				//var textEndIndex = FindTextEnd(text, i);
-				//if (textEndIndex != i)
-				//{
-				//    tags.Add(text.Substring(i, textEndIndex - i));
-				//    i = textEndIndex;
-				//}
-
-				//var tagEndIndex = FindTagEnd(text, i + 1);
-				//if (tagEndIndex < text.Length)
-				//{
-				//    tags.Add(text.Substring(i, tagEndIndex - i + 1));
-				//    //tags.Add(i);
-				//}
-				//i = tagEndIndex + 1;
-				#endregion
-
 				// exclude search char
 				var textEndIndex = text.IndexOf('<', i);
 				if (textEndIndex != i)
@@ -92,10 +71,7 @@ namespace Snail
 						textEndIndex = text.Length;
 
 					//tags.Add(text.Substring(i, textEndIndex - i));
-					//tags.Add(i);
 					tags.Add(i | (((long)textEndIndex - i) << 32));
-					//tags.Add(new Substring(i, textEndIndex - i));
-					//tags.Add(i, textEndIndex - i);
 
 					i = textEndIndex;
 				}
@@ -116,6 +92,8 @@ namespace Snail
 					// 1) skip any whitespace? Probably not.
 					int j = i + 1;
 					char jc = text[j];
+					if (jc < '[')
+						jc += (char)('a' - 'A');
 
 					//if (jc == '!')
 					//{
@@ -126,8 +104,11 @@ namespace Snail
 					//    // processing instruction
 					//}
 					//else if (jc == 's' || jc == 'S')
-					if (jc == 's' || jc == 'S')
+					if (jc == 's')
 					{
+						nameBuffer[0] = 's';
+						
+
 						jc = text[j + 1];
 
 						// accumulate until whitespace or end
@@ -192,10 +173,7 @@ namespace Snail
 
 
 					//tags.Add(text.Substring(i, tagEndIndex - i + 1));
-					//tags.Add(i);
 					tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
-					//tags.Add(new Substring(i, tagEndIndex - i + 1));
-					//tags.Add(i, textEndIndex - i + 1);
 
 					i = tagEndIndex;
 				}
@@ -238,80 +216,6 @@ namespace Snail
 					}
 				}
 			}
-		}
-
-		#region Same performance; Different calls
-		private static int FindTagEnd(string text, int startIndex)
-		{
-			int i = startIndex;
-			while (i < text.Length && text[i] != '>')
-				++i;
-			return i;
-		}
-
-		private static int FindTextEnd(string text, int startIndex)
-		{
-			int i = startIndex;
-			while (i < text.Length && text[i] != '<')
-				++i;
-			return i;
-		}
-		#endregion
-	}
-
-	internal class SubstringList
-	{
-		const int CHUNK_COUNT = 1000;
-		const int LAST_INDEX = CHUNK_COUNT - 1;
-
-		private readonly string m_text;
-		private readonly List<long[]> m_substrings;
-		private long[] m_currentGroup;
-		private int m_currentIndex;
-
-		public int Count
-		{
-			get { return (m_substrings.Count - 1) * CHUNK_COUNT + m_currentIndex + 1; }
-		}
-
-		public SubstringList(string text)
-		{
-			m_text = text;
-			m_substrings = new List<long[]>();
-			m_currentIndex = LAST_INDEX;
-		}
-
-		public void Add(int index, int count)
-		{
-			if (m_currentIndex == LAST_INDEX)
-			{
-				m_currentGroup = new long[CHUNK_COUNT];
-				m_substrings.Add(m_currentGroup);
-				m_currentIndex = -1;
-			}
-			++m_currentIndex;
-
-			m_currentGroup[m_currentIndex] = index | (((long)count) << 32);
-		}
-	}
-
-	internal class SubstringList2
-	{
-		private readonly List<long> m_substrings;
-
-		public int Count
-		{
-			get { return m_substrings.Count; }
-		}
-
-		public SubstringList2()
-		{
-			m_substrings = new List<long>();
-		}
-
-		public void Add(int index, int count)
-		{
-			m_substrings.Add(index | (((long)count) << 32));
 		}
 	}
 }
