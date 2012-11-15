@@ -40,12 +40,7 @@ namespace Snail
 			#endregion
 
 			// pre-allocating is only a marginal improvement
-			//var tags = new List<string>(); // THIS IS FOR DEBUGGING ONLY
-			var tags = new List<long>(); // THIS IS THE BEST SO FAR, PACKING INDEX AND COUNT
-
-			//var nameBuffer = new char[6];
-
-			//var specialBlocks = new string[] { "script", "style" };
+			var tags = new List<long>();
 			
 			int i = 0;
 			while (i < text.Length)
@@ -57,7 +52,6 @@ namespace Snail
 					if (textEndIndex == -1)
 						textEndIndex = text.Length;
 
-					//tags.Add(text.Substring(i, textEndIndex - i));
 					tags.Add(i | (((long)textEndIndex - i) << 24));
 
 					i = textEndIndex;
@@ -88,7 +82,12 @@ namespace Snail
 							// find -->
 						}
 					}
-					else if ((jc == 's' || jc == 'S') && tagEndIndex - i > 5)
+					else if (jc == '?')
+					{
+						// something
+					}
+					//else if ((jc == 's' || jc == 'S') && tagEndIndex - i > 5)
+					else
 					{
 						// accumulate until whitespace or end
 						//int nameStartIndex = j;
@@ -99,7 +98,7 @@ namespace Snail
 							++j;
 						}
 
-						var tagNameLength = j - i - 1;
+						int tagNameLength = j - i - 1;
 
 						if (tagNameLength == "script".Length && String.Compare(text, j, "script", 0, "script".Length, true) == 0)
 						{
@@ -119,11 +118,9 @@ namespace Snail
 						{
 							// find </style>
 						}
-					}
-					else
-					{
-						//tags.Add(text.Substring(i, tagEndIndex - i + 1));
-						tags.Add(i | (((long) tagEndIndex - i + 1) << 24));
+
+						//long tagLengthIncludingBrackets = tagEndIndex - i + 1;
+						tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
 					}
 					i = tagEndIndex;
 				}
@@ -135,12 +132,22 @@ namespace Snail
 			// [  24  ][  24  ][  16  ]
 			//  index   count   other
 
+			//var test = new List<string>();
 			//var sb = new StringBuilder(text.Length);
 			//foreach (var tag in tags)
 			//{
 			//    int index = ((int)tag << 8) >> 8;
 			//    int length = (int)((tag << 16) >> (24 + 16));
 			//    ushort other = (ushort)(tag >> 64 - 16);
+
+			//    //sb.Append(text.Substring(index, length));
+
+			//    string s = null;
+			//    if (other != 0)
+			//    {
+			//        test.Add(string.Format("<{0}>", text.Substring(index + 1, other)));
+			//    }
+
 			//    sb.Append(text.Substring(index, length));
 			//}
 			//var textRecreated = sb.ToString();
