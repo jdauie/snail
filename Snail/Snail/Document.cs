@@ -80,6 +80,7 @@ namespace Snail
 						if (String.Compare(text, j + 1, "--", 0, "--".Length) == 0)
 						{
 							// find -->
+
 							int searchPos = j + 3;
 							while (searchPos != -1)
 							{
@@ -99,15 +100,10 @@ namespace Snail
 
 							if (searchPos != -1)
 							{
+								// add entire comment as one tag
 								tagEndIndex = searchPos + "-->".Length - 1;
 								tags.Add(i | (((long)tagEndIndex - i + 1) << 24));
 							}
-
-
-							// add entire comment as one tag
-
-							// why is this so expensive?
-							// should I just keep getting the next '>' char and checking the 2 chars in front of it?
 
 							//int closeCommentIndex = text.IndexOf("-->", j + 3);
 							//if (closeCommentIndex != -1)
