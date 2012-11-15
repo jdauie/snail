@@ -76,17 +76,31 @@ namespace Snail
 
 					if (jc == '!')
 					{
-						// check if this is a comment block and find the ending "--"
-						if (String.Compare(text, j + 1, "--", 0, "script".Length) == 0)
+						// check if this is a comment block and find the ending "-->"
+						if (String.Compare(text, j + 1, "--", 0, "--".Length) == 0)
 						{
 							// find -->
+							// In the future, check if the tagEndIndex is correct already.  This would save some time searching the same region again.
+
+							// add entire comment as one tag
+
+							// why is this so expensive?
+							// should I just keep getting the next '>' char and checking the 2 chars in front of it?
+
+							int closeCommentIndex = text.IndexOf("-->", j + 3);
+							if (closeCommentIndex != -1)
+							{
+								tagEndIndex = closeCommentIndex + "-->".Length - 1;
+								tags.Add(i | (((long)tagEndIndex - i + 1) << 24));
+							}
 						}
+						// else
+						// doctype, etc.
 					}
 					else if (jc == '?')
 					{
 						// something
 					}
-					//else if ((jc == 's' || jc == 'S') && tagEndIndex - i > 5)
 					else
 					{
 						// accumulate until whitespace or end
@@ -100,24 +114,24 @@ namespace Snail
 
 						int tagNameLength = j - i - 1;
 
-						if (tagNameLength == "script".Length && String.Compare(text, j, "script", 0, "script".Length, true) == 0)
-						{
-							// find </script>
-							//int endTagStartIndex = text.IndexOf("</script>", StringComparison.OrdinalIgnoreCase);
-							//if (endTagStartIndex != -1)
-							//{
-							//    // current (start) tag
-							//    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
-							//    // special contents
-							//    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
-							//    // closing tag
-							//    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
-							//}
-						}
-						else if (tagNameLength == "style".Length && String.Compare(text, j, "style", 0, "style".Length, true) == 0)
-						{
-							// find </style>
-						}
+						//if (tagNameLength == "script".Length && String.Compare(text, j, "script", 0, "script".Length, true) == 0)
+						//{
+						//    // find </script>
+						//    //int endTagStartIndex = text.IndexOf("</script>", StringComparison.OrdinalIgnoreCase);
+						//    //if (endTagStartIndex != -1)
+						//    //{
+						//    //    // current (start) tag
+						//    //    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
+						//    //    // special contents
+						//    //    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
+						//    //    // closing tag
+						//    //    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
+						//    //}
+						//}
+						//else if (tagNameLength == "style".Length && String.Compare(text, j, "style", 0, "style".Length, true) == 0)
+						//{
+						//    // find </style>
+						//}
 
 						//long tagLengthIncludingBrackets = tagEndIndex - i + 1;
 						tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
