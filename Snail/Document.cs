@@ -80,19 +80,41 @@ namespace Snail
 						if (String.Compare(text, j + 1, "--", 0, "--".Length) == 0)
 						{
 							// find -->
-							// In the future, check if the tagEndIndex is correct already.  This would save some time searching the same region again.
+							int searchPos = j + 3;
+							while (searchPos != -1)
+							{
+								searchPos = text.IndexOf('-', searchPos);
+								if (searchPos > text.Length - 3)
+									searchPos = -1;
+
+								if (searchPos != -1)
+								{
+									if (text[searchPos + 1] == '-' && text[searchPos + 2] == '>')
+									{
+										break;
+									}
+								}
+								++searchPos;
+							}
+
+							if (searchPos != -1)
+							{
+								tagEndIndex = searchPos + "-->".Length - 1;
+								tags.Add(i | (((long)tagEndIndex - i + 1) << 24));
+							}
+
 
 							// add entire comment as one tag
 
 							// why is this so expensive?
 							// should I just keep getting the next '>' char and checking the 2 chars in front of it?
 
-							int closeCommentIndex = text.IndexOf("-->", j + 3);
-							if (closeCommentIndex != -1)
-							{
-								tagEndIndex = closeCommentIndex + "-->".Length - 1;
-								tags.Add(i | (((long)tagEndIndex - i + 1) << 24));
-							}
+							//int closeCommentIndex = text.IndexOf("-->", j + 3);
+							//if (closeCommentIndex != -1)
+							//{
+							//    tagEndIndex = closeCommentIndex + "-->".Length - 1;
+							//    tags.Add(i | (((long)tagEndIndex - i + 1) << 24));
+							//}
 						}
 						// else
 						// doctype, etc.
