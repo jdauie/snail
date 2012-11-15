@@ -94,15 +94,15 @@ namespace Snail
 									{
 										break;
 									}
+									++searchPos;
 								}
-								++searchPos;
 							}
 
 							if (searchPos != -1)
 							{
 								// add entire comment as one tag
 								tagEndIndex = searchPos + "-->".Length - 1;
-								tags.Add(i | (((long)tagEndIndex - i + 1) << 24));
+								tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (long.MaxValue << 48));
 							}
 
 							//int closeCommentIndex = text.IndexOf("-->", j + 3);
@@ -160,7 +160,7 @@ namespace Snail
 				++i;
 			}
 
-			// low...high
+			// [ low . . . . . . high ]
 			// [  24  ][  24  ][  16  ]
 			//  index   count   other
 
@@ -175,9 +175,19 @@ namespace Snail
 			//    //sb.Append(text.Substring(index, length));
 
 			//    string s = null;
-			//    if (other != 0)
+			//    if (other == 0)
 			//    {
-			//        test.Add(string.Format("<{0}>", text.Substring(index + 1, other)));
+			//        // skip text
+			//    }
+			//    else if (other == ushort.MaxValue)
+			//    {
+			//        // comment block
+			//        test.Add(text.Substring(index, length));
+			//    }
+			//    else
+			//    {
+			//        // tag name
+			//        //test.Add(string.Format("<{0}>", text.Substring(index + 1, other)));
 			//    }
 
 			//    sb.Append(text.Substring(index, length));
