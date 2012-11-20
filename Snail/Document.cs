@@ -41,6 +41,8 @@ namespace Snail
 
 			// pre-allocating is only a marginal improvement
 			var tags = new List<long>();
+
+			var specialTags = new string[] { "script", "style" };
 			
 			int i = 0;
 			while (i < text.Length)
@@ -105,6 +107,7 @@ namespace Snail
 								tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (long.MaxValue << 48));
 							}
 
+							// equivalent, but slower
 							//int closeCommentIndex = text.IndexOf("-->", j + 3);
 							//if (closeCommentIndex != -1)
 							//{
@@ -132,27 +135,89 @@ namespace Snail
 
 						int tagNameLength = j - i - 1;
 
-						//if (tagNameLength == "script".Length && String.Compare(text, j, "script", 0, "script".Length, true) == 0)
+						//bool matchedSpecialTag = false;
+						//for (int specialTagIndex = 0; specialTagIndex < specialTags.Length; specialTagIndex++)
 						//{
-						//    // find </script>
-						//    //int endTagStartIndex = text.IndexOf("</script>", StringComparison.OrdinalIgnoreCase);
-						//    //if (endTagStartIndex != -1)
-						//    //{
-						//    //    // current (start) tag
-						//    //    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
-						//    //    // special contents
-						//    //    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
-						//    //    // closing tag
-						//    //    tags.Add(i | (((long)tagEndIndex - i + 1) << 32));
-						//    //}
-						//}
-						//else if (tagNameLength == "style".Length && String.Compare(text, j, "style", 0, "style".Length, true) == 0)
-						//{
-						//    // find </style>
+						//    string t1 = specialTags[specialTagIndex];
+						//    if (tagNameLength == t1.Length)
+						//    {
+						//        matchedSpecialTag = true;
+								
+						//        const char upperToLowerIncrement = (char)('a' - 'A');
+						//        int textIndex = i + 1;
+						//        int bufferIndex = 0;
+						//        while (bufferIndex < tagNameLength)
+						//        {
+						//            char cb = t1[bufferIndex];
+						//            char ct = text[textIndex];
+
+						//            if (ct != cb && (ct + upperToLowerIncrement != cb))
+						//            {
+						//                matchedSpecialTag = false;
+						//                break;
+						//            }
+						//            ++textIndex;
+						//            ++bufferIndex;
+						//        }
+
+						//        if (matchedSpecialTag)
+						//        {
+						//            // find end tag
+						//            string t2 = "</" + t1 + ">";
+						//            var t2Length = t2.Length;
+						//            int endTagStartIndex = text.IndexOf(t2, tagEndIndex + 1, StringComparison.OrdinalIgnoreCase);
+						//            if (endTagStartIndex != -1)
+						//            {
+						//                // [current (start) tag]
+						//                // [special contents]
+						//                // [closing tag]
+
+						//                tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
+						//                tags.Add(tagEndIndex + 1 | (((long)endTagStartIndex - tagEndIndex - 1) << 24));
+						//                tags.Add(endTagStartIndex | (((long)t2Length) << 24) | (((long)t2Length - 2) << 48));
+
+						//                tagEndIndex = endTagStartIndex + t2Length - 1;
+						//            }
+						//        }
+						//    }
 						//}
 
-						//long tagLengthIncludingBrackets = tagEndIndex - i + 1;
-						tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
+						//if (!matchedSpecialTag)
+						//{
+						//    //long tagLengthIncludingBrackets = tagEndIndex - i + 1;
+						//    tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
+						//}
+
+						string t1;
+						if (tagNameLength == (t1 = "script").Length && String.Compare(text, j, t1, 0, t1.Length) == 0)
+						{
+							// find end tag
+							string t2 = "</" + t1 + ">";
+							var t2Length = t2.Length;
+							int endTagStartIndex = text.IndexOf(t2, tagEndIndex + 1, StringComparison.OrdinalIgnoreCase);
+							if (endTagStartIndex != -1)
+							{
+								// [current (start) tag]
+								// [special contents]
+								// [closing tag]
+
+								tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
+								tags.Add(tagEndIndex + 1 | (((long)endTagStartIndex - tagEndIndex - 1) << 24));
+								tags.Add(endTagStartIndex | (((long)t2Length) << 24) | (((long)t2Length - 2) << 48));
+
+								tagEndIndex = endTagStartIndex + t2Length - 1;
+							}
+						}
+						else if (tagNameLength == (t1 = "style").Length && String.Compare(text, j, t1, 0, t1.Length) == 0)
+						{
+							// find </style>
+							tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
+						}
+						else
+						{
+							//long tagLengthIncludingBrackets = tagEndIndex - i + 1;
+							tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
+						}
 					}
 					i = tagEndIndex;
 				}
@@ -172,9 +237,6 @@ namespace Snail
 			//    int length = (int)((tag << 16) >> (24 + 16));
 			//    ushort other = (ushort)(tag >> 64 - 16);
 
-			//    //sb.Append(text.Substring(index, length));
-
-			//    string s = null;
 			//    if (other == 0)
 			//    {
 			//        // skip text
@@ -187,9 +249,10 @@ namespace Snail
 			//    else
 			//    {
 			//        // tag name
-			//        //test.Add(string.Format("<{0}>", text.Substring(index + 1, other)));
+			//        test.Add(string.Format("<{0}>", text.Substring(index + 1, other)));
 			//    }
 
+			//    //test.Add(text.Substring(index, length));
 			//    sb.Append(text.Substring(index, length));
 			//}
 			//var textRecreated = sb.ToString();
@@ -199,6 +262,11 @@ namespace Snail
 			//Console.WriteLine(textRecreated.Length);
 
 			return tags.Count;
+		}
+
+		private static long CreateTagIndex(int index, int length, int tagNameLength)
+		{
+			return (index | (((long)length) << 24) | (((long)tagNameLength) << 48));
 		}
 	}
 }
