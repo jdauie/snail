@@ -42,8 +42,6 @@ namespace Snail
 			// pre-allocating is only a marginal improvement
 			var tags = new List<long>();
 
-			var specialTags = new string[] { "script", "style" };
-
 			int i = 0;
 			while (i < text.Length)
 			{
@@ -54,7 +52,7 @@ namespace Snail
 					if (textEndIndex == -1)
 						textEndIndex = text.Length;
 
-					tags.Add(i | (((long)textEndIndex - i) << 24));
+					tags.Add(CreateTagIndex(i, textEndIndex - i));
 
 					i = textEndIndex;
 				}
@@ -78,7 +76,7 @@ namespace Snail
 
 					if (jc == '!')
 					{
-						tagEndIndex = IdentifyTagStartingWithExclamation(text, tags, i, j, tagEndIndex);
+						tagEndIndex = IdentifyTagStartingWithExclamation(text, tags, i, tagEndIndex);
 					}
 					else if (jc == '?')
 					{
@@ -99,14 +97,14 @@ namespace Snail
 
 						int tagNameLength = j - i - 1;
 
-						string t1;
-						if (tagNameLength == (t1 = "script").Length && String.Compare(text, j, t1, 0, tagNameLength) == 0)
+						string tagName;
+						if (tagNameLength == (tagName = "script").Length && String.Compare(text, j, tagName, 0, tagNameLength) == 0)
 						{
-							tagEndIndex = FindEndOfSpecialBlock(text, i, tagEndIndex, tags, t1, tagNameLength);
+							tagEndIndex = FindEndOfSpecialBlock(text, tags, i, tagEndIndex, tagName);
 						}
-						else if (tagNameLength == (t1 = "style").Length && String.Compare(text, j, t1, 0, tagNameLength) == 0)
+						else if (tagNameLength == (tagName = "style").Length && String.Compare(text, j, tagName, 0, tagNameLength) == 0)
 						{
-							tagEndIndex = FindEndOfSpecialBlock(text, i, tagEndIndex, tags, t1, tagNameLength);
+							tagEndIndex = FindEndOfSpecialBlock(text, tags, i, tagEndIndex, tagName);
 						}
 						else
 						{
@@ -120,6 +118,8 @@ namespace Snail
 
 				++i;
 			}
+
+			#region Test
 
 			// [ low . . . . . . high ]
 			// [  24  ][  24  ][  16  ]
@@ -157,13 +157,15 @@ namespace Snail
 			//var textRecreated = string.Join("", tags);
 			//Console.WriteLine(textRecreated.Length);
 
+			#endregion
+
 			return tags.Count;
 		}
 
-		private static int FindEndOfSpecialBlock(string text, int i, int tagEndIndex, List<long> tags, string t1, int tagNameLength)
+		private static int FindEndOfSpecialBlock(string text, List<long> tags, int i, int tagEndIndex, string tagName)
 		{
 			// find end tag
-			string t2 = "</" + t1 + ">";
+			string t2 = "</" + tagName + ">";
 			var t2Length = t2.Length;
 			int endTagStartIndex = text.IndexOf(t2, tagEndIndex + 1, StringComparison.OrdinalIgnoreCase);
 			if (endTagStartIndex != -1)
@@ -172,8 +174,8 @@ namespace Snail
 				// [special contents]
 				// [closing tag]
 
-				tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagNameLength));
-				tags.Add(CreateTagIndex(tagEndIndex + 1, endTagStartIndex - tagEndIndex - 1, 0));
+				tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagName.Length));
+				tags.Add(CreateTagIndex(tagEndIndex + 1, endTagStartIndex - tagEndIndex - 1));
 				tags.Add(CreateTagIndex(endTagStartIndex, t2Length, t2Length - 2));
 
 				tagEndIndex = endTagStartIndex + t2Length - 1;
@@ -181,8 +183,10 @@ namespace Snail
 			return tagEndIndex;
 		}
 
-		private static int IdentifyTagStartingWithExclamation(string text, List<long> tags, int i, int j, int tagEndIndex)
+		private static int IdentifyTagStartingWithExclamation(string text, List<long> tags, int i, int tagEndIndex)
 		{
+			int j = i + 1;
+
 			// check if this is a comment block and find the ending "-->"
 			if (String.Compare(text, j + 1, "--", 0, "--".Length) == 0)
 			{
@@ -225,6 +229,11 @@ namespace Snail
 			// doctype, etc.
 
 			return tagEndIndex;
+		}
+
+		private static long CreateTagIndex(int index, int length)
+		{
+			return (index | (((long)length) << 24));
 		}
 
 		private static long CreateTagIndex(int index, int length, int tagNameLength)
