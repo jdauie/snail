@@ -165,21 +165,55 @@ namespace Snail
 		private static int FindEndOfSpecialBlock(string text, List<long> tags, int i, int tagEndIndex, string tagName)
 		{
 			// find end tag
-			string t2 = "</" + tagName + ">";
-			var t2Length = t2.Length;
-			int endTagStartIndex = text.IndexOf(t2, tagEndIndex + 1, StringComparison.OrdinalIgnoreCase);
-			if (endTagStartIndex != -1)
+			int searchPos = tagEndIndex + 1;
+			while (searchPos != -1)
+			{
+				searchPos = text.IndexOf('<', searchPos);
+				// is this condition correct?
+				if (searchPos > text.Length - (tagName.Length + 3))
+					searchPos = -1;
+
+				if (searchPos != -1)
+				{
+					if (text[searchPos + 1] == '/' && text[searchPos + tagName.Length + 2] == '>' && String.Compare(text, searchPos + 2, tagName, 0, tagName.Length, true) == 0)
+					{
+						break;
+					}
+					++searchPos;
+				}
+			}
+
+			if (searchPos != -1)
 			{
 				// [current (start) tag]
 				// [special contents]
 				// [closing tag]
 
 				tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagName.Length));
-				tags.Add(CreateTagIndex(tagEndIndex + 1, endTagStartIndex - tagEndIndex - 1));
-				tags.Add(CreateTagIndex(endTagStartIndex, t2Length, t2Length - 2));
+				tags.Add(CreateTagIndex(tagEndIndex + 1, searchPos - tagEndIndex - 1));
+				tags.Add(CreateTagIndex(searchPos, tagName.Length + 3, tagName.Length + 1));
 
-				tagEndIndex = endTagStartIndex + t2Length - 1;
+				tagEndIndex = searchPos + tagName.Length + 2;
 			}
+
+
+			//// find end tag
+			//string t2 = "</" + tagName + ">";
+			//var t2Length = t2.Length;
+			//int endTagStartIndex = text.IndexOf(t2, tagEndIndex + 1, StringComparison.OrdinalIgnoreCase);
+			//if (endTagStartIndex != -1)
+			//{
+			//    // [current (start) tag]
+			//    // [special contents]
+			//    // [closing tag]
+
+			//    tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagName.Length));
+			//    tags.Add(CreateTagIndex(tagEndIndex + 1, endTagStartIndex - tagEndIndex - 1));
+			//    tags.Add(CreateTagIndex(endTagStartIndex, t2Length, t2Length - 2));
+
+			//    tagEndIndex = endTagStartIndex + t2Length - 1;
+			//}
+
 			return tagEndIndex;
 		}
 
