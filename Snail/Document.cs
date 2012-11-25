@@ -43,7 +43,7 @@ namespace Snail
 			var tags = new List<long>();
 
 			var specialTags = new string[] { "script", "style" };
-			
+
 			int i = 0;
 			while (i < text.Length)
 			{
@@ -104,7 +104,7 @@ namespace Snail
 							{
 								// add entire comment as one tag
 								tagEndIndex = searchPos + "-->".Length - 1;
-								tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (long.MaxValue << 48));
+								tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, int.MaxValue));
 							}
 
 							// equivalent, but slower
@@ -201,9 +201,9 @@ namespace Snail
 								// [special contents]
 								// [closing tag]
 
-								tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
-								tags.Add(tagEndIndex + 1 | (((long)endTagStartIndex - tagEndIndex - 1) << 24));
-								tags.Add(endTagStartIndex | (((long)t2Length) << 24) | (((long)t2Length - 2) << 48));
+								tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagNameLength));
+								tags.Add(CreateTagIndex(tagEndIndex + 1, endTagStartIndex - tagEndIndex - 1, 0));
+								tags.Add(CreateTagIndex(endTagStartIndex, t2Length, t2Length - 2));
 
 								tagEndIndex = endTagStartIndex + t2Length - 1;
 							}
@@ -211,12 +211,14 @@ namespace Snail
 						else if (tagNameLength == (t1 = "style").Length && String.Compare(text, j, t1, 0, t1.Length) == 0)
 						{
 							// find </style>
-							tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
+							//tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
+							tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagNameLength));
 						}
 						else
 						{
 							//long tagLengthIncludingBrackets = tagEndIndex - i + 1;
-							tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
+							//tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
+							tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagNameLength));
 						}
 					}
 					i = tagEndIndex;
