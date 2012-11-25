@@ -98,11 +98,11 @@ namespace Snail
 						int tagNameLength = j - i - 1;
 
 						string tagName;
-						if (tagNameLength == (tagName = "script").Length && String.Compare(text, j, tagName, 0, tagNameLength) == 0)
+						if (tagNameLength == (tagName = "script").Length && String.Compare(text, i + 1, tagName, 0, tagNameLength) == 0)
 						{
 							tagEndIndex = FindEndOfSpecialBlock(text, tags, i, tagEndIndex, tagName);
 						}
-						else if (tagNameLength == (tagName = "style").Length && String.Compare(text, j, tagName, 0, tagNameLength) == 0)
+						else if (tagNameLength == (tagName = "style").Length && String.Compare(text, i + 1, tagName, 0, tagNameLength) == 0)
 						{
 							tagEndIndex = FindEndOfSpecialBlock(text, tags, i, tagEndIndex, tagName);
 						}
