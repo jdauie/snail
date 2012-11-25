@@ -78,49 +78,13 @@ namespace Snail
 
 					if (jc == '!')
 					{
-						// check if this is a comment block and find the ending "-->"
-						if (String.Compare(text, j + 1, "--", 0, "--".Length) == 0)
-						{
-							// find -->
-
-							int searchPos = j + 3;
-							while (searchPos != -1)
-							{
-								searchPos = text.IndexOf('-', searchPos);
-								if (searchPos > text.Length - 3)
-									searchPos = -1;
-
-								if (searchPos != -1)
-								{
-									if (text[searchPos + 1] == '-' && text[searchPos + 2] == '>')
-									{
-										break;
-									}
-									++searchPos;
-								}
-							}
-
-							if (searchPos != -1)
-							{
-								// add entire comment as one tag
-								tagEndIndex = searchPos + "-->".Length - 1;
-								tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, int.MaxValue));
-							}
-
-							// equivalent, but slower
-							//int closeCommentIndex = text.IndexOf("-->", j + 3);
-							//if (closeCommentIndex != -1)
-							//{
-							//    tagEndIndex = closeCommentIndex + "-->".Length - 1;
-							//    tags.Add(i | (((long)tagEndIndex - i + 1) << 24));
-							//}
-						}
-						// else
-						// doctype, etc.
+						tagEndIndex = IdentifyTagStartingWithExclamation(text, tags, i, j, tagEndIndex);
 					}
 					else if (jc == '?')
 					{
 						// something
+						// this only matters if I start parsing server-side directives e.g.
+						// <?php...?>
 					}
 					else
 					{
@@ -135,84 +99,14 @@ namespace Snail
 
 						int tagNameLength = j - i - 1;
 
-						//bool matchedSpecialTag = false;
-						//for (int specialTagIndex = 0; specialTagIndex < specialTags.Length; specialTagIndex++)
-						//{
-						//    string t1 = specialTags[specialTagIndex];
-						//    if (tagNameLength == t1.Length)
-						//    {
-						//        matchedSpecialTag = true;
-								
-						//        const char upperToLowerIncrement = (char)('a' - 'A');
-						//        int textIndex = i + 1;
-						//        int bufferIndex = 0;
-						//        while (bufferIndex < tagNameLength)
-						//        {
-						//            char cb = t1[bufferIndex];
-						//            char ct = text[textIndex];
-
-						//            if (ct != cb && (ct + upperToLowerIncrement != cb))
-						//            {
-						//                matchedSpecialTag = false;
-						//                break;
-						//            }
-						//            ++textIndex;
-						//            ++bufferIndex;
-						//        }
-
-						//        if (matchedSpecialTag)
-						//        {
-						//            // find end tag
-						//            string t2 = "</" + t1 + ">";
-						//            var t2Length = t2.Length;
-						//            int endTagStartIndex = text.IndexOf(t2, tagEndIndex + 1, StringComparison.OrdinalIgnoreCase);
-						//            if (endTagStartIndex != -1)
-						//            {
-						//                // [current (start) tag]
-						//                // [special contents]
-						//                // [closing tag]
-
-						//                tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
-						//                tags.Add(tagEndIndex + 1 | (((long)endTagStartIndex - tagEndIndex - 1) << 24));
-						//                tags.Add(endTagStartIndex | (((long)t2Length) << 24) | (((long)t2Length - 2) << 48));
-
-						//                tagEndIndex = endTagStartIndex + t2Length - 1;
-						//            }
-						//        }
-						//    }
-						//}
-
-						//if (!matchedSpecialTag)
-						//{
-						//    //long tagLengthIncludingBrackets = tagEndIndex - i + 1;
-						//    tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
-						//}
-
 						string t1;
-						if (tagNameLength == (t1 = "script").Length && String.Compare(text, j, t1, 0, t1.Length) == 0)
+						if (tagNameLength == (t1 = "script").Length && String.Compare(text, j, t1, 0, tagNameLength) == 0)
 						{
-							// find end tag
-							string t2 = "</" + t1 + ">";
-							var t2Length = t2.Length;
-							int endTagStartIndex = text.IndexOf(t2, tagEndIndex + 1, StringComparison.OrdinalIgnoreCase);
-							if (endTagStartIndex != -1)
-							{
-								// [current (start) tag]
-								// [special contents]
-								// [closing tag]
-
-								tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagNameLength));
-								tags.Add(CreateTagIndex(tagEndIndex + 1, endTagStartIndex - tagEndIndex - 1, 0));
-								tags.Add(CreateTagIndex(endTagStartIndex, t2Length, t2Length - 2));
-
-								tagEndIndex = endTagStartIndex + t2Length - 1;
-							}
+							tagEndIndex = FindEndOfSpecialBlock(text, i, tagEndIndex, tags, t1, tagNameLength);
 						}
-						else if (tagNameLength == (t1 = "style").Length && String.Compare(text, j, t1, 0, t1.Length) == 0)
+						else if (tagNameLength == (t1 = "style").Length && String.Compare(text, j, t1, 0, tagNameLength) == 0)
 						{
-							// find </style>
-							//tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
-							tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagNameLength));
+							tagEndIndex = FindEndOfSpecialBlock(text, i, tagEndIndex, tags, t1, tagNameLength);
 						}
 						else
 						{
@@ -264,6 +158,73 @@ namespace Snail
 			//Console.WriteLine(textRecreated.Length);
 
 			return tags.Count;
+		}
+
+		private static int FindEndOfSpecialBlock(string text, int i, int tagEndIndex, List<long> tags, string t1, int tagNameLength)
+		{
+			// find end tag
+			string t2 = "</" + t1 + ">";
+			var t2Length = t2.Length;
+			int endTagStartIndex = text.IndexOf(t2, tagEndIndex + 1, StringComparison.OrdinalIgnoreCase);
+			if (endTagStartIndex != -1)
+			{
+				// [current (start) tag]
+				// [special contents]
+				// [closing tag]
+
+				tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagNameLength));
+				tags.Add(CreateTagIndex(tagEndIndex + 1, endTagStartIndex - tagEndIndex - 1, 0));
+				tags.Add(CreateTagIndex(endTagStartIndex, t2Length, t2Length - 2));
+
+				tagEndIndex = endTagStartIndex + t2Length - 1;
+			}
+			return tagEndIndex;
+		}
+
+		private static int IdentifyTagStartingWithExclamation(string text, List<long> tags, int i, int j, int tagEndIndex)
+		{
+			// check if this is a comment block and find the ending "-->"
+			if (String.Compare(text, j + 1, "--", 0, "--".Length) == 0)
+			{
+				// find -->
+
+				int searchPos = j + 3;
+				while (searchPos != -1)
+				{
+					searchPos = text.IndexOf('-', searchPos);
+					// is this condition correct
+					if (searchPos > text.Length - 3)
+						searchPos = -1;
+
+					if (searchPos != -1)
+					{
+						if (text[searchPos + 1] == '-' && text[searchPos + 2] == '>')
+						{
+							break;
+						}
+						++searchPos;
+					}
+				}
+
+				if (searchPos != -1)
+				{
+					// add entire comment as one tag
+					tagEndIndex = searchPos + "-->".Length - 1;
+					tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, int.MaxValue));
+				}
+
+				// equivalent, but slower
+				//int closeCommentIndex = text.IndexOf("-->", j + 3);
+				//if (closeCommentIndex != -1)
+				//{
+				//    tagEndIndex = closeCommentIndex + "-->".Length - 1;
+				//    tags.Add(i | (((long)tagEndIndex - i + 1) << 24));
+				//}
+			}
+			// else
+			// doctype, etc.
+
+			return tagEndIndex;
 		}
 
 		private static long CreateTagIndex(int index, int length, int tagNameLength)
