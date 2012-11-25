@@ -1,0 +1,4448 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    
+    <title>C++ performance vs. Java/C# - Stack Overflow</title>
+    <link rel="shortcut icon" href="http://cdn.sstatic.net/stackoverflow/img/favicon.ico">
+    <link rel="apple-touch-icon" href="http://cdn.sstatic.net/stackoverflow/img/apple-touch-icon.png">
+    <link rel="search" type="application/opensearchdescription+xml" title="Stack Overflow" href="/opensearch.xml">
+
+    
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdn.sstatic.net/js/stub.js?v=8a629d6e9fb6"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sstatic.net/stackoverflow/all.css?v=24fdd40e5473">
+    
+    <meta name="relativepagescore" content="552089">
+    <link rel="canonical" href="http://stackoverflow.com/questions/145110/c-performance-vs-java-c">
+    <script type="text/javascript">
+        
+        StackExchange.ready(function () {
+            
+            StackExchange.question.init({showAnswerHelp:true,totalCommentCount:2,shownCommentCount:0,highlightColor:'#F4A83D',backgroundColor:'#FFF',questionId:145110});
+
+            styleCode();
+
+                StackExchange.realtime.subscribeToQuestion('1', '145110');
+            
+                
+        });
+    </script>
+
+
+    <script type="text/javascript">
+        StackExchange.init({"stackAuthUrl":"https://stackauth.com","serverTime":1353884454,"styleCode":true,"enableUserHovercards":true,"site":{"name":"Stack Overflow","description":"Q&A for professional and enthusiast programmers","isNoticesTabEnabled":true,"recaptchaPublicKey":"6LdchgIAAAAAAJwGpIzRQSOFaO0pU6s44Xt8aTwc","enableSocialMediaInSharePopup":true},"user":{"fkey":"1eb38a50f45d6fe48d3ea94e55dbbd97","isAnonymous":true}});
+        StackExchange.using.setCacheBreakers({"js/prettify-full.js":"c862bf93b3ec","js/moderator.js":"37bba549a03e","js/full-anon.js":"bcd6f2e0d542","js/full.js":"87618162bac4","js/wmd.js":"89ec12ce09df","js/third-party/jquery.autocomplete.min.js":"e5f01e97f7c3","js/mobile.js":"6eb68240242f","js/help.js":"fc9fb0517db2","js/tageditor.js":"450c9e8426fc","js/tageditornew.js":"9ac6c13a3a7f","js/inline-tag-editing.js":"30f72b99548b","js/revisions.js":"8c6bcd93b7fe","js/review.js":"94bb46ac228f"});
+        
+    </script>
+</head>
+<body class="question-page">
+    <noscript><div id="noscript-padding"></div></noscript>
+    <div id="notify-container"></div>
+    <div id="overlay-header"></div>
+    <div id="custom-header"></div>
+
+    <div class="container">
+        <div id="header">
+            <div id="portalLink">
+                <a class="genu" href="http://stackexchange.com" onclick="StackExchange.ready(function(){genuwine.click();});return false;">Stack Exchange</a>
+            </div>
+            <div id="topbar">
+                <div id="hlinks">
+                    
+
+
+
+
+
+
+
+
+
+<span id="hlinks-user">
+
+</span>
+<span id="hlinks-nav">
+                   <a href="/users/login?returnurl=%2fquestions%2f145110%2fc-performance-vs-java-c">log in</a>
+
+ <span class="lsep">|</span>
+                    <a href="http://careers.stackoverflow.com">careers 2.0</a>
+
+ <span class="lsep">|</span>
+
+</span>
+<span id="hlinks-custom">
+        <a href="http://chat.stackoverflow.com">chat</a>
+
+ <span class="lsep">|</span>
+            <a href="http://meta.stackoverflow.com">meta</a>
+
+ <span class="lsep">|</span>
+        <a href="/about">about</a>
+
+ <span class="lsep">|</span>
+    <a href="/faq">faq</a>
+
+</span>
+                </div>
+                <div id="hsearch">
+                    <form id="search" action="/search" method="get" autocomplete="off">
+                    <div>
+                        <input autocomplete="off" name="q" class="textbox" placeholder="search" tabindex="1" type="text" maxlength="140" size="28" value="">
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <br class="cbt">
+            <div id="hlogo">
+                <a href="/" >Stack Overflow</a>
+            </div>
+            <div id="hmenus">
+                <div class="nav mainnavs">
+                    <ul>
+                        <li class="youarehere"><a id="nav-questions" href="/questions">Questions</a></li>
+                        <li><a id="nav-tags" href="/tags">Tags</a></li>
+                        <li><a id="nav-users" href="/users">Users</a></li>
+                        <li><a id="nav-badges" href="/badges">Badges</a></li>
+                        <li><a id="nav-unanswered" href="/unanswered">Unanswered</a></li>
+                    </ul>
+                </div>
+                <div class="nav askquestion">
+                    <ul>
+                        <li>
+                            <a id="nav-askquestion"  href="/questions/ask">Ask Question</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+        <div id="content">
+            
+
+<div itemscope itemtype="http://schema.org/Article">
+<link itemprop="image" href="http://cdn.sstatic.net/stackoverflow/img/apple-touch-icon.png">
+<div id="question-header">
+    <h1 itemprop="name"><a href="/questions/145110/c-performance-vs-java-c" class="question-hyperlink">C++ performance vs. Java/C#</a></h1>
+</div>
+<div id="mainbar">
+
+
+
+<div class="question ice-ice-baby" id="question" data-questionid="145110" >
+      <input type="hidden" id="145110-only-allow-inform-moderator-flagging" value="true">
+            <div class="everyonelovesstackoverflow" id="adzerk1">
+        </div>
+
+
+
+    <table>
+    <tr>
+    <td class="votecell">
+        
+
+<div class="vote">
+    <input type="hidden" value="145110">
+    <a class="vote-up-off" title="This question shows research effort; it is useful and clear (click again to undo)">up vote</a>
+    <span class="vote-count-post" style="font-size: 200%;">119</span>
+    <a class="vote-down-off" title="This question does not show any research effort; it is unclear or not useful (click again to undo)">down vote</a>
+    
+    <a class="star-off" href="#" title="This is a favorite question (click again to undo)">favorite</a>
+    <div class="favoritecount"><b>132</b></div>   
+
+ 
+</div>
+
+    </td>
+    
+<td class="postcell">
+<div>          
+    <div class="post-text" itemprop="description">
+        <p>My understanding is that C/C++ produces native code to run on a particular machine architecture.  Conversely, languages like Java and C# run on top of a virtual machine which abstracts away the native architecture.  Logically it would seem impossible for Java or C# to match the speed of C++ because of this intermediate step, however I've been told that the latest compilers ("hot spot") can attain this speed or even exceed it.</p>
+
+<p>Perhaps this is more of a compiler question than a language question, but can anyone explain in plain English how it is possible for one of these virtual machine languages to perform better than a native language?</p>
+
+    </div>            
+    <div class="post-taglist">
+        <a href="/questions/tagged/c%23" class="post-tag" title="show questions tagged 'c#'" rel="tag">c#</a> <a href="/questions/tagged/java" class="post-tag" title="show questions tagged 'java'" rel="tag">java</a> <a href="/questions/tagged/c%2b%2b" class="post-tag" title="show questions tagged 'c++'" rel="tag">c++</a> <a href="/questions/tagged/performance" class="post-tag" title="show questions tagged 'performance'" rel="tag">performance</a> <a href="/questions/tagged/bytecode" class="post-tag" title="show questions tagged 'bytecode'" rel="tag">bytecode</a> 
+    </div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/q/145110" title="short permalink to this question" class="short-link" id="link-post-145110">share</a></div>
+    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                            edited
+                             <a href="/posts/145110/revisions" title="show all edits to this post"><span title="2009-12-29 18:04:59Z" class="relativetime">Dec 29 '09 at 18:04</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+    <td class="post-signature">
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145110" href="/posts/145110/revisions" title="show revision history for this post">
+user23126            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</div>
+</td>    </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145110" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-145110" class="comments-link" data-comments-count="2" title="expand to show all comments on this post">show <b>2</b> more comments</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>    
+        </table>    
+</div>
+
+
+    <div class="question-status">
+        <h2><strong>locked</strong> by <a href="/users/267/lasse-v-karlsen">Lasse V. Karlsen</a><span class="mod-flair" title="moderator">&#9830;</span> <span title="2011-10-02 12:28:22Z" class="relativetime">Oct 2 '11 at 12:28</span></h2>
+        <p>This question exists because it has historical significance, but <b>it is not considered a good, on-topic question for this site</b>, 
+so please do not use it as evidence that you can ask similar questions here.  This question and its answers are frozen and cannot be changed.
+More info: <a href="/faq">FAQ</a>.</p>
+    </div>
+    
+
+
+<div id="answers">
+
+    <a name="tab-top"></a>
+    <div id="answers-header">
+        <div class="subheader answers-subheader">
+            <h2>
+                    31 Answers
+            </h2>
+            <div id="tabs">
+                <a href="/questions/145110/c-performance-vs-java-c?answertab=active#tab-top" title="Answers with the latest activity first">active</a>
+<a href="/questions/145110/c-performance-vs-java-c?answertab=oldest#tab-top" title="Answers in the order they were provided">oldest</a>
+<a class="youarehere" href="/questions/145110/c-performance-vs-java-c?answertab=votes#tab-top" title="Answers with the highest score first">votes</a>
+
+            </div>
+        </div>    
+    </div>    
+
+
+<div class="pager-answers" >
+<span class="page-numbers current">1</span>
+<a href="/questions/145110/c-performance-vs-java-c?page=2&amp;tab=votes#tab-top" title="go to page 2"><span class="page-numbers">2</span></a>
+<a href="/questions/145110/c-performance-vs-java-c?page=2&amp;tab=votes#tab-top" title="go to page 2" rel="next"><span class="page-numbers next"> next</span></a>
+</div>
+
+
+
+  
+    <a name="145122"></a>
+    <div id="answer-145122" class="answer ice-ice-baby accepted-answer"  data-answerid="145122">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145122">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post" style="font-size: 200%;">179</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+            <span class="vote-accepted-on load-accepted-answer-date" title="loading when this answer was accepted...">accepted</span>
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>Generally, C# and Java can be just as fast or faster because the JIT compiler -- a compiler that compiles your IL the first time it's executed -- can make optimizations that a C++ compiled program cannot because it can query the machine. It can determine if the machine is Intel or AMD; Pentium 4, Core Solo, or Core Duo; or if supports SSE4, etc.</p>
+
+<p>A C++ program has to be compiled beforehand usually with mixed optimizations so that it runs decently well on all machines, but is not optimized as much as it could be for a single configuration (i.e. processor, instruction set, other hardware).</p>
+
+<p>Additionally certain language features allow the compiler in C# and Java to make assumptions about your code that allows it to optimize certain parts away that just aren't safe for the C/C++ compiler to do. When you have access to pointers there's a lot of optimizations that just aren't safe.</p>
+
+<p>Also Java and C# can do heap allocations more efficiently than C++ because the layer of abstraction between the garbage collector and your code allows it to do all of its heap compression at once (a fairly expensive operation).</p>
+
+<p>Now I can't speak for Java on this next point, but I know that C# for example will actually remove methods and method calls when it knows the body of the method is empty. And it will use this kind of logic throughout your code.</p>
+
+<p>So as you can see, there are lots of reasons why certain C# or Java implementations will be faster.</p>
+
+<p>Now this all said, specific optimizations can be made in C++ that will blow away anything that you could do with C#, especially in the graphics realm and anytime you're close to the hardware. Pointers do wonders here.</p>
+
+<p>So depending on what you're writing I would go with one or the other. But if you're writing something that isn't hardware dependent (driver, video game, etc), I wouldn't worry about the performance of C# (again can't speak about Java). It'll do just fine.</p>
+
+<p>One the Java side, <a href="http://stackoverflow.com/users/12682/swati">@Swati</a> points out a good article:</p>
+
+<p><a href="http://www-128.ibm.com/developerworks/java/library/j-jtp09275.html?ca=dgr-jw22JavaUrbanLegends" rel="nofollow">http://www-128.ibm.com/developerworks/java/library/j-jtp09275.html?ca=dgr-jw22JavaUrbanLegends</a></p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145122" title="short permalink to this answer" class="short-link" id="link-post-145122">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                            edited
+                             <a href="/posts/145122/revisions" title="show all edits to this post"><span title="2010-01-11 14:49:25Z" class="relativetime">Jan 11 '10 at 14:49</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145122" href="/posts/145122/revisions" title="show revision history for this post">
+Orion Adrian            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145122" class="comments">
+        <table>
+        <tbody>
+                    
+    <tr id="comment-9022308" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">3</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">@Justicle The best your c++ compiler will offer for different architectures is usually x86, x64, ARM and whatnot. Now you can tell it to use specific features (say SSE2) and if you&#39;re lucky it&#39;ll even generate some backup code if that feature isn&#39;t available, but that&#39;s about as fine-grained as one can get. Certainly no specialization depending on cache sizes and whatnot.</span> &ndash;&nbsp;<a href="/users/144746/voo" title="8357 reputation" class="comment-user">Voo</a> <span class="comment-date" dir="ltr"><span title="2011-09-17 22:46:38Z" class="relativetime-clean">Sep 17 '11 at 22:46</span></span></div></td>
+    </tr>
+            
+    <tr id="comment-9030956" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">4</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">See <a href="http://shootout.alioth.debian.org/u32/which-programming-languages-are-fastest.php" rel="nofollow">shootout.alioth.debian.org/u32/&hellip;</a> for examples of this theory <i>not</i> happening.</span> &ndash;&nbsp;<a href="/users/94239/justicle" title="4965 reputation" class="comment-user">Justicle</a> <span class="comment-date" dir="ltr"><span title="2011-09-18 20:27:19Z" class="relativetime-clean">Sep 18 '11 at 20:27</span></span><span class="edited-yes" title="this comment was edited"></span></div></td>
+    </tr>
+            
+    <tr id="comment-11383688" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">1</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">@OrionAdrian ok we&#39;re full circle now ... See <a href="http://shootout.alioth.debian.org/u32/which-programming-languages-are-fastest.php" rel="nofollow">shootout.alioth.debian.org/u32/&hellip;</a> for examples of this theory not happening. In other words, show us that your theory can be proven <i>correct</i> before making vague speculative statements.</span> &ndash;&nbsp;<a href="/users/94239/justicle" title="4965 reputation" class="comment-user">Justicle</a> <span class="comment-date" dir="ltr"><span title="2012-01-30 19:13:28Z" class="relativetime-clean">Jan 30 at 19:13</span></span><span class="edited-yes" title="this comment was edited 2 times"></span></div></td>
+    </tr>
+
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-145122" class="comments-link" data-comments-count="16" title="expand to show all comments on this post">show <b>16</b> more comments</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+        <div class="everyonelovesstackoverflow" id="adzerk3">
+        </div>
+
+
+
+
+  
+    <a name="145559"></a>
+    <div id="answer-145559" class="answer ice-ice-baby"  data-answerid="145559">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145559">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post" style="font-size: 200%;">199</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><h2>JIT vs. Static Compiler</h2>
+
+<p>As already said in the previous posts, JIT can compile IL/bytecode into native code at runtime. The cost of that was mentionned, but not to its conclusion:</p>
+
+<p>JIT has one massive problem is that it can't compile everything: JIT compiling takes time, so the JIT will compile only some parts of the code, whereas a static compiler will produce a full native binary: For some kind of programs, the static compiler will simply easily outperform the JIT.</p>
+
+<p>Of course, C# (or Java, or VB) is usually faster to produce viable and robust solution than is C++ (if only because C++ has complex semantics, and C++ standard library, while interesting and powerful, is quite poor when compared with the full scope of the standard library from .NET or Java), so usually, the difference between C++ and .NET or Java JIT won't be visible to most users, and for those binaries that are critical, well, you can still call C++ processing from C# or Java (even if this kind of native calls can be quite costly in themselves)...</p>
+
+<h2>C++ metaprograming</h2>
+
+<p>Note that usually, you are comparing C++ runtime code with its equivalent in C# or Java. But C++ has one feature that can outperform Java/C# out of the box, that is template metaprograming: The code processing will be done at compilation time (thus, increasing vastly compilation time), resulting into zero (or almost zero) runtime.</p>
+
+<p><s>I have yet so see a real life effect on this (I played only with concepts, but by then, the difference was seconds of execution for JIT, and <strong>zero</strong> for C++), but this is worth mentioning, alongside the fact template metaprograming is not trivial...</s></p>
+
+<blockquote>
+  <p><i><b>Edit 2011-06-10:</b> In C++, playing with types is done at compile time, meaning producing generic code which calls non-generic code (e.g. a generic parser from string to type T, calling standard library API for types T it recognizes, and making the parser easily extensible by its user) is very easy and very efficient, whereas the equivalent in Java or C# is painful at best to write, and will always be slower and resolved at runtime even when the types are known at compile time, meaning your only </i>hope<i> is for the JIT to inline the whole thing.</i></p>
+</blockquote>
+
+<p>...</p>
+
+<blockquote>
+  <p><i><b>Edit 2011-09-20:</b> The team behind Blitz++ (<a href="http://www.oonumerics.org/blitz/whatis.html" rel="nofollow">Homepage</a>, <a href="https://secure.wikimedia.org/wikipedia/en/wiki/Blitz%2B%2B" rel="nofollow">Wikipedia</a>) went that way, and apparently, their goal is to reach FORTRAN's performance on scientific calculations by moving as much as possible from runtime execution to compilation time, via C++ template metaprogramming. So the "</i>I have yet so see a real life effect on this<i>" part I wrote above apparently <b>does</b> exist in real life.</i></p>
+</blockquote>
+
+<h2>Native C++ Memory Usage</h2>
+
+<p>C++ has a memory usage different from Java/C#, and thus, has different advantages/flaws.</p>
+
+<p>No matter the JIT optimization, nothing will go has fast as direct pointer access to memory (let's ignore for a moment processor caches, etc.). So, if you have contiguous data in memory, accessing it through C++ pointers (i.e. C pointers... Let's give Caesar its due) will goes times faster than in Java/C#. And C++ has RAII, which makes a lot of processing a lot easier than in C# or even in Java. C++ does not need <code>using</code> to scope the existence of its objects. And C++ does not have a <code>finally</code> clause. This is not an error.</p>
+
+<p>:-)</p>
+
+<p>And despite C# primitive-like structs, C++ "on the stack" objects will cost nothing at allocation and destruction, and will need no GC to work in an independent thread to do the cleaning.</p>
+
+<p>As for memory fragmentation, memory allocators in 2008 are not the old memory allocators from 1980 that are usually compared with a GC: C++ allocation can't be moved in memory, true, but then, like on a Linux filesystem: Who needs hard disk defragmenting when fragmentation does not happen? Using the right allocator for the right task should be part of the C++ developer toolkit. Now, writing allocators is not easy, and then, most of us have better things to do, and for the most of use, RAII or GC is more than good enough.</p>
+
+<blockquote>
+  <p><i><b>Edit 2011-10-04:</b> For examples about efficient allocators: On Windows platforms, since Vista, the <a href="http://msdn.microsoft.com/en-us/library/aa366750.aspx" rel="nofollow">Low Fragmentation Heap</a> is enabled by default. For previous versions, the LFH can be activated by calling the WinAPI function <a href="http://msdn.microsoft.com/en-us/library/aa366705.aspx" rel="nofollow">HeapSetInformation</a>). On other OSes, alternative allocators are provided (see <a href="https://secure.wikimedia.org/wikipedia/en/wiki/Malloc" rel="nofollow">https://secure.wikimedia.org/wikipedia/en/wiki/Malloc</a> for a list)</i></p>
+</blockquote>
+
+<p>Now, the memory model is somewhat becoming more complicated with the rise of multicore and multithreading technology. In this field, I guess .NET has the advantage, and Java, I was told, held the upper ground. It's easy for some "on the bare metal" hacker to praise his "near the machine" code. But now, it is quite more difficult to produce better assembly by hand than letting the compiler to its job. For C++, the compiler became usually better than the hacker since a decade. For C# and Java, this is even easier.</p>
+
+<p>Still, the new standard C++0x will impose a simple memory model to C++ compilers, which will standardize (and thus simplify) effective multiprocessing/parallel/threading code in C++, and make optimizations easier and safer for compilers. But then, we'll see in some couple of years if its promises are held true.</p>
+
+<h2>C++/CLI vs. C#/VB.NET</h2>
+
+<p><i>Note: In this section, I am talking about C++/CLI, that is, the C++ hosted by .NET, not the native C++.</i></p>
+
+<p>Last week, I had a training on .NET optimization, and discovered that the static compiler is very important anyway. As important than JIT.</p>
+
+<p>The very same code compiled in C++/CLI (or its ancestor, Managed C++) could be times faster than the same code produced in C# (or VB.NET, whose compiler produces the same IL than C#).</p>
+
+<p>Because the C++ static compiler was a lot better to produce already optimized code than C#'s.</p>
+
+<p>For example, function inlining in .NET is limited to functions whose bytecode is less or equal than 32 bytes in length. So, some code in C# will produce a 40 bytes accessor, which won't be ever inlined by the JIT. The same code in C++/CLI will produce a 20 bytes accessor, which will be inlined by the JIT.</p>
+
+<p>Another example is temporary variables, that are simply compiled away by the C++ compiler while still being mentioned in the IL produced by the C# compiler. C++ static compilation optimization will result in less code, thus authorizes a more aggressive JIT optimization, again.</p>
+
+<p>The reason for this was speculated to be the fact C++/CLI compiler profited from the vast optimization techniques from C++ native compiler.</p>
+
+<h2>Conclusion</h2>
+
+<p>I love C++.</p>
+
+<p>But as far as I see it, C# or Java are all in all a better bet. Not because they are faster than C++, but because when you add up their qualities, they end up being more productive, needing less training, and having more complete standard libraries than C++. And as for most of programs, their speed differences (in one way or another) will be negligible...</p>
+
+<h2>Edit (2011-06-06)</h2>
+
+<h3>My experience on C#/.NET</h3>
+
+<p>I have now 5 months of almost exclusive professional C# coding (which adds up to my CV already full of C++ and Java, and a touch of C++/CLI).</p>
+
+<p>I played with WinForms (Ahem...) and WCF (cool!), and WPF (Cool!!!! Both through XAML and raw C#. WPF is so easy I believe Swing just cannot compare to it), and C# 4.0.</p>
+
+<p>The conclusion is that while it's easier/faster to produce a code that works in C#/Java than in C++, it's a lot harder to produce a strong, safe and robust code in C# (and even harder in Java) than in C++. Reasons abound, but it can be summarized by:</p>
+
+<ol>
+<li><b>Generics are not as powerful as templates</b> (<i>try to write an efficient generic Parse method (from string to T), or an efficient equivalent of boost::lexical_cast in C# to understand the problem</i>)</li>
+<li><b>RAII remains unmatched</b> (<i>GC still can leak (yes, I had to handle that problem) and will only handle memory. Even C#'s <code>using</code> is not as easy and powerful because writing a correct Dispose implementations is difficult</i>)</li>
+<li><b>C# <code>readonly</code> and Java <code>final</code> are nowhere as useful as C++'s <code>const</code></b> (<i>There's no way you can expose readonly complex data (a Tree of Nodes, for example) in C# without tremendous work, while it's a built-in feature of C++. Immutable data is an interesting solution, but not everything can be made immutable, so it's not even enough, by far</i>).</li>
+</ol>
+
+<p>So, C# remains an pleasant language as long as you want something that works, but a frustrating language the moment you want something that <i>always and safely</i> works.</p>
+
+<p>Java is even more frustrating, as it has the same problems than C#, and more: Lacking the equivalent of C#'s <code>using</code> keyword, a very skilled colleague of mine spent too much time making sure its resources where correctly freed, whereas the equivalent in C++ would have been easy (using destructors and smart pointers).</p>
+
+<p>So I guess C#/Java's productivity gain is visible for most code... until the day you need the code to be as perfect as possible. That day, you'll know pain. (you won't believe what's asked from our server and GUI apps...).</p>
+
+<h3>About Server-side Java and C++</h3>
+
+<p>I kept contact with the server teams (I worked 2 years among them, before getting back to the GUI team), at the other side of the building, and I learned something interesting.</p>
+
+<p>Last years, the trend was to have the Java server apps be destined to replace the old C++ server apps, as Java has a lot of frameworks/tools, and is easy to maintain, deploy, etc. etc..</p>
+
+<p>...Until the problem of low-latency reared its ugly head the last months. Then, the Java server apps, no matter the optimization attempted by our skilled Java team, simply and cleanly lost the race against the old, not really optimized C++ server.</p>
+
+<p>Currently, the decision is to keep the Java servers for common use where performance while still important, is not concerned by the low-latency target, and aggressively optimize the already faster C++ server applications for low-latency and ultra-low-latency needs.</p>
+
+<h3>Conclusion</h3>
+
+<p>Nothing is as simple as expected.</p>
+
+<p>Java, and even more C#, are cool languages, with extensive standard libraries and frameworks, where you can code fast, and have result very soon.</p>
+
+<p>But when you need raw power, powerful and systematic optimizations, strong compiler support, powerful language features and absolute safety, Java and C# make it difficult to win the last missing but critical percents of quality you need to remain above the competition.</p>
+
+<p>It's as if you needed less time and less experienced developers in C#/Java than in C++ to produce average quality code, but in the other hand, the moment you needed excellent to perfect quality code, it was suddenly easier and faster to get the results right in C++.</p>
+
+<p>Of course, this is my own perception, perhaps limited to our specific needs.</p>
+
+<p>But still, it is what happens today, both in the GUI teams and the server-side teams.</p>
+
+<p>Of course, I'll update this post if something new happens.</p>
+
+<h2>Edit (2011-06-22)</h2>
+
+<blockquote>
+  <p>"We find that in regards to performance, C++ wins out by
+  a large margin. However, it also required the most extensive
+  tuning efforts, many of which were done at a level of sophistication
+  that would not be available to the average programmer.</p>
+  
+  <p>[...] The Java version was probably the simplest to implement, but the hardest to analyze for performance. Specifically the effects around garbage collection were complicated and very hard to tune."</p>
+</blockquote>
+
+<p>Sources:</p>
+
+<ul>
+<li><a href="https://days2011.scala-lang.org/sites/days2011/files/ws3-1-Hundt.pdf" rel="nofollow">https://days2011.scala-lang.org/sites/days2011/files/ws3-1-Hundt.pdf</a></li>
+<li><a href="http://www.computing.co.uk/ctg/news/2076322/-winner-google-language-tests" rel="nofollow">http://www.computing.co.uk/ctg/news/2076322/-winner-google-language-tests</a></li>
+</ul>
+
+<h2>Edit (2011-09-20)</h2>
+
+<blockquote>
+  <p>"The going word at Facebook is that '<b>reasonably written C++ code just runs fast,</b>' which underscores the enormous effort spent at optimizing PHP and Java code. Paradoxically, C++ code is more difficult to write than in other languages, but <b>efficient code is a lot easier [to write in C++ than in other languages].</b>"</p>
+  
+  <p>– <a href="https://secure.wikimedia.org/wikipedia/en/wiki/Herb_Sutter" rel="nofollow">Herb Sutter</a> at <a href="http://www.buildwindows.com/" rel="nofollow">//build/</a>, quoting <b><a href="https://secure.wikimedia.org/wikipedia/en/wiki/Andrei_Alexandrescu" rel="nofollow">Andrei Alexandrescu</a></b></p>
+</blockquote>
+
+<p>Sources:</p>
+
+<ul>
+<li><a href="http://channel9.msdn.com/Events/BUILD/BUILD2011/TOOL-835T" rel="nofollow">http://channel9.msdn.com/Events/BUILD/BUILD2011/TOOL-835T</a></li>
+<li><a href="http://video.ch9.ms/build/2011/slides/TOOL-835T_Sutter.pptx" rel="nofollow">http://video.ch9.ms/build/2011/slides/TOOL-835T_Sutter.pptx</a></li>
+</ul>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145559" title="short permalink to this answer" class="short-link" id="link-post-145559">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                            edited
+                             <a href="/posts/145559/revisions" title="show all edits to this post"><span title="2011-10-04 20:25:37Z" class="relativetime">Oct 4 '11 at 20:25</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145559" href="/posts/145559/revisions" title="show revision history for this post">
+10 revs<br>paercebal            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145559" class="comments">
+        <table>
+        <tbody>
+                    
+    <tr id="comment-9294395" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="warm">8</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">You edit after 5 months of C# describes exactly my own experience (templates better, const better, RAII). +1. Those three remain my personal killer features for C++ (or D, which I hadn&#39;t the time for, yet).</span> &ndash;&nbsp;<a href="/users/76722/phresnel" title="11600 reputation" class="comment-user">phresnel</a> <span class="comment-date" dir="ltr"><span title="2011-10-04 15:59:26Z" class="relativetime-clean">Oct 4 '11 at 15:59</span></span><span class="edited-yes" title="this comment was edited"></span></div></td>
+    </tr>
+            
+    <tr id="comment-9798493" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">1</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">What an excellent answer!</span> &ndash;&nbsp;<a href="/users/398398/chan" title="2045 reputation" class="comment-user">Chan</a> <span class="comment-date" dir="ltr"><span title="2011-11-04 10:33:52Z" class="relativetime-clean">Nov 4 '11 at 10:33</span></span></div></td>
+    </tr>
+            
+    <tr id="comment-11119215" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">1</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">&quot;No matter the JIT optimization, nothing will go has fast as direct pointer access to memory...if you have contiguous data in memory, accessing it through C++ pointers (i.e. C pointers... Let&#39;s give Caesar its due) will goes times faster than in Java/C#&quot;. People have observed Java beating C++ on the SOR test from the SciMark2 benchmark precisely because pointers impede aliasing-related optimizations. <a href="http://blogs.oracle.com/dagastine/entry/sun_java_is_faster_than" rel="nofollow">blogs.oracle.com/dagastine/entry/sun_java_is_faster_than</a></span> &ndash;&nbsp;<a href="/users/13924/jon-harrop" title="16225 reputation" class="comment-user">Jon Harrop</a> <span class="comment-date" dir="ltr"><span title="2012-01-17 10:16:29Z" class="relativetime-clean">Jan 17 at 10:16</span></span></div></td>
+    </tr>
+
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-145559" class="comments-link" data-comments-count="4" title="expand to show all comments on this post">show <b>4</b> more comments</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="220582"></a>
+    <div id="answer-220582" class="answer ice-ice-baby"  data-answerid="220582">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="220582">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">48</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>Whenever I talk managed vs. unmanaged performance, I like to point to the series Rico (and Raymond) did comparing C++ and C# versions of a Chinese/English dictionary.  This <a href="http://www.google.com/search?hl=en&amp;q=performance+quiz+6+site%3Ablogs.msdn.com">google search</a> will let you read for yourself, but I like Rico's summary.</p>
+
+<blockquote>
+  <p>So am I ashamed by my crushing defeat?
+  Hardly.  The managed code got a very
+  good result for hardly any effort. To
+  defeat the managed Raymond had to:</p>
+  
+  <ul>
+  <li>Write his own file I/O stuff </li>
+  <li>Write his own string class </li>
+  <li>Write his own allocator </li>
+  <li>Write his own international mapping</li>
+  </ul>
+  
+  <p>Of course he used available lower
+  level libraries to do this, but that's
+  still a lot of work.  Can you call
+  what's left an STL program?  I don't
+  think so, I think he kept the
+  std::vector class which ultimately was
+  never a problem and he kept the find
+  function.  Pretty much everything else
+  is gone.</p>
+  
+  <p>So, yup, you can definately beat the
+  CLR.  Raymond can make his program go
+  even faster I think.</p>
+  
+  <p>Interestingly, the time to parse the
+  file as reported by both programs
+  internal timers is about the same --
+  30ms for each.  The difference is in
+  the overhead.</p>
+</blockquote>
+
+<p>For me the bottom line is that it took 6 revisions for the unmanaged version to beat the managed version that was a simple port of the original unmanaged code.  If you need every last bit of performance (and have the time and expertise to get it), you'll have to go unmanaged, but for me, I'll take the order of magnitude advantage I have on the first versions over the 33% I gain if I try 6 times.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/220582" title="short permalink to this answer" class="short-link" id="link-post-220582">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                            edited
+                             <a href="/posts/220582/revisions" title="show all edits to this post"><span title="2011-12-07 09:47:05Z" class="relativetime">Dec 7 '11 at 9:47</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-220582" href="/posts/220582/revisions" title="show revision history for this post">
+3 revs, 3 users 94%<br>Jon Norton            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-220582" class="comments">
+        <table>
+        <tbody>
+                    
+    <tr id="comment-5961076" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">3</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">link is dead, found mentioned article here: <a href="http://blogs.msdn.com/b/ricom/archive/2005/05/10/416151.aspx" rel="nofollow">blogs.msdn.com/b/ricom/archive/2005/05/10/416151.aspx</a></span> &ndash;&nbsp;<a href="/users/65747/gjvdkamp" title="2495 reputation" class="comment-user">gjvdkamp</a> <span class="comment-date" dir="ltr"><span title="2011-03-13 08:57:48Z" class="relativetime-clean">Mar 13 '11 at 8:57</span></span></div></td>
+    </tr>
+
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-220582" class="comments-link" data-comments-count="3" title="expand to show all comments on this post">show <b>3</b> more comments</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="153900"></a>
+    <div id="answer-153900" class="answer ice-ice-baby"  data-answerid="153900">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="153900">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">27</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>The compile for specific CPU optimizations are usually overrated.  Just  take a program in C++ and compile with   optimization for pentium PRO  and run on a pentium 4. Then  recompile with optimize for pentium 4. I passed long afternoons doing it with several programs.  General results?? Usually less than 2-3% performance increase. So the theoretical JIT advantages  are almost none. Most differences of performance can only be observed when using scalar data processing features, something that  will eventually need manual fine tunning to achieve maximum performance anyway. Optimizations of that sort are slow and costly to perform making them sometimes unsuitable for JIT anyway.</p>
+
+<p>On real world and real application C++ is still usually faster than java, mainly  because of  lighter memory footprint that result in better cache performance.</p>
+
+<p>But to use all of C++ capability you, the developer must work hard. You can achieve superior results, but you must use your brain for that. C++ is a language that decided to present you with more tools, charging the price that you must  learn them to be able to use the language well. </p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/153900" title="short permalink to this answer" class="short-link" id="link-post-153900">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/153900/revisions" title="show all edits to this post"><span title="2008-09-30 16:36:50Z" class="relativetime">Sep 30 '08 at 16:36</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-153900" href="/posts/153900/revisions" title="show revision history for this post">
+OldMan            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-153900" class="comments">
+        <table>
+        <tbody>
+                    
+    <tr id="comment-1402087" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">4</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">It&#39;s not so much that you are compiling for CPU optimization, but you are compiling for runtime path optimization.  If you find that a method is very often called with a specific parameter, you could pre-compile that routine with that parameter as a constant which could (in the case of a boolean that controls flow) factor out gigantic chunks of work.
+
+C++ cannot come close to doing that kind of optimization.</span> &ndash;&nbsp;<a href="/users/12943/bill-k" title="24600 reputation" class="comment-user">Bill K</a> <span class="comment-date" dir="ltr"><span title="2009-10-09 17:42:47Z" class="relativetime-clean">Oct 9 '09 at 17:42</span></span></div></td>
+    </tr>
+            
+    <tr id="comment-1736482" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">1</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">So how do JITs do at recompiling routines to take advantage of observed runpaths, and how much difference does that make?</span> &ndash;&nbsp;<a href="/users/14148/david-thornley" title="33439 reputation" class="comment-user">David Thornley</a> <span class="comment-date" dir="ltr"><span title="2009-12-03 21:50:19Z" class="relativetime-clean">Dec 3 '09 at 21:50</span></span></div></td>
+    </tr>
+            
+    <tr id="comment-3857831" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">2</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">@Bill I may be mixing two things... but isn&#39;t branch prediction done at run time in the instruction pipeline achieve similar goals independent of the language?</span> &ndash;&nbsp;<a href="/users/151242/hardy" title="133 reputation" class="comment-user">Hardy</a> <span class="comment-date" dir="ltr"><span title="2010-09-08 09:00:02Z" class="relativetime-clean">Sep 8 '10 at 9:00</span></span></div></td>
+    </tr>
+
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-153900" class="comments-link" data-comments-count="1" title="expand to show all comments on this post">show <b>1</b> more comment</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="145139"></a>
+    <div id="answer-145139" class="answer ice-ice-baby"  data-answerid="145139">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145139">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">21</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>JIT (Just In Time Compiling) can be incredibly fast because it optimizes for the target platform.</p>
+
+<p>This means that it can take advantage of any compiler trick your CPU can support, regardless of what CPU the developer wrote the code on.</p>
+
+<p>The basic concept of the .NET JIT works like this (heavily simplified):</p>
+
+<p><strong>Calling a method for the first time:</strong></p>
+
+<ul>
+<li>Your program code calls a method Foo()</li>
+<li>The CLR looks at the type that implements Foo() and gets the metadata associated with it</li>
+<li>From the metadata, the CLR knows what memory address the IL (Intermediate byte code) is stored in.</li>
+<li>The CLR allocates a block of memory, and calls the JIT.</li>
+<li>The JIT compiles the IL into native code, places it into the allocated memory, and then changes the function pointer in Foo()'s type metadata to point to this native code.</li>
+<li>The native code is ran.</li>
+</ul>
+
+<p><strong>Calling a method for the second time:</strong></p>
+
+<ul>
+<li>Your program code calls a method Foo()</li>
+<li>The CLR looks at the type that implements Foo() and finds the function pointer in the metadata.</li>
+<li>The native code at this memory location is ran.</li>
+</ul>
+
+<p>As you can see, the 2nd time around, its virtually the same process as C++, except with the advantage of real time optimizations.</p>
+
+<p>That said, there are still other overhead issues that slow down a managed language, but the JIT helps a lot.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145139" title="short permalink to this answer" class="short-link" id="link-post-145139">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/145139/revisions" title="show all edits to this post"><span title="2008-09-28 03:30:49Z" class="relativetime">Sep 28 '08 at 3:30</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145139" href="/posts/145139/revisions" title="show revision history for this post">
+FlySwat            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145139" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-145139" class="comments-link" data-comments-count="1" title="expand to show all comments on this post">show <b>1</b> more comment</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="145277"></a>
+    <div id="answer-145277" class="answer ice-ice-baby"  data-answerid="145277">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145277">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">12</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>I like <a href="http://stackoverflow.com/questions/145110/c-performance-vs-javac#145122">Orion Adrian</a>'s answer, but there is another aspect to it.</p>
+
+<p>The same question was posed decades ago about assembly language vs. "human" languages like FORTRAN. And part of the answer is similar.</p>
+
+<p>Yes, a C++ program is capable of being faster than C# on any given (non-trivial?) algorithm, but the program in C# will often be as fast or faster than a "naive" implementation in C++, and an optimized version in C++ will take longer to develop, and might still beat the C# version by a very small margin. So, is it really worth it?</p>
+
+<p>You'll have to answer that question on a one-by-one basis.</p>
+
+<p>That said, I'm a long time fan of C++, and I think it's an incredibly expressive and powerful language -- sometimes underappreciated. But in many "real life" problems (to me personally, that means "the kind I get paid to solve"), C# will get the job done sooner and safer.</p>
+
+<p>The biggest penalty you pay? Many .NET and Java programs are memory hogs. I have seen .NET and Java apps take "hundreds" of megabytes of memory, when C++ programs of similar complexity barely scratch the "tens" of MBs.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145277" title="short permalink to this answer" class="short-link" id="link-post-145277">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/145277/revisions" title="show all edits to this post"><span title="2008-09-28 05:40:28Z" class="relativetime">Sep 28 '08 at 5:40</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145277" href="/posts/145277/revisions" title="show revision history for this post">
+Euro Micelli            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145277" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="145134"></a>
+    <div id="answer-145134" class="answer ice-ice-baby"  data-answerid="145134">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145134">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">7</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>I'm not sure how often you'll find that Java code will run faster than C++, even with Hotspot, but I'll take a swing at explaining how it could happen.</p>
+
+<p>Think of compiled Java code as interpreted machine language for the JVM.  When the Hotspot processor notices that certain pieces of the compiled code are going to be used many times, it performs an optimization on the machine code.  Since hand-tuning Assembly is almost always faster than C++ compiled code, it's ok to figure that programmatically-tuned machine code isn't going to be <strong>too</strong> bad.</p>
+
+<p>So, for highly repetitious code, I could see where it'd be possible for Hotspot JVM to run the Java faster than C++... until garbage collection comes into play. :)</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145134" title="short permalink to this answer" class="short-link" id="link-post-145134">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/145134/revisions" title="show all edits to this post"><span title="2008-09-28 03:28:06Z" class="relativetime">Sep 28 '08 at 3:28</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145134" href="/posts/145134/revisions" title="show revision history for this post">
+Bill James            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145134" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-145134" class="comments-link" data-comments-count="5" title="expand to show all comments on this post">show <b>5</b> more comments</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="145196"></a>
+    <div id="answer-145196" class="answer ice-ice-baby"  data-answerid="145196">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145196">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">6</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>Generally, your program's <em>algorithm</em> will be much more important to the speed of your application than the <em>language</em>.  You can implement a poor algorithm in any language, including C++.  With that in mind, you'll generally be able to write code the runs faster in a language that helps you implement a more efficient algorithm.  </p>
+
+<p>Higher-level languages do very well at this by providing easier access to many efficient pre-built data structures and encouraging practices that will help you avoid inefficient code.  Of course, they can at times also make it easy to write a bunch of really slow code, too, so you still have to know your platform.</p>
+
+<p>Also, C++ is catching up with "new" (note the quotes) features like the STL containers, auto pointers, etc -- see the boost library, for example.  And you might occasionally find that the fastest way to accomplish some task requires a technique like pointer arithmetic that's forbidden in a higher-level language -- though they typcially allow you to call out to a library written in a language that can implement it as desired.</p>
+
+<p>The main thing is to know the language you're using, it's associated API, what it can do, and what it's limitations are.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145196" title="short permalink to this answer" class="short-link" id="link-post-145196">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/145196/revisions" title="show all edits to this post"><span title="2008-09-28 04:10:40Z" class="relativetime">Sep 28 '08 at 4:10</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145196" href="/posts/145196/revisions" title="show revision history for this post">
+Joel Coehoorn            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145196" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="220743"></a>
+    <div id="answer-220743" class="answer ice-ice-baby"  data-answerid="220743">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="220743">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">5</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>I don't know either...my Java programs are always slow. :-) I've never really noticed C# programs being particularly slow, though.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/220743" title="short permalink to this answer" class="short-link" id="link-post-220743">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/220743/revisions" title="show all edits to this post"><span title="2008-10-21 04:05:57Z" class="relativetime">Oct 21 '08 at 4:05</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-220743" href="/posts/220743/revisions" title="show revision history for this post">
+Paul Nathan            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-220743" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="873141"></a>
+    <div id="answer-873141" class="answer ice-ice-baby"  data-answerid="873141">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="873141">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">4</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>Here is another intersting benchmark, which you can try yourself on your own computer. </p>
+
+<p>It compares ASM, VC++, C#, Silverlight, Java applet, Javascript, Flash (AS3)</p>
+
+<p><a href="http://www.3djam.com/speed%5Fdemo.aspx" rel="nofollow">Roozz plugin speed demo</a></p>
+
+<p>Please note that the speed of javascript varries a lot depending on what browser is executing it. The same is true for Flash and Silverlight because these plugins run in the same process as the hosting browser. But the Roozz plugin run standard .exe files, which run in their own process, thus the speed is not influenced by the hosting browser. </p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/873141" title="short permalink to this answer" class="short-link" id="link-post-873141">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/873141/revisions" title="show all edits to this post"><span title="2009-05-16 19:41:36Z" class="relativetime">May 16 '09 at 19:41</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-873141" href="/posts/873141/revisions" title="show revision history for this post">
+Thomas            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-873141" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="1843088"></a>
+    <div id="answer-1843088" class="answer ice-ice-baby"  data-answerid="1843088">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="1843088">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">4</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>You should define "perform better than..". Well, I know, you asked about speed, but its not everything that counts.</p>
+
+<ul>
+<li>Do virtual machines perform more runtime overhead? Yes!</li>
+<li>Do they eat more working memory? Yes!</li>
+<li>Do they have higher startup costs (runtime initialization and JIT compiler) ? Yes!</li>
+<li>Do they require a huge library installed? Yes!</li>
+</ul>
+
+<p>And so on, its biased, yes ;)</p>
+
+<p>With C# and Java you pay a price for what you get (faster coding, automatic memory management, big library and so on). But you have not much room to haggle about the details: take the complete package or nothing.</p>
+
+<p>Even if those languages can optimize some code to execute faster than compiled code, the whole approach is (IMHO) inefficient. Imagine driving every day 5 miles to your workplace, with a truck! Its comfortable, it feels good, you are safe (extreme crumple zone) and after you step on the gas for some time, it will even be as fast as a standard car! Why don't we all have a truck to drive to work? ;)</p>
+
+<p>In C++ you get what you pay for, not more, not less.</p>
+
+<p>Quoting Bjarne Stroustrup: "C++ is my favorite garbage collected language because it generates so little garbage"
+<a href="http://www2.research.att.com/~bs/bs%5Ffaq.html#really-say-that" rel="nofollow">link text</a></p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/1843088" title="short permalink to this answer" class="short-link" id="link-post-1843088">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/1843088/revisions" title="show all edits to this post"><span title="2009-12-03 21:35:31Z" class="relativetime">Dec 3 '09 at 21:35</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-1843088" href="/posts/1843088/revisions" title="show revision history for this post">
+Frunsi            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-1843088" class="comments">
+        <table>
+        <tbody>
+                    
+    <tr id="comment-8831154" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">3</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">@Jon: but at some (later?) point in time it has to destruct the objects anyway (at least it has to release its memory). And also note, that exceptions are for exceptional cases, at least in C++ that rule should be respected. C++ exceptions may be heavy when exceptions occur, that is a trade-off.</span> &ndash;&nbsp;<a href="/users/206247/frunsi" title="3545 reputation" class="comment-user">Frunsi</a> <span class="comment-date" dir="ltr"><span title="2011-09-06 19:19:17Z" class="relativetime-clean">Sep 6 '11 at 19:19</span></span></div></td>
+    </tr>
+
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-1843088" class="comments-link" data-comments-count="5" title="expand to show all comments on this post">show <b>5</b> more comments</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="145124"></a>
+    <div id="answer-145124" class="answer ice-ice-baby"  data-answerid="145124">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145124">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">3</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>The executable code produced from a Java or C# compiler is not interpretted -- it is compiled to native code "just in time" (JIT).  So, the first time code in a Java/C# program is encountered during execution, there is some overhead as the "runtime compiler" (aka JIT compiler) turns the byte code (Java) or IL code (C#) into native machine instructions.  However, the next time that code is encountered while the application is still running, the native code is executed immediately.  This explains how some Java/C# programs appear to be slow initially, but then perform better the longer they run.  A good example is an ASP.Net web site.  The very first time the web site is accessed, it may be a bit slower as the C# code is compiled to native code by the JIT compiler.  Subsequent accesses result in a much faster web site -- server and client side caching aside.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145124" title="short permalink to this answer" class="short-link" id="link-post-145124">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/145124/revisions" title="show all edits to this post"><span title="2008-09-28 03:23:21Z" class="relativetime">Sep 28 '08 at 3:23</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145124" href="/posts/145124/revisions" title="show revision history for this post">
+Peter Meyer            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145124" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="145199"></a>
+    <div id="answer-145199" class="answer ice-ice-baby"  data-answerid="145199">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145199">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">3</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>Some good answers here about the specific question you asked.  I'd like to step back and look at the bigger picture.</p>
+
+<p>Keep in mind that your user's perception of the speed of the software you write is affected by many other factors than just how well the codegen optimizes.  Here are some examples:</p>
+
+<ul>
+<li><p>Manual memory management is hard to do correctly (no leaks), and even harder to do effeciently (free memory soon after you're done with it).  Using a GC is, in general, more likely to produce a program that manages memory well.  Are you willing to work very hard, and delay delivering your software, in an attempt to out-do the GC?</p></li>
+<li><p>My C# is easier to read &amp; understand than my C++.  I also have more ways to convince myself that my C# code is working correctly.  That means I can optimize my algorithms with less risk of introducing bugs (and users don't like software that crashes, even if it does it quickly!)</p></li>
+<li><p>I can create my software faster in C# than in C++.  That frees up time to work on performance, and still deliver my software on time.</p></li>
+<li><p>It's easier to write good UI in C# than C++, so I'm more likely to be able to push work to the background while UI stays responsive, or to provide progress or hearbeat UI when the program has to block for a while.  This doesn't make anything faster, but it makes users happier about waiting.</p></li>
+</ul>
+
+<p>Everything I said about C# is probably true for Java, I just don't have the experience to say for sure.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145199" title="short permalink to this answer" class="short-link" id="link-post-145199">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/145199/revisions" title="show all edits to this post"><span title="2008-09-28 04:11:28Z" class="relativetime">Sep 28 '08 at 4:11</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145199" href="/posts/145199/revisions" title="show revision history for this post">
+Jay Bazuzi            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145199" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="145574"></a>
+    <div id="answer-145574" class="answer ice-ice-baby"  data-answerid="145574">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145574">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">3</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>If you're a Java/C# programmer learning C++, you'll be tempted to keep thinking in terms of Java/C# and translate verbatim to C++ syntax. In that case, you only get the earlier mentioned benefits of native code vs. interpreted/JIT. To get the biggest performance gain in C++ vs. Java/C#, you have to learn to think in C++ and design code specifically to exploit the strengths of C++.</p>
+
+<p>To paraphrase <a href="http://www.cs.virginia.edu/~evans/cs655-S00/readings/ewd498.html" rel="nofollow">Edsger Dijkstra</a>: [your first language] mutilates the mind beyond recovery.<br />
+To paraphrase <a href="http://www.codinghorror.com/blog/archives/000272.html" rel="nofollow">Jeff Atwood</a>: you can write [your first language] in any new language.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145574" title="short permalink to this answer" class="short-link" id="link-post-145574">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/145574/revisions" title="show all edits to this post"><span title="2008-09-28 09:44:12Z" class="relativetime">Sep 28 '08 at 9:44</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145574" href="/posts/145574/revisions" title="show revision history for this post">
+palm3D            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145574" class="comments">
+        <table>
+        <tbody>
+                    
+    <tr id="comment-1736523" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">1</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">I suspect that the saying &quot;You can write FORTRAN in any language&quot; predates Jeff&#39;s career.</span> &ndash;&nbsp;<a href="/users/14148/david-thornley" title="33439 reputation" class="comment-user">David Thornley</a> <span class="comment-date" dir="ltr"><span title="2009-12-03 21:54:42Z" class="relativetime-clean">Dec 3 '09 at 21:54</span></span></div></td>
+    </tr>
+
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="467158"></a>
+    <div id="answer-467158" class="answer ice-ice-baby"  data-answerid="467158">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="467158">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">3</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>One of the most significant JIT optimizations is method inlining. Java can even inline virtual methods if it can guarantee runtime correctness. This kind of optimization usually cannot be performed by standard static compilers because it needs whole-program analysis, which is hard because of separate compilation (in contrast, JIT has all the program available to it). Method inlining improves other optimizations, giving larger code blocks to optimize.</p>
+
+<p>Standard memory allocation in Java/C# is also faster, and deallocation (GC) is not much slower, but only less deterministic.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/467158" title="short permalink to this answer" class="short-link" id="link-post-467158">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/467158/revisions" title="show all edits to this post"><span title="2009-01-21 21:46:59Z" class="relativetime">Jan 21 '09 at 21:46</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-467158" href="/posts/467158/revisions" title="show revision history for this post">
+user57697            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-467158" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-467158" class="comments-link" data-comments-count="1" title="expand to show all comments on this post">show <b>1</b> more comment</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="145133"></a>
+    <div id="answer-145133" class="answer ice-ice-baby"  data-answerid="145133">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145133">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">3</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>The virtual machine languages are unlikely to outperform compiled languages but they can get close enough that it doesn't matter, for (at least) the following reasons (I'm speaking for Java here since I've never done C#).</p>
+
+<p>1/ The Java Runtime Environment is usually able to detect pieces of code that are run frequently and perform just-in-time (JIT) compilation of those sections so that, in future, they run at the full compiled speed.</p>
+
+<p>2/ Vast portions of the Java libraries are compiled so that, when you call a library function, you're executing compiled code, not interpreted. You can see the code (in C) by downloading the OpenJDK.</p>
+
+<p>3/ Unless you're doing massive calculations, much of the time your program is running, it's waiting for input from a very slow (relatively speaking) human.</p>
+
+<p>4/ Since a lot of the validation of Java bytecode is done at the time of loading the class, the normal overhead of runtime checks is greatly reduced.</p>
+
+<p>5/ At the worst case, performance-intensive code can be extracted to a compiled module and called from Java (see JNI) so that it runs at full speed.</p>
+
+<p>In summary, the Java bytecode will never outperform native machine language, but there are ways to mitigate this. The big advantage of Java (as I see it) is the <em>HUGE</em> standard library and the cross-platform nature.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145133" title="short permalink to this answer" class="short-link" id="link-post-145133">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                            edited
+                             <a href="/posts/145133/revisions" title="show all edits to this post"><span title="2009-12-04 01:01:13Z" class="relativetime">Dec 4 '09 at 1:01</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145133" href="/posts/145133/revisions" title="show revision history for this post">
+paxdiablo            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145133" class="comments">
+        <table>
+        <tbody>
+                    
+    <tr id="comment-41635" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">1</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">Re item 2, &quot;2/ Vast portions of the Java libraries are compiled so that, when you call a library function, you&#39;re executing compiled code, not interpreted&quot;: Do you have a citation for that? If it were really as you describe, I&#39;d expect to run into native code from my debugger a lot, but I don&#39;t.</span> &ndash;&nbsp;<a href="/users/93248/cero" title="372 reputation" class="comment-user">cero</a> <span class="comment-date" dir="ltr"><span title="2008-09-28 22:46:56Z" class="relativetime-clean">Sep 28 '08 at 22:46</span></span></div></td>
+    </tr>
+            
+    <tr id="comment-1736716" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">2</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">There is another huge performance gain to This HUGH library - 
+library code is probably better written than what many programmers will write on their own (given a limited time, and lack of specialty knowledge) and on Java, because of many reasons, programmers often use the library.</span> &ndash;&nbsp;<a href="/users/72471/liran-orevi" title="1903 reputation" class="comment-user">Liran Orevi</a> <span class="comment-date" dir="ltr"><span title="2009-12-03 22:20:10Z" class="relativetime-clean">Dec 3 '09 at 22:20</span></span></div></td>
+    </tr>
+
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-145133" class="comments-link" data-comments-count="1" title="expand to show all comments on this post">show <b>1</b> more comment</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="6253691"></a>
+    <div id="answer-6253691" class="answer ice-ice-baby"  data-answerid="6253691">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="6253691">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">3</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p><a href="http://stackoverflow.com/questions/145110/c-performance-vs-java-c/145122#145122">Orion Adrian</a>, let me invert your post to see how unfounded your remarks are, because a lot can be said about C++ as well. And telling that Java/C# compiler optimize away empty functions does really make you sound like you are <em>not</em> my expert in optimization, because a) why should a real program contain empty functions, except for really bad legacy code, b) that is really not black and bleeding edge optimization.</p>
+
+<p>Apart from that phrase, you ranted blatantly about pointers, but don't objects in Java and C# basically work like C++ pointers? May they not overlap? May they not be null? C (and most C++ implementations) has the restrict keyword, both have value types, C++ has reference-to-value with non-null guarantee. What do Java and C# offer?</p>
+
+<h2>>>>>>>>>>></h2>
+
+<p>Generally, C and C++ can be just as fast or faster because the AOT compiler -- a compiler that compiles your code  before deployment, once and for all, on your high memory many core build server -- can make optimizations that a C# compiled program cannot because it has a ton of time to do so. The compiler can determine if the machine is Intel or AMD; Pentium 4, Core Solo, or Core Duo; or if supports SSE4, etc, and if your compiler does not support runtime dispatch, you can solve for that yourself by deploying a handful of specialized binaries.</p>
+
+<p>A C# program is commonly compiled upon running it so that it runs decently well on all machines, but is not optimized as much as it could be for a single configuration (i.e. processor, instruction set, other hardware), and it <em>must</em> spend some time first.  Features like loop fission, loop inversion, automatic vectorization, whole program optimization, template expansion, IPO, and many more, are very hard to be solved all and completely in a way that does not annoy the end user.</p>
+
+<p>Additionally certain language features allow the compiler in C++ or C to make assumptions about your code that allows it to optimize certain parts away that just aren't safe for the Java/C# compiler to do. When you don't have access to the full type id of generics or a guaranteed program flow there's a lot of optimizations that just aren't safe.</p>
+
+<p>Also C++ and C do many stack allocations at once with just one register incrementation, which surely is more efficient than Javas and C# allocations as for the layer of abstraction between the garbage collector and your code.</p>
+
+<p>Now I can't speak for Java on this next point, but I know that C++ compilers for example will  actually remove methods and method calls when it knows the body of the method is empty, it will eliminate common subexpressions, it may try and retry to find optimal register usage, it does not enforce bounds checking, it will autovectorize loops and inner loops and will invert inner to outer, it moves conditionals out of loops, it splits and unsplits loops. It will expand std::vector into native zero overhead arrays as you'd do the C way. It will do inter procedural optimmizations. It will construct return values directly at the caller site. It will fold and propagate expressions. It will reorder data into  a cache friendly manner. It will do jump threading. It lets you write compile time ray tracers with zero runtime overhead.  It will make very expensive graph based optimizations. It will do strength reduction, were it replaces certain codes with syntactically totally unequal but semantically equivalent code (the old "xor foo, foo" is just the simplest, though outdated optimization of such kind). If you kindly ask it, you may omit IEEE floating point standards and enable even more optimizations like floating point operand re-ordering. After it has massaged and massacred your code, it might repeat the whole process, because often, certain optimizations lay the foundation for even certainer optimizations. It might also just retry with shuffled parameters and see how the other variant scores in its internal ranking. And it will use this kind of logic throughout your code.</p>
+
+<p>So as you can see, there are lots of reasons why certain C++ or C implementations will be faster.</p>
+
+<p>Now this all said, many optimizations can be made in C++ that will blow away anything that you could do with C#,  especially in the number crunching, realtime and close-to-metal realm, but not exclusively there. You don't even have to touch a single pointer to come a long way.</p>
+
+<p>So depending on what you're writing I would go with one or the other. But if you're writing something that isn't hardware dependent (driver, video game, etc), I wouldn't worry about the performance of C# (again can't speak about Java). It'll do just fine.</p>
+
+<h2>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</h2>
+
+<p><em>Generally, certain generalized arguments might sound cool in specific posts, but don't generally sound certainly credible.</em></p>
+
+<p><strong>Anyways, to make peace: <em>AOT</em> is great, as is <em>JIT</em>. The only correct answer can be: It depends. And the real smart people know that you can use the best of both worlds anyways.</strong></p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/6253691" title="short permalink to this answer" class="short-link" id="link-post-6253691">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                            edited
+                             <a href="/posts/6253691/revisions" title="show all edits to this post"><span title="2011-06-07 04:06:32Z" class="relativetime">Jun 7 '11 at 4:06</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-6253691" href="/posts/6253691/revisions" title="show revision history for this post">
+phresnel            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-6253691" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="145121"></a>
+    <div id="answer-145121" class="answer ice-ice-baby"  data-answerid="145121">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145121">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">2</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>It would only happen if the Java interpreter is producing machine code that is actually <em>better</em> optimized than the machine code your compiler is generating for the C++ code you are writing, to the point where the C++ code is slower than the Java and the interpretation cost.</p>
+
+<p>However, the odds of that actually happening are pretty low - unless perhaps Java has a very well-written library, and you have your own poorly written C++ library.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145121" title="short permalink to this answer" class="short-link" id="link-post-145121">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/145121/revisions" title="show all edits to this post"><span title="2008-09-28 03:21:28Z" class="relativetime">Sep 28 '08 at 3:21</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145121" href="/posts/145121/revisions" title="show revision history for this post">
+ine            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145121" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-145121" class="comments-link" data-comments-count="1" title="expand to show all comments on this post">show <b>1</b> more comment</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="220679"></a>
+    <div id="answer-220679" class="answer ice-ice-baby"  data-answerid="220679">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="220679">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">2</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>Actually, C# does not really run in a virtual machine like Java does. IL is compiled into assembly language, which is entirely native code and runs at the same speed as native code. You can pre-JIT an .NET application which entirely removes the JIT cost and then you are running entirely native code.</p>
+
+<p>The slowdown with .NET will come not because .NET code is slower, but because it does a lot more behind the scenes to do things like garbage collect, check references, store complete stack frames, etc. This can be quite powerful and helpful when building applications, but also comes at a cost. Note that you could do all these things in a C++ program as well (much of the core .NET functionality is actually .NET code which you can view in ROTOR). However, if you hand wrote the same functionality you would probably end up with a much slower program since the .NET runtime has been optimized and finely tuned.</p>
+
+<p>That said, one of the strengths of managed code is that it can be fully verifiable, ie. you can verify that the code will never access another processes's memory or do unsage things before you execute it. Microsoft has a research prototype of a fully managed operating system that has suprisingly shown that a 100% managed environment can actually perform significantly faster than any modern operating system by taking advantage of this verification to turn off security features that are no longer needed by managed programs (we are talking like 10x in some cases). SE radio has a great episode talking about this project.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/220679" title="short permalink to this answer" class="short-link" id="link-post-220679">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/220679/revisions" title="show all edits to this post"><span title="2008-10-21 03:21:38Z" class="relativetime">Oct 21 '08 at 3:21</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-220679" href="/posts/220679/revisions" title="show revision history for this post">
+jezell            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-220679" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="145151"></a>
+    <div id="answer-145151" class="answer ice-ice-baby"  data-answerid="145151">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145151">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">1</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>In some cases, managed code can actually be <em>faster</em> than native code. For instance, "mark-and-sweep" garbage collection algorithms allow environments like the JRE or CLR to free large numbers of short-lived (usually) objects in a single pass, where most C/C++ heap objects are freed one-at-a-time.</p>
+
+<p>From <a href="http://en.wikipedia.org/wiki/Garbage_collection_(computer_science)" rel="nofollow">wikipedia</a>:</p>
+
+<blockquote>
+  <p>For many practical purposes, allocation/deallocation-intensive algorithms implemented in garbage collected languages can actually be faster than their equivalents using manual heap allocation. A major reason for this is that the garbage collector allows the runtime system to amortize allocation and deallocation operations in a potentially advantageous fashion.</p>
+</blockquote>
+
+<p>That said, I've written a lot of C# and a lot of C++, and I've run a lot of benchmarks. In my experience, C++ is a lot faster than C#, in two ways: (1) if you take some code that you've written in C#, port it to C++ the native code <em>tends</em> to be faster. How much faster? Well, it varies a whole lot, but it's not uncommon to see a 100% speed improvement. (2) In some cases, garbage collection can <em>massively</em> slow down a managed application. The .NET CLR does a terrible job with large heaps (say, > 2GB), and can end up spending a lot of time in GC--even in applications that have few--or even no--objects of intermediate life spans.</p>
+
+<p>Of course, in most cases that I've encounted, managed languages are fast enough, by a long shot, and the maintenance and coding tradeoff for the extra performance of C++ is simply not a good one.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145151" title="short permalink to this answer" class="short-link" id="link-post-145151">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                            edited
+                             <a href="/posts/145151/revisions" title="show all edits to this post"><span title="2008-09-28 22:37:59Z" class="relativetime">Sep 28 '08 at 22:37</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145151" href="/posts/145151/revisions" title="show revision history for this post">
+cero            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145151" class="comments">
+        <table>
+        <tbody>
+                    
+    <tr id="comment-40526" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">1</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">The problem is that for long running processes, such as a web server, your memory over time will become so fragmented (in a C++ written program) that you will have to implement something that resembles garbage collection (or restart every so often, see IIS).</span> &ndash;&nbsp;<a href="/users/80075/tony-benbrahim" title="3098 reputation" class="comment-user">Tony BenBrahim</a> <span class="comment-date" dir="ltr"><span title="2008-09-28 04:06:00Z" class="relativetime-clean">Sep 28 '08 at 4:06</span></span></div></td>
+    </tr>
+            
+    <tr id="comment-1736505" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">3</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">I haven&#39;t observed that on the big Unix programs that are meant to run forever.  They tend to be written in C, which is even worse for memory management than C++.</span> &ndash;&nbsp;<a href="/users/14148/david-thornley" title="33439 reputation" class="comment-user">David Thornley</a> <span class="comment-date" dir="ltr"><span title="2009-12-03 21:52:31Z" class="relativetime-clean">Dec 3 '09 at 21:52</span></span></div></td>
+    </tr>
+            
+    <tr id="comment-1749007" class="comment">
+        <td class="comment-actions"><table><tbody><tr>
+<td class="comment-score">
+<span title="number of 'useful comment' votes received" class="cool">2</span>
+</td>
+<td>
+&nbsp;
+</td></tr>
+</tbody></table></td>
+        <td class="comment-text"><div><span class="comment-copy">In C/C++ you <i>can</i> allocate short lived objects on the stack, and you do when its appropriate. In managed code you <i>cannot</i>, you have no choice. Also, in C/C++ you <i>can</i> allocate lists of objects in contigous areas (new Foo[100]), in managed code you cannot. So, your comparison is not valid. Well, this power of choices places a burden on the developers, but this way they learn to know the world they live in (memory......).</span> &ndash;&nbsp;<a href="/users/206247/frunsi" title="3545 reputation" class="comment-user">Frunsi</a> <span class="comment-date" dir="ltr"><span title="2009-12-06 03:39:01Z" class="relativetime-clean">Dec 6 '09 at 3:39</span></span></div></td>
+    </tr>
+
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-145151" class="comments-link" data-comments-count="3" title="expand to show all comments on this post">show <b>3</b> more comments</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="208525"></a>
+    <div id="answer-208525" class="answer ice-ice-baby"  data-answerid="208525">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="208525">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">1</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>Here's an interesting benchmark
+<a href="http://zi.fi/shootout/" rel="nofollow">http://zi.fi/shootout/</a></p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/208525" title="short permalink to this answer" class="short-link" id="link-post-208525">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/208525/revisions" title="show all edits to this post"><span title="2008-10-16 13:21:59Z" class="relativetime">Oct 16 '08 at 13:21</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-208525" href="/posts/208525/revisions" title="show revision history for this post">
+            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-208525" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="220768"></a>
+    <div id="answer-220768" class="answer ice-ice-baby"  data-answerid="220768">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="220768">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">1</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>Actually Sun's HotSpot JVM uses "mixed-mode" execution. It interprets the method's bytecode until it determines (usually through a counter of some sort) that a particular block of code (method, loop, try-catch block, etc.) is going to be executed a lot, then it JIT compiles it. The time required to JIT compile a method often takes longer than if the method were to be interpreted if it is a seldom run method. Performance is usually higher for "mixed-mode" because the JVM does not waste time JITing code that is rarely, if ever, run.
+C# and .NET do not do this. .NET JITs everything which, often times, wastes time.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/220768" title="short permalink to this answer" class="short-link" id="link-post-220768">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/220768/revisions" title="show all edits to this post"><span title="2008-10-21 04:32:48Z" class="relativetime">Oct 21 '08 at 4:32</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-220768" href="/posts/220768/revisions" title="show revision history for this post">
+mcjabberz            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-220768" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="1976014"></a>
+    <div id="answer-1976014" class="answer ice-ice-baby"  data-answerid="1976014">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="1976014">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">1</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>Go read about HP Labs' <a href="http://arstechnica.com/reviews/1q00/dynamo/dynamo-1.html" rel="nofollow">Dynamo</a>, an interpreter for PA-8000 that runs on PA-8000, and often runs programs faster than they do natively.  Then it won't seem at all surprising!</p>
+
+<p>Don't think of it as an "intermediate step" -- running a program involves lots of other steps already, in any language.</p>
+
+<p>It often comes down to:</p>
+
+<ul>
+<li><p>programs have hot-spots, so even if you're slower running 95% of the body of code you have to run, you can still be performance-competitive if you're faster at the hot 5%</p></li>
+<li><p>a HLL knows more about your intent than a LLL like C/C++, and so can generate more optimized code (OCaml has even more, and in practice is often even faster)</p></li>
+<li><p>a JIT compiler has a lot of information that a static compiler doesn't (like, the actual data you happen to have this time)</p></li>
+<li><p>a JIT compiler can do optimizations at run-time that traditional linkers aren't really allowed to do (like reordering branches so the common case is flat, or inlining library calls)</p></li>
+</ul>
+
+<p>All in all, C/C++ are pretty lousy languages for performance: there's relatively little information about your data types, no information about your data, and no dynamic runtime to allow much in the way of run-time optimization.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/1976014" title="short permalink to this answer" class="short-link" id="link-post-1976014">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/1976014/revisions" title="show all edits to this post"><span title="2009-12-29 18:12:51Z" class="relativetime">Dec 29 '09 at 18:12</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-1976014" href="/posts/1976014/revisions" title="show revision history for this post">
+Ken            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-1976014" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="3215236"></a>
+    <div id="answer-3215236" class="answer ice-ice-baby"  data-answerid="3215236">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="3215236">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">1</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>You might get short bursts when Java or CLR is faster than C++, but overall the performance is worse for the life of the application:
+see www.codeproject.com/KB/dotnet/RuntimePerformance.aspx for some results for that.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/3215236" title="short permalink to this answer" class="short-link" id="link-post-3215236">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/3215236/revisions" title="show all edits to this post"><span title="2010-07-09 17:50:27Z" class="relativetime">Jul 9 '10 at 17:50</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-3215236" href="/posts/3215236/revisions" title="show revision history for this post">
+dmihailescu            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-3215236" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="1407164"></a>
+    <div id="answer-1407164" class="answer ice-ice-baby"  data-answerid="1407164">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="1407164">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">1</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>Here is answer from Cliff Click: <a href="http://www.azulsystems.com/blog/cliff/2009-09-06-java-vs-c-performanceagain" rel="nofollow">http://www.azulsystems.com/blog/cliff/2009-09-06-java-vs-c-performanceagain</a></p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/1407164" title="short permalink to this answer" class="short-link" id="link-post-1407164">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                            edited
+                             <a href="/posts/1407164/revisions" title="show all edits to this post"><span title="2011-04-09 12:31:37Z" class="relativetime">Apr 9 '11 at 12:31</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-1407164" href="/posts/1407164/revisions" title="show revision history for this post">
+Peter Štibran&#253;            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-1407164" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="7318496"></a>
+    <div id="answer-7318496" class="answer ice-ice-baby"  data-answerid="7318496">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="7318496">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">1</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><blockquote>
+  <p>My understanding is that C/C++ produces native code to run on a particular machine architecture. Conversely, languages like Java and C# run on top of a virtual machine which abstracts away the native architecture. Logically it would seem impossible for Java or C# to match the speed of C++ because of this intermediate step, however I've been told that the latest compilers ("hot spot") can attain this speed or even exceed it.</p>
+</blockquote>
+
+<p>That is illogical. The use of an intermediate representation does not inherently degrade performance. For example, llvm-gcc compiles C and C++ via LLVM IR (which is a virtual infinite-register machine) to native code and it achieves excellent performance (often beating GCC).</p>
+
+<blockquote>
+  <p>Perhaps this is more of a compiler question than a language question, but can anyone explain in plain English how it is possible for one of these virtual machine languages to perform better than a native language?</p>
+</blockquote>
+
+<p>Here are some examples:</p>
+
+<ul>
+<li><p>Virtual machines with JIT compilation facilitate run-time code generation (e.g. <code>System.Reflection.Emit</code> on .NET) so you can compile generated code on-the-fly in languages like C# and F# but must resort to writing a comparatively-slow interpreter in C or C++. For example, to implement regular expressions.</p></li>
+<li><p>Parts of the virtual machine (e.g. the write barrier and allocator) are often written in hand-coded assembler because C and C++ do not generate fast enough code. If a program stresses these parts of a system then it could conceivably outperform anything that can be written in C or C++.</p></li>
+<li><p>Dynamic linking of native code requires conformance to an ABI that can impede performance and obviates whole-program optimization whereas linking is typically deferred on VMs and can benefit from whole-program optimizations (like .NET's reified generics).</p></li>
+</ul>
+
+<p>I'd also like to address some issues with paercebal's highly-upvoted answer above (because someone keeps deleting my comments on his answer) that presents a counter-productively polarized view:</p>
+
+<blockquote>
+  <p>The code processing will be done at compilation time...</p>
+</blockquote>
+
+<p>Hence template metaprogramming only works if the program is available at compile time which is often not the case, e.g. it is impossible to write a competitively performant regular expression library in vanilla C++ because it is incapable of run-time code generation (an important aspect of metaprogramming).</p>
+
+<blockquote>
+  <p>...playing with types is done at compile time...the equivalent in Java or C# is painful at best to write, and will always be slower and resolved at runtime even when the types are known at compile time.</p>
+</blockquote>
+
+<p>In C#, that is only true of reference types and is not true for value types.</p>
+
+<blockquote>
+  <p>No matter the JIT optimization, nothing will go has fast as direct pointer access to memory...if you have contiguous data in memory, accessing it through C++ pointers (i.e. C pointers... Let's give Caesar its due) will goes times faster than in Java/C#.</p>
+</blockquote>
+
+<p>People have observed <a href="http://blogs.oracle.com/dagastine/entry/sun_java_is_faster_than" rel="nofollow">Java beating C++ on the SOR test from the SciMark2 benchmark</a> precisely because pointers impede aliasing-related optimizations.</p>
+
+<p>Also worth noting that .NET does type specialization of generics across dynamically-linked libraries after linking whereas C++ cannot because templates must be resolved before linking. And obviously the big advantage generics have over templates is comprehensible error messages.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/7318496" title="short permalink to this answer" class="short-link" id="link-post-7318496">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                            edited
+                             <a href="/posts/7318496/revisions" title="show all edits to this post"><span title="2012-01-17 10:59:37Z" class="relativetime">Jan 17 at 10:59</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-7318496" href="/posts/7318496/revisions" title="show revision history for this post">
+2 revs<br>Jon Harrop            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-7318496" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="145132"></a>
+    <div id="answer-145132" class="answer ice-ice-baby"  data-answerid="145132">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="145132">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">0</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>On top of what some others have said, from my understanding .NET and Java are better at memory allocation. E.g. they can compact memory as it gets fragmented while C++ cannot (natively, but it can if you're using a clever garbage collector).</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/145132" title="short permalink to this answer" class="short-link" id="link-post-145132">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                            edited
+                             <a href="/posts/145132/revisions" title="show all edits to this post"><span title="2009-10-09 17:37:50Z" class="relativetime">Oct 9 '09 at 17:37</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-145132" href="/posts/145132/revisions" title="show revision history for this post">
+Giovanni Galbo            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-145132" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    <a id="comments-link-145132" class="comments-link" data-comments-count="2" title="expand to show all comments on this post">show <b>2</b> more comments</a>
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="1844309"></a>
+    <div id="answer-1844309" class="answer ice-ice-baby"  data-answerid="1844309">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="1844309">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">0</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>For anything needing lots of speed, the JVM just calls a C++ implementation, so it's a question more of how good their libs are than how good the JVM is for most OS related things.
+Garbage collection cuts your memory in half, but using some of the fancier STL and Boost features will have the same effect but with many times the bug potential. </p>
+
+<p>If you are just using C++ libraries and lots of its high level features in a large project with many classes you will probably wind up slower than using a JVM. Except much more error prone.</p>
+
+<p>However, the benefit of C++ is that it allows you to optimize yourself, otherwise you are stuck with what the compiler/jvm does. If you make your own containers, write your own memory management that's aligned, use SIMD, and drop to assembly here and there, you can speed up at least 2x-4x times over what most C++ compilers will do on their own. For some operations, 16x-32x. That's using the same algorithms, if you use better algorithms and parallelize, increases can be dramatic, sometimes thousands of times faster that commonly used methods.</p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/1844309" title="short permalink to this answer" class="short-link" id="link-post-1844309">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/1844309/revisions" title="show all edits to this post"><span title="2009-12-04 01:26:38Z" class="relativetime">Dec 4 '09 at 1:26</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-1844309" href="/posts/1844309/revisions" title="show revision history for this post">
+Charles Eli Cheese            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-1844309" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="1844667"></a>
+    <div id="answer-1844667" class="answer ice-ice-baby"  data-answerid="1844667">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="1844667">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">0</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>I look at it from a few different points.</p>
+
+<ol>
+<li>Given infinite time and resources, will managed or unmanaged code be faster?  Clearly, the answer is that unmanaged code can always at least tie managed code in this aspect - as in the worst case, you'd just hard-code the managed code solution.</li>
+<li>If you take a program in one language, and directly translate it to another, how much worse will it perform?  Probably a lot, for <em>any</em> two languages.  Most languages require different optimizations and have different gotchas.  Micro-performance is often a lot about knowing these details.</li>
+<li>Given finite time and resources, which of two languages will produce a better result?  This is the most interesting question, as while a managed language may produce slightly slower code (given a program reasonably written for that language), that version will likely be done sooner, allowing for more time spent on optimization.</li>
+</ol>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/1844667" title="short permalink to this answer" class="short-link" id="link-post-1844667">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/1844667/revisions" title="show all edits to this post"><span title="2009-12-04 03:32:56Z" class="relativetime">Dec 4 '09 at 3:32</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-1844667" href="/posts/1844667/revisions" title="show revision history for this post">
+kyoryu            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-1844667" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+
+
+  
+    <a name="1975945"></a>
+    <div id="answer-1975945" class="answer ice-ice-baby"  data-answerid="1975945">
+        <table>
+        <tr>
+        <td class="votecell">
+            
+
+<div class="vote">
+    <input type="hidden" value="1975945">
+    <a class="vote-up-off" title="This answer is useful (click again to undo)">up vote</a>
+    <span class="vote-count-post">0</span>
+    <a class="vote-down-off" title="This answer is not useful (click again to undo)">down vote</a>
+    
+
+ 
+</div>
+
+        </td>
+        
+
+
+<td class="answercell">
+    <div class="post-text"><p>A very short answer: Given a fixed budget you will achieve better performing java application than a C++ application (ROI considerations)  In addition Java platform has more decent profilers, that will help you pinpoint your hotspots more quickly </p>
+</div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+
+
+
+
+
+
+
+
+
+<div class="post-menu"><a href="/a/1975945" title="short permalink to this answer" class="short-link" id="link-post-1975945">share</a></div>                    </td>
+    <td align="right" class="post-signature">
+
+
+    <div class="user-info ">
+        <div class="user-action-time">
+                                    answered
+                             <a href="/posts/1975945/revisions" title="show all edits to this post"><span title="2009-12-29 17:57:35Z" class="relativetime">Dec 29 '09 at 17:57</span></a>
+
+        </div>
+        <div class="user-gravatar32">
+            
+        </div>
+        <div class="user-details">
+            <br>
+            
+        </div>
+    </div>
+    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    
+
+    <div class="user-info">
+        <div class="user-details">
+            <span class="community-wiki" title="This post is community owned as of Sep 7 &#39;11 at 6:18. Votes do not generate reputation, and it can be edited by users with 100 rep">
+                community wiki
+            </span>
+        </div><br>
+        <div class="user-details">
+            <a id="history-1975945" href="/posts/1975945/revisions" title="show revision history for this post">
+lifey            </a>
+        </div>
+    </div>
+
+    </td>
+    </tr>
+    </table>
+</td>        </tr>
+
+
+<tr>
+<td class="votecell"></td>
+<td>
+    <div id="comments-1975945" class="comments dno">
+        <table>
+        <tbody>
+        
+            <tr><td></td><td></td></tr>
+        
+        </tbody>
+    
+        </table>
+    </div>
+    
+    
+    <div class="was-this-helpful">
+        feedback
+    </div>
+    
+</td>
+</tr>            </table>
+</div>
+<div class="pager-answers" >
+<span class="page-numbers current">1</span>
+<a href="/questions/145110/c-performance-vs-java-c?page=2&amp;tab=votes#tab-top" title="go to page 2"><span class="page-numbers">2</span></a>
+<a href="/questions/145110/c-performance-vs-java-c?page=2&amp;tab=votes#tab-top" title="go to page 2" rel="next"><span class="page-numbers next"> next</span></a>
+</div>
+    <div class="question-status">
+        <h2><strong>protected</strong> by <a href="/users/1228/will">Will</a><span class="mod-flair" title="moderator">&#9830;</span> <span title="2010-08-25 11:54:17Z" class="relativetime">Aug 25 '10 at 11:54</span></h2>
+        <p>This question is protected to prevent "thanks!", "me too!", or spam answers by new users. To answer it, you must have earned at least 10 <a href="/faq#reputation">reputation</a> on this site.</p>
+    </div>
+
+
+
+        <h2 class="bottom-notice">
+                Not the answer you're looking for? 
+            Browse other questions tagged <a href="/questions/tagged/c%23" class="post-tag" title="show questions tagged 'c#'" rel="tag">c#</a> <a href="/questions/tagged/java" class="post-tag" title="show questions tagged 'java'" rel="tag">java</a> <a href="/questions/tagged/c%2b%2b" class="post-tag" title="show questions tagged 'c++'" rel="tag">c++</a> <a href="/questions/tagged/performance" class="post-tag" title="show questions tagged 'performance'" rel="tag">performance</a> <a href="/questions/tagged/bytecode" class="post-tag" title="show questions tagged 'bytecode'" rel="tag">bytecode</a> 
+                or <a href="/questions/ask">ask your own question</a>.
+        </h2>
+</div>
+</div>
+<div id="sidebar">
+
+
+
+     <script type="text/javascript">
+        window.showNewUser = true;
+
+            
+                (function(){
+                    var cs = window.sessionStorage && window.sessionStorage['tNewsletter'];
+                    var m = /:\/\/([^\/]*)/.exec(document.referrer);
+                    var h = {'www.reddit.com':1,'news.ycombinator.com':1};
+                    if(window.sessionStorage && (cs || (m && m.length == 2 && h[m[1]]))){
+                        showNewUser = false;
+                        StackExchange.ready(function(){
+                            StackExchange.newsletterAd.loader(m[1], cs);
+                        });
+                    }
+                    if (window.localStorage && showNewUser){
+                        var c = parseInt(localStorage['nuCounter'],10); 
+                        c = isNaN(c) ? 1 : c+1;
+                        window.localStorage['nuCounter'] = c; 
+                        showNewUser = c < 10;
+                    }
+                })()
+            
+     </script>
+    <div class="module newuser newuser-greeting" id="newuser-box" style="display:none;">
+        <h4>Hello World!</h4>
+        <div>
+            <p>This is a collaboratively edited question and answer site for <b>professional and enthusiast programmers</b>. It's 100% free, no registration required.</p>
+            <p class="ar"><a href="/about?mnu=1">about &raquo;</a>&nbsp;&nbsp;&nbsp;<a href="/faq?mnu=1">faq &raquo;</a>
+            </p>
+        </div>
+    </div>
+     <script type="text/javascript">
+        if (showNewUser) {
+            document.getElementById('newuser-box').style.display = '';
+        }
+     </script>
+        <div class="module question-stats">
+        <p class="label-key">tagged</p>
+        <div class="tagged"><a href="/questions/tagged/c%23" class="post-tag" title="show questions tagged 'c#'" rel="tag">c#</a>&nbsp;<span class="item-multiplier"><span class="item-multiplier-x">&times;</span>&nbsp;<span class="item-multiplier-count">382113</span></span><br>
+<a href="/questions/tagged/java" class="post-tag" title="show questions tagged 'java'" rel="tag">java</a>&nbsp;<span class="item-multiplier"><span class="item-multiplier-x">&times;</span>&nbsp;<span class="item-multiplier-count">328913</span></span><br>
+<a href="/questions/tagged/c%2b%2b" class="post-tag" title="show questions tagged 'c++'" rel="tag">c++</a>&nbsp;<span class="item-multiplier"><span class="item-multiplier-x">&times;</span>&nbsp;<span class="item-multiplier-count">161556</span></span><br>
+<a href="/questions/tagged/performance" class="post-tag" title="show questions tagged 'performance'" rel="tag">performance</a>&nbsp;<span class="item-multiplier"><span class="item-multiplier-x">&times;</span>&nbsp;<span class="item-multiplier-count">25971</span></span><br>
+<a href="/questions/tagged/bytecode" class="post-tag" title="show questions tagged 'bytecode'" rel="tag">bytecode</a>&nbsp;<span class="item-multiplier"><span class="item-multiplier-x">&times;</span>&nbsp;<span class="item-multiplier-count">555</span></span><br>
+</div>
+        <table id="qinfo">
+            <tr>
+                <td><p class="label-key">asked</p></td>
+                <td style="padding-left:10px"><p class="label-key" title="2008-09-28 03:16:54Z"><b>4 years ago</b></p></td>
+            </tr>
+            <tr>
+                <td><p class="label-key">viewed</p></td>
+
+                <td style="padding-left:10px">
+                    <p class="label-key">
+                        <b>73588 times</b>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="label-key">active</p></td>
+                <td style="padding-left:10px"><p class="label-key"><b><a href="?lastactivity" class="lastactivity-link" title="2012-01-17 10:59:37Z">10 months ago</a></b></p></td>
+            </tr>
+        </table>
+    </div>
+        
+                <script type="text/javascript">
+                var scriptSrc = "http://engine.adzerk.net/z/8277/adzerk1_2_4_43,adzerk2_2_17_45,adzerk3_2_4_44?keywords=c%23,java,c%2b%2b,performance,bytecode";
+                if (document.referrer) {
+                    if (/\?/.test(scriptSrc))
+                        scriptSrc += "&";
+                    else
+                        scriptSrc += "?";
+                    scriptSrc += "xReferrer=" + document.referrer;
+                }
+                StackExchange.ready(function () {
+                    var z = document.createElement("script");
+                    z.type = "text/javascript";
+                    z.async = "true";
+                    z.src = scriptSrc;
+                    var s = document.getElementsByTagName("script")[0];
+                    s.parentNode.insertBefore(z, s);
+                });
+            </script>
+        <div class="everyonelovesstackoverflow" id="adzerk2">
+        </div>
+    <div id="hireme">
+        <script type="text/javascript">
+            var careers_adurl="http://careers.stackoverflow.com/gethired/js",careers_cssurl="http://careerscdn.sstatic.net/careers/gethired/sidebar.css?fffffffff879eaa0",careers_leaderboardcssurl="http://careerscdn.sstatic.net/careers/gethired/ninja.min.css?394848",careers_companycssurl="http://careerscdn.sstatic.net/careers/gethired/company",careers_adselector="div.hireme, div#hireme";StackExchange.ready(function(){$.ajax({url:"http://careerscdn.sstatic.net/careers/gethired/loader.min.js?394848",dataType:"script",cache:!0})})
+        </script>
+    </div>
+
+
+
+      
+    
+    <div class="module sidebar-linked">
+        <h4 id="h-linked">Linked</h4>
+        <div class="linked" data-tracker="lq=1">
+            <div class="spacer">
+<a href="/questions/2163411/why-did-java-have-the-reputation-of-being-slow" class="question-hyperlink">Why did java have the reputation of being slow?</a>
+</div>
+<div class="spacer">
+<a href="/questions/77718/why-doesnt-java-offer-operator-overloading" class="question-hyperlink">Why doesn&#39;t Java offer operator overloading?</a>
+</div>
+<div class="spacer">
+<a href="/questions/745675/what-features-any-good-application-should-care-about-by-design" class="question-hyperlink">What features any good application should care about &#39;By-Design&#39;</a>
+</div>
+<div class="spacer">
+<a href="/questions/1247968/fast-c-program-c-sharp-gui-possible" class="question-hyperlink">Fast C++ program, C# GUI, possible?</a>
+</div>
+<div class="spacer">
+<a href="/questions/1984856/java-runtime-performance-vs-native-c-c-code" class="question-hyperlink">Java Runtime Performance Vs Native C / C++ Code?</a>
+</div>
+<div class="spacer">
+<a href="/questions/2589241/why-do-java-c-edge-out-c-as-the-recommended-language-to-learn-oop-on-so" class="question-hyperlink">Why do Java/C# edge out C++ as the recommended language to learn OOP on SO?</a>
+</div>
+<div class="spacer">
+<a href="/questions/6428444/java-seems-to-be-executing-bare-bones-algorithms-faster-than-c-why" class="question-hyperlink">Java seems to be executing bare-bones algorithms faster than C++. Why?</a>
+</div>
+<div class="spacer">
+<a href="/questions/8010691/are-programs-written-in-java-for-android-slower-than-equivalent-written-in-c-emb" class="question-hyperlink">Are programs written in Java for Android slower than equivalent written in C embedded into Objective-C for iOS?</a>
+</div>
+<div class="spacer">
+<a href="/questions/405622/can-java-be-faster-c-in-any-situation" class="question-hyperlink">Can Java be faster C++ in any situation?</a>
+</div>
+<div class="spacer">
+<a href="/questions/3961426/c-sharp-vs-c-performance-comparison" class="question-hyperlink">C# vs C++ performance comparison</a>
+</div>
+<div class="spacer">
+<a href="/questions/6343901/why-java-is-not-suitable-to-devlop-some-big-computer-3dgame" class="question-hyperlink">Why java is not suitable to devlop some big computer 3Dgame?</a>
+</div>
+<div class="spacer">
+<a href="/questions/1088171/c-sharp-monte-carlo-incremental-risk-calculation-optimisation-random-numbers-p" class="question-hyperlink">C# Monte Carlo Incremental Risk Calculation optimisation, random numbers, parallel execution</a>
+</div>
+<div class="spacer">
+<a href="/questions/6101827/java-c-performance" class="question-hyperlink">Java/C++ performance</a>
+</div>
+<div class="spacer">
+<a href="/questions/10260021/c-intel-vs-java-hotspot-vs-c-sharp-benchmark-questions-code-and-results-i" class="question-hyperlink">C++ (Intel) vs Java (Hotspot) vs C# benchmark questions (code and results included)</a>
+</div>
+<div class="spacer">
+<a href="/questions/3563742/java-nio-vs-dotnet-io-performance" class="question-hyperlink">Java NIO vs DotNet IO Performance</a>
+</div>
+<div class="spacer">
+<a href="/questions/12395520/does-android-ndk-give-speedup-for-sending-large-int-over-sockets" class="question-hyperlink">Does Android NDK give speedup for sending large int[] over sockets?</a>
+</div>
+<div class="spacer">
+<a href="/questions/9937393/net-vs-c-performance" class="question-hyperlink">.Net vs C++ (performance)</a>
+</div>
+<div class="spacer">
+<a href="/questions/8460732/does-speed-differ-for-different-compiled-languages-e-g-java-vs-c" class="question-hyperlink">Does speed differ for different compiled languages? (e.g. Java vs. C++)</a>
+</div>
+<div class="spacer">
+<a href="/questions/8770674/what-are-specific-differences-between-coding-styles-of-java-and-c" class="question-hyperlink">What are specific differences between coding styles of Java and C++?</a>
+</div>
+<div class="spacer">
+<a href="/questions/6466653/net-components-in-unmanaged-code-performance" class="question-hyperlink">.net components in unmanaged code - performance?</a>
+</div>
+
+        </div>
+    </div>
+    <div class="module sidebar-related">
+        <h4 id="h-related">Related</h4>
+        <div class="related" data-tracker="rq=1">
+            <div class="spacer">
+<a href="/questions/791600/java-bytecode-equivalents-for-ilasm-ildasm" class="question-hyperlink">Java bytecode equivalents for ilasm / ildasm</a>
+</div>
+<div class="spacer">
+<a href="/questions/1550910/c-and-java-performance" class="question-hyperlink">C++ and Java performance</a>
+</div>
+<div class="spacer">
+<a href="/questions/1552308/understanding-java-byte-code" class="question-hyperlink">Understanding Java Byte Code</a>
+</div>
+<div class="spacer">
+<a href="/questions/1774996/local-variables-in-java-bytecode" class="question-hyperlink">Local variables in java bytecode</a>
+</div>
+<div class="spacer">
+<a href="/questions/1832000/byte-code-to-java" class="question-hyperlink">Byte code to java</a>
+</div>
+<div class="spacer">
+<a href="/questions/2215804/java-vs-c-sharp-performance" class="question-hyperlink">Java vs C# performance</a>
+</div>
+<div class="spacer">
+<a href="/questions/2303683/is-there-any-purpose-for-a-python-application-use-c-other-than-performance" class="question-hyperlink">Is there any purpose for a python application use C other than performance?</a>
+</div>
+<div class="spacer">
+<a href="/questions/2398738/how-does-google-app-engine-precompile-java" class="question-hyperlink">How does Google App Engine precompile Java?</a>
+</div>
+<div class="spacer">
+<a href="/questions/3003281/detect-use-of-older-java-libraries" class="question-hyperlink">Detect use of older Java libraries</a>
+</div>
+<div class="spacer">
+<a href="/questions/3145826/check-if-java-bytecode-contains-debug-symbols" class="question-hyperlink">Check if Java bytecode contains debug symbols</a>
+</div>
+<div class="spacer">
+<a href="/questions/3150254/programming-in-java-bytecode" class="question-hyperlink">Programming in Java bytecode</a>
+</div>
+<div class="spacer">
+<a href="/questions/3470949/what-is-java-bytecode-injection" class="question-hyperlink">What is Java bytecode injection?</a>
+</div>
+<div class="spacer">
+<a href="/questions/5801296/is-fantom-generated-bytecode-as-performant-as-java-equivalent-bytecode" class="question-hyperlink">is fantom generated bytecode as performant as java equivalent bytecode?</a>
+</div>
+<div class="spacer">
+<a href="/questions/6042952/performance-difference-in-java-generic-types-vs-oldstyle-generics" class="question-hyperlink">Performance difference in Java generic types vs oldstyle generics?</a>
+</div>
+<div class="spacer">
+<a href="/questions/6983641/whats-the-difference-between-java-bytecode-astore-1-and-astore-2" class="question-hyperlink">What&#39;s the difference between java bytecode astore_1 and astore_2</a>
+</div>
+<div class="spacer">
+<a href="/questions/7892601/does-qualifying-a-method-call-degrade-performance-in-java" class="question-hyperlink">Does qualifying a method call degrade performance in Java?</a>
+</div>
+<div class="spacer">
+<a href="/questions/8153792/why-the-java-language-need-bytecode-why-java-design-in-this-way" class="question-hyperlink">Why the Java language need bytecode? Why java design in this way?</a>
+</div>
+<div class="spacer">
+<a href="/questions/9871822/how-to-compile-java-bytecode-string" class="question-hyperlink">How to compile Java bytecode string?</a>
+</div>
+<div class="spacer">
+<a href="/questions/10224677/mixing-java-1-4-and-1-6-bytecode-in-a-class-hierarchy" class="question-hyperlink">Mixing Java 1.4 and 1.6 bytecode in a class hierarchy</a>
+</div>
+<div class="spacer">
+<a href="/questions/10331921/will-we-still-have-the-performance-gain-of-java-6-if-the-bytecode-was-compiled-i" class="question-hyperlink">Will we still have the performance gain of Java 6 if the bytecode was compiled in 1.4</a>
+</div>
+<div class="spacer">
+<a href="/questions/11811774/different-behaviour-of-java-bytecode" class="question-hyperlink">Different behaviour of java bytecode</a>
+</div>
+<div class="spacer">
+<a href="/questions/12298168/run-java-byte-code" class="question-hyperlink">Run Java byte code</a>
+</div>
+<div class="spacer">
+<a href="/questions/12379319/given-the-execution-of-some-method-in-java-is-there-a-way-to-determine-the-numb" class="question-hyperlink">Given the execution of some method in java, is there a way to determine the number of byte-code operations used for that method?</a>
+</div>
+<div class="spacer">
+<a href="/questions/12438567/java-bytecode-dup" class="question-hyperlink">Java Bytecode DUP</a>
+</div>
+<div class="spacer">
+<a href="/questions/13153995/java-bytecode-optimisation" class="question-hyperlink">Java Bytecode Optimisation</a>
+</div>
+
+        </div>
+    </div>
+        <div class="everyonelovesstackoverflow" id="adzerk3">
+        </div>
+
+
+</div>
+<script type="text/javascript">
+StackExchange.ready(function(){$.get('/posts/145110/ivc/c3f3');});
+</script>
+<noscript>
+    <div><img src="/posts/145110/ivc/c3f3" class="dno" alt="" width="0" height="0"></div>
+</noscript><div style="display:none" id="prettify-lang">default</div></div>
+        </div>
+    </div>
+    <div id="footer">
+        <div class="footerwrap">
+            <div id="footer-menu">
+                <a href="/about">about</a> |
+                <a href="/faq">faq</a> |
+                <a href="http://blog.stackexchange.com?blb=1">blog</a> |
+                    <a href="http://chat.stackoverflow.com">chat</a> |
+                <a href="http://data.stackexchange.com">data</a> |
+                <a href="http://stackexchange.com/legal">legal</a> |
+                <a href="http://stackexchange.com/legal/privacy-policy">privacy policy</a> |
+                <a href="http://stackexchange.com/about/hiring">jobs</a> |
+                <a href="http://engine.adzerk.net/redirect/0/2776/2751/0/4de3c60f719c4dfcb1a57531c7050090/0">advertising info</a> |
+
+                <a onclick="StackExchange.switchMobile('on', '/questions/145110/c-performance-vs-java-c')">mobile</a> |
+
+                <b><a href="/help">contact us</a></b>
+                  | <b><a href="http://meta.stackoverflow.com">feedback</a></b>
+                <div id="footer-sites">
+                    
+                        <span style="color:#FE7A15;font-size:140%">&#9632;</span>&nbsp;<a href="http://stackoverflow.com">stackoverflow.com</a>&nbsp; 
+                        <span style="color:#FE7A15;font-size:140%">&#9632;</span>&nbsp;<a href="http://stackapps.com">api/apps</a>&nbsp; 
+                        <span style="color:#FE7A15;font-size:140%">&#9632;</span>&nbsp;<a href="http://careers.stackoverflow.com">careers 2.0</a>&nbsp; 
+                        <span style="color:#E8272C;font-size:140%">&#9632;</span>&nbsp;<a href="http://serverfault.com">serverfault.com</a>&nbsp; 
+                        <span style="color:#00AFEF;font-size:140%">&#9632;</span>&nbsp;<a href="http://superuser.com">superuser.com</a>&nbsp; 
+                        <span style="color:#969696;font-size:140%">&#9632;</span>&nbsp;<a href="http://meta.stackoverflow.com">meta</a>&nbsp; 
+                        <span style="color:#46937D;font-size:140%">&#9632;</span>&nbsp;<a href="http://area51.stackexchange.com">area&nbsp;51</a>&nbsp; 
+                        <span style="color:#C0D0DC;font-size:140%">&#9632;</span>&nbsp;<a href="http://webapps.stackexchange.com">webapps</a>&nbsp; 
+                        <span style="color:#000000;font-size:140%">&#9632;</span>&nbsp;<a href="http://gaming.stackexchange.com">gaming</a>&nbsp; 
+                        <span style="color:#dd4814;font-size:140%">&#9632;</span>&nbsp;<a href="http://askubuntu.com">ubuntu</a>&nbsp; 
+                        <span style="color:#9ce4fe;font-size:140%">&#9632;</span>&nbsp;<a href="http://webmasters.stackexchange.com">webmasters</a>&nbsp; 
+                        <span style="color:#cf4d3f;font-size:140%">&#9632;</span>&nbsp;<a href="http://cooking.stackexchange.com">cooking</a>&nbsp; 
+                        <span style="color:#f4f28d;font-size:140%">&#9632;</span>&nbsp;<a href="http://gamedev.stackexchange.com">game development</a>&nbsp; 
+                        <span style="color:#0f3559;font-size:140%">&#9632;</span>&nbsp;<a href="http://math.stackexchange.com">math</a>&nbsp; 
+                        <span style="color:#f2f2f2;font-size:140%">&#9632;</span>&nbsp;<a href="http://photo.stackexchange.com">photography</a>&nbsp; 
+                        <span style="color:#037187;font-size:140%">&#9632;</span>&nbsp;<a href="http://stats.stackexchange.com">stats</a>&nbsp; 
+                        <span style="color:#f1e7cc;font-size:140%">&#9632;</span>&nbsp;<a href="http://tex.stackexchange.com">tex</a>&nbsp; 
+                        <span style="color:#e1cdae;font-size:140%">&#9632;</span>&nbsp;<a href="http://english.stackexchange.com">english</a>&nbsp; 
+                        <span style="color:#a2d9f6;font-size:140%">&#9632;</span>&nbsp;<a href="http://cstheory.stackexchange.com">theoretical cs</a>&nbsp; 
+                        <span style="color:#1b3e6c;font-size:140%">&#9632;</span>&nbsp;<a href="http://programmers.stackexchange.com">programmers</a>&nbsp; 
+                        <span style="color:#293a5d;font-size:140%">&#9632;</span>&nbsp;<a href="http://unix.stackexchange.com">unix</a>&nbsp;
+                        <span style="color:#bec0cb;font-size:140%">&#9632;</span>&nbsp;<a href="http://apple.stackexchange.com">apple</a>&nbsp;
+                        <span style="color:#939185;font-size:140%">&#9632;</span>&nbsp;<a href="http://wordpress.stackexchange.com">wordpress</a>&nbsp;
+                        <span style="color:#ebf5f5;font-size:140%">&#9632;</span>&nbsp;<a href="http://physics.stackexchange.com">physics</a>&nbsp;
+                        <span style="color:#4176ab;font-size:140%">&#9632;</span>&nbsp;<a href="http://diy.stackexchange.com">home&nbsp;improvement</a>&nbsp;
+                        <span style="color:#d1d8d7;font-size:140%">&#9632;</span>&nbsp;<a href="http://gis.stackexchange.com">gis</a>&nbsp;
+                        <span style="color:#e5e2d3;font-size:140%">&#9632;</span>&nbsp;<a href="http://electronics.stackexchange.com">electrical&nbsp;engineering</a>&nbsp;
+                        <span style="color:#a4c639;font-size:140%">&#9632;</span>&nbsp;<a href="http://android.stackexchange.com">android</a>&nbsp;
+                        <span style="color:#2e4e60;font-size:140%">&#9632;</span>&nbsp;<a href="http://security.stackexchange.com">security</a>&nbsp;
+                        <span style="color:#45bcb5;font-size:140%">&#9632;</span>&nbsp;<a href="http://bicycles.stackexchange.com">bicycles</a>&nbsp;
+                        <span style="color:#00adee;font-size:140%">&#9632;</span>&nbsp;<a href="http://dba.stackexchange.com">dba</a>&nbsp;
+                        <span style="color:#2edaf0;font-size:140%">&#9632;</span>&nbsp;<a href="http://drupal.stackexchange.com">drupal</a>&nbsp;
+                        <span style="color:#213951;font-size:140%">&#9632;</span>&nbsp;<a href="http://sharepoint.stackexchange.com">sharepoint</a>&nbsp;
+                        <span style="color:#73abb3;font-size:140%">&#9632;</span>&nbsp;<a href="http://scifi.stackexchange.com">scifi &amp; fantasy</a>&nbsp;
+                        <span style="color:#23629F;font-size:140%">&#9632;</span>&nbsp;<a href="http://ux.stackexchange.com">user experience</a>&nbsp;
+                        <span style="color:#faff72;font-size:140%">&#9632;</span>&nbsp;<a href="http://skeptics.stackexchange.com">skeptics</a>&nbsp;
+                        <span style="color:#623121;font-size:140%">&#9632;</span>&nbsp;<a href="http://rpg.stackexchange.com">rpg</a>&nbsp;
+                        <span style="color:#e4be88;font-size:140%">&#9632;</span>&nbsp;<a href="http://judaism.stackexchange.com">judaism</a>&nbsp;
+                        <span style="color:#ffecb1;font-size:140%">&#9632;</span>&nbsp;<a href="http://mathematica.stackexchange.com">mathematica</a>&nbsp;
+                </div>
+            </div>
+            <div id="footer-flair">
+                <a class="peer1" href="http://www.peer1.com/stackoverflow"></a>  
+	            <a href="http://creativecommons.org/licenses/by-sa/3.0/" class="cc-wiki-link"></a>
+                <div id="svnrev">rev 2012.11.23.402</div>
+                        </div>
+            <div id="copyright">
+                site design / logo &copy; 2012 stack exchange inc; 
+                user contributions licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/" rel="license">cc-wiki</a> with <a href="http://blog.stackoverflow.com/2009/06/attribution-required/" rel="license">attribution required</a>
+            </div>
+            
+
+        </div>
+    </div>
+    
+    <noscript>
+        <div id="noscript-warning">Stack Overflow works best with JavaScript enabled<img src="http://pixel.quantserve.com/pixel/p-c1rF4kxgLUzNc.gif" alt="" class="dno"></div>
+    </noscript>
+    <script type="text/javascript">var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-5620270-1']);
+        _gaq.push(['_setCustomVar', 1, 'tags', '|c#|java|c++|performance|bytecode|']); 
+_gaq.push(['_trackPageview']);
+    var _qevents = _qevents || [];
+    (function(){
+        var s=document.getElementsByTagName('script')[0];
+        var ga=document.createElement('script');
+        ga.type='text/javascript';
+        ga.async=true;
+        ga.src='http://www.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(ga,s);
+        var sc=document.createElement('script');
+        sc.type='text/javascript';
+        sc.async=true;
+        sc.src='http://edge.quantserve.com/quant.js'; 
+        s.parentNode.insertBefore(sc,s);
+    })();
+    </script>
+    <script type="text/javascript">
+        _qevents.push({ qacct: "p-c1rF4kxgLUzNc" });
+    </script>    
+    
+</body>
+</html>
