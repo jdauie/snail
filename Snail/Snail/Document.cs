@@ -78,12 +78,13 @@ namespace Snail
 					{
 						tagEndIndex = IdentifyTagStartingWithExclamation(text, tags, i, tagEndIndex);
 					}
-					else if (jc == '?')
-					{
-						// something
-						// this only matters if I start parsing server-side directives e.g.
-						// <?php...?>
-					}
+					//else if (jc == '?')
+					//{
+					//    // this only matters if I start parsing server-side directives e.g.
+					//    // <?php...?>
+					//    // otherwise, it is just things like xml declarations which can be parsed the default way e.g.
+					//    // <?xml version optional parts?>
+					//}
 					else
 					{
 						// accumulate until whitespace or end
