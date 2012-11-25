@@ -227,7 +227,7 @@ namespace Snail
 			{
 				// find -->
 
-				int searchPos = j + 3;
+				int searchPos = tagEndIndex - 3;
 				while (searchPos != -1)
 				{
 					searchPos = text.IndexOf('-', searchPos);
@@ -260,8 +260,26 @@ namespace Snail
 				//    tags.Add(i | (((long)tagEndIndex - i + 1) << 24));
 				//}
 			}
-			// else
-			// doctype, etc.
+			//else if (String.Compare(text, j + 1, "[CDATA[", 0, "[CDATA[".Length, true) == 0)
+			//{
+
+			//}
+			//else if (String.Compare(text, j + 1, "DOCTYPE", 0, "DOCTYPE".Length, true) == 0)
+			//{
+
+			//}
+			//else if (String.Compare(text, j + 1, "ENTITY", 0, "ENTITY".Length, true) == 0)
+			//{
+
+			//}
+			//else if (String.Compare(text, j + 1, "ELEMENT", 0, "ELEMENT".Length, true) == 0)
+			//{
+
+			//}
+			//else if (String.Compare(text, j + 1, "ATTLIST", 0, "ATTLIST".Length, true) == 0)
+			//{
+
+			//}
 
 			return tagEndIndex;
 		}
