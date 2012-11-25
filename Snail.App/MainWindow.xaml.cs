@@ -30,6 +30,7 @@ namespace Snail.App
 			string testFile = @"..\Snail.Test\PsyStarcraft_channel.htm";
 			//string testFile = @"..\Snail.Test\ot.xml";
 			//string testFile = @"..\Snail.Test\TO_core_last_DEM_AR_forests.shp.afe";
+			//string testFile = @"..\Snail.Test\xhtml1-strict.dtd";
 			string testText = File.ReadAllText(testFile);
 
 			var sw = Stopwatch.StartNew();
