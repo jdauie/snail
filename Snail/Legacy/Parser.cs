@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Snail.Nodes;
 
-namespace Snail
+namespace Snail.Legacy
 {
 	internal class TokenGroup
 	{
