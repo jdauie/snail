@@ -41,9 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FastParser.cs" />
+    <Compile Include="LegacyParser.cs" />
     <Compile Include="Legacy\Config.cs" />
     <Compile Include="Document.cs" />
-    <Compile Include="Legacy\EnumerableExtensions.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="Legacy\Lexer.cs" />
     <Compile Include="Nodes\CDATASectionNode.cs" />
