@@ -12,7 +12,7 @@ namespace Snail
 	{
 		public static void Parse(string text)
 		{
-			var tokens = Lexer.Tokenize(text);
+			//var tokens = Lexer.Tokenize(text);
 			//var tags = Parser.ParseTokens(tokens);
 			//Parser.CalculateTagDepths(tokens, tags);
 			//var tree = Parser.ParseTagsToTree(tokens, tags);

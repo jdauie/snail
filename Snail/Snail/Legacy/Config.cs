@@ -3,32 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Snail
+namespace Snail.Legacy
 {
-	/// <summary>
-	/// IDL values from http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/idl-definitions.html
-	/// </summary>
-	public enum NodeType : byte
-	{
-		UNKNOWN = 0,
-		ELEMENT_NODE,
-		ATTRIBUTE_NODE,
-		TEXT_NODE,
-		CDATA_SECTION_NODE,
-		ENTITY_REFERENCE_NODE,
-		ENTITY_NODE,
-		PROCESSING_INSTRUCTION_NODE,
-		COMMENT_NODE,
-		DOCUMENT_NODE,
-		DOCUMENT_TYPE_NODE,
-		DOCUMENT_FRAGMENT_NODE,
-		NOTATION_NODE,
-
-		DTD_ENTITY_NODE,
-		DTD_ELEMENT_NODE,
-		DTD_ATTLIST_NODE
-	}
-
 	/// <summary>
 	/// Lexer token type
 	/// </summary>

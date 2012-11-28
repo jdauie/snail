@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Snail
+namespace Snail.Legacy
 {
 	/// <summary>
 	/// List allows too much, but whatever (for now).
