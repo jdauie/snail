@@ -8,7 +8,6 @@ namespace Snail.Nodes
 	public class ElementNode : Node
 	{
 		private readonly LinkedList<Node> m_childNodes;
-		private readonly bool m_isEmpty;
 
 		public IEnumerable<Node> Children
 		{
@@ -16,16 +15,15 @@ namespace Snail.Nodes
 		}
 
 		public ElementNode(string name, bool empty)
-			: this(NodeType.ELEMENT_NODE, name, null)
+			: base(NodeType.ELEMENT_NODE, name, null)
 		{
-			m_isEmpty = empty;
+			m_childNodes = empty ? null : new LinkedList<Node>();
 		}
 
 		protected ElementNode(NodeType type, string name, string value)
 			: base(type, name, value)
 		{
 			m_childNodes = new LinkedList<Node>();
-			m_isEmpty = false;
 		}
 
 		public void InsertBefore(Node node, Node newNode)
@@ -80,7 +78,7 @@ namespace Snail.Nodes
 				attr.AppendFormat(" {0}", attribute);
 
 			var value = new StringBuilder();
-			if (m_isEmpty)
+			if (m_childNodes == null)
 			{
 				value.AppendFormat("{0}<{1}{2} />", indent, Name, attr);
 			}
