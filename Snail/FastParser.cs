@@ -85,6 +85,21 @@ namespace Snail
 					if (textEndIndex == -1)
 						textEndIndex = text.Length;
 
+					//// is this all whitespace?
+					//int j = i;
+					//while (j < textEndIndex)
+					//{
+					//    if (!Char.IsWhiteSpace(text[j]))
+					//        break;
+					//    ++j;
+					//}
+
+					//bool includeWhitespace = false;
+					//if (includeWhitespace || j != textEndIndex)
+					//{
+					//    tags.Add(CreateTagIndex(i, textEndIndex - i));
+					//}
+
 					tags.Add(CreateTagIndex(i, textEndIndex - i));
 
 					i = textEndIndex;
