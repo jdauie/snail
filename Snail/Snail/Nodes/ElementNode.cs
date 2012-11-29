@@ -8,22 +8,30 @@ namespace Snail.Nodes
 	public class ElementNode : Node
 	{
 		private readonly LinkedList<Node> m_childNodes;
+		private readonly AttributeCollection m_attributes;
 
 		public IEnumerable<Node> Children
 		{
 			get { return m_childNodes; }
 		}
 
+		public AttributeCollection Attributes
+		{
+			get { return m_attributes; }
+		}
+
 		public ElementNode(string name, bool empty)
 			: base(NodeType.ELEMENT_NODE, name, null)
 		{
 			m_childNodes = empty ? null : new LinkedList<Node>();
+			m_attributes = new AttributeCollection();
 		}
 
 		protected ElementNode(NodeType type, string name, string value)
 			: base(type, name, value)
 		{
 			m_childNodes = new LinkedList<Node>();
+			m_attributes = new AttributeCollection();
 		}
 
 		public void InsertBefore(Node node, Node newNode)

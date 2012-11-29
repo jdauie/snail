@@ -110,7 +110,6 @@ namespace Snail.Nodes
 		private readonly NodeType m_type;
 		private readonly string m_name;
 		private readonly string m_value;
-		private readonly AttributeCollection m_attributes;
 		private ElementNode m_parent;
 
 		public NodeType Type
@@ -134,11 +133,6 @@ namespace Snail.Nodes
 			set { m_parent = value; }
 		}
 
-		public AttributeCollection Attributes
-		{
-			get { return m_attributes; }
-		}
-
 		protected Node(NodeType type, string name, string value)
 		{
 			m_type = type;
@@ -146,8 +140,6 @@ namespace Snail.Nodes
 			m_value = value;
 
 			m_parent = null;
-
-			m_attributes = new AttributeCollection();
 		}
 
 		protected abstract string ToString(WhitespaceMode mode, string indentation, int currentDepth);

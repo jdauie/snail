@@ -219,7 +219,7 @@ namespace Snail.Legacy
 			                            --j;
 			                        }
 									
-									node.Attributes.Add(attribute.Name, attribute.Value);
+									(node as ElementNode).Attributes.Add(attribute.Name, attribute.Value);
 
 			                    } else if(tokens[j].Type == TokenType.FORWARD_SLASH) {
 			                        // ignore for now

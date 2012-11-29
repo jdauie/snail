@@ -96,8 +96,11 @@ namespace Snail
 						bool isSelfClosingTag = text[index + length - 2] == '/';
 						string tagName = text.Substring(index + 1, other);
 						var node = new ElementNode(tagName, isSelfClosingTag);
-						current.AppendChild(node);
 
+						int attributeStart = index + other + 1;
+						ParseAttributesFromWellFormedXml(node, text, attributeStart, length - attributeStart - 1);
+
+						current.AppendChild(node);
 						if (!isSelfClosingTag)
 						{
 							current = node;
@@ -107,6 +110,44 @@ namespace Snail
 			}
 
 			return root;
+		}
+
+		private static void ParseAttributes(ElementNode node, string text, int index, int length)
+		{
+			if (length <= 0)
+				return;
+
+			int endIndex = index + length;
+			while (index < endIndex)
+			{
+				// find name
+				
+				// find value (if there is one)
+			}
+		}
+
+		private static void ParseAttributesFromWellFormedXml(ElementNode node, string text, int index, int length)
+		{
+			if (length <= 0)
+				return;
+
+			// THIS IS NOT FAST...IT'S JUST TO GET SOMETHING WORKING
+			int endIndex = index + length;
+			while (index < endIndex)
+			{
+				// get name before '='
+				int indexOfEquals = text.IndexOf('=', index);
+				string name = text.Substring(index, indexOfEquals - index).Trim();
+				index = indexOfEquals + 1;
+				
+				// get value between quotes
+				int indexOfQuote1 = text.IndexOf('"', index);
+				int indexOfQuote2 = text.IndexOf('"', indexOfQuote1 + 1);
+				string value = text.Substring(indexOfQuote1 + 1, indexOfQuote2 - indexOfQuote1 - 1);
+				index = indexOfQuote2 + 1;
+
+				node.Attributes.Add(name, value);
+			}
 		}
 
 		public static List<long> ParseTags(string text)
