@@ -80,6 +80,8 @@ namespace Snail.App
 			// compare trees for differences (not considering order)
 
 
+			treeView1.ItemsSource = root1.Children;
+
 			var status = string.Format("Compared {0}, {1}", System.IO.Path.GetFileName(p1), System.IO.Path.GetFileName(p2));
 			Trace.WriteLine(status);
 			textBlock.Text = status;

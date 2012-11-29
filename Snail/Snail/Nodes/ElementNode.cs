@@ -20,6 +20,18 @@ namespace Snail.Nodes
 			get { return m_attributes; }
 		}
 
+		public string StringRepresentation
+		{
+			get
+			{
+				var attr = new StringBuilder();
+				foreach (var attribute in Attributes)
+					attr.AppendFormat(" {0}", attribute);
+
+				return string.Format("{0}{1}", Name, attr);
+			}
+		}
+
 		public ElementNode(string name, bool empty)
 			: base(NodeType.ELEMENT_NODE, name, null)
 		{
