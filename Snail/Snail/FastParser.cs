@@ -149,17 +149,19 @@ namespace Snail
 
 		private static int FindTextBlock(string text, List<long> tags, int textStartIndex)
 		{
-			// exclude search char
-			//int length = text.Length;
-			//char c;
+			int length = text.Length;
 			int textEndIndex = textStartIndex;
-			while (textEndIndex < text.Length && (text[textEndIndex]) != '<')
-			{
-				++textEndIndex;
-			}
 
-			if (textEndIndex != textStartIndex)
+			while (textEndIndex < length && char.IsWhiteSpace(text[textEndIndex]))
+				++textEndIndex;
+
+			// only add the block if it contains non-whitespace chars
+			if (textEndIndex != length && text[textEndIndex] != '<')
 			{
+				while (textEndIndex < length && text[textEndIndex] != '<')
+					++textEndIndex;
+
+				// exclude search char
 				tags.Add(CreateTagIndex(textStartIndex, textEndIndex - textStartIndex));
 			}
 
