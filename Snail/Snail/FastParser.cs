@@ -31,17 +31,19 @@ namespace Snail
 
 			//    if (other == 0)
 			//    {
-			//        // skip text
+			//        // text block
+			//        test.Add(text.Substring(index, length));
 			//    }
 			//    else if (other == ushort.MaxValue)
 			//    {
 			//        // comment block
-			//        test.Add(text.Substring(index, length));
+			//        //test.Add(text.Substring(index, length));
 			//    }
 			//    else
 			//    {
 			//        // tag name
 			//        test.Add(string.Format("<{0}>", text.Substring(index + 1, other)));
+			//        //test.Add(text.Substring(index, length));
 			//    }
 
 			//    //test.Add(text.Substring(index, length));
