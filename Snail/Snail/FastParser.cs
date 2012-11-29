@@ -14,6 +14,7 @@ namespace Snail
 		public DocumentNode Parse(string text)
 		{
 			var tags = ParseTags(text);
+			var root = ParseWellFormedXml(text, tags);
 
 			#region Test
 
@@ -44,7 +45,7 @@ namespace Snail
 			//    else
 			//    {
 			//        // tag name
-			//        //test.Add(string.Format("<{0}>", text.Substring(index + 1, other)));
+			//        test.Add(string.Format("<{0}>", text.Substring(index + 1, other)));
 			//        //test.Add(text.Substring(index, length));
 			//    }
 
@@ -59,7 +60,53 @@ namespace Snail
 
 			#endregion
 
-			return null;
+			return root;
+		}
+
+		public static DocumentNode ParseWellFormedXml(string text, List<long> tags)
+		{
+			var root = new DocumentNode();
+			ElementNode current = root;
+
+			foreach (var tag in tags)
+			{
+				int index = ((int)tag << 8) >> 8;
+				int length = (int)((tag << 16) >> (24 + 16));
+				ushort other = (ushort)(tag >> 64 - 16);
+
+				if (other == 0)
+				{
+					var node = new TextNode(text.Substring(index, length));
+					current.AppendChild(node);
+				}
+				else if (other == ushort.MaxValue)
+				{
+					var node = new CommentNode(text.Substring(index + 4, length - 7).Trim());
+					current.AppendChild(node);
+				}
+				else
+				{
+					bool isClosingTag = text[index + 1] == '/';
+					if (isClosingTag)
+					{
+						current = current.Parent;
+					}
+					else
+					{
+						bool isSelfClosingTag = text[index + length - 2] == '/';
+						string tagName = text.Substring(index + 1, other);
+						var node = new ElementNode(tagName, isSelfClosingTag);
+						current.AppendChild(node);
+
+						if (!isSelfClosingTag)
+						{
+							current = node;
+						}
+					}
+				}
+			}
+
+			return root;
 		}
 
 		public static List<long> ParseTags(string text)
