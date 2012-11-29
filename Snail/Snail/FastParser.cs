@@ -78,33 +78,9 @@ namespace Snail
 			int i = 0;
 			while (i < text.Length)
 			{
-				// exclude search char
-				var textEndIndex = text.IndexOf('<', i);
-				if (textEndIndex != i)
-				{
-					if (textEndIndex == -1)
-						textEndIndex = text.Length;
+				var textEndIndex = FindTextBlock(text, tags, i);
 
-					//// is this all whitespace?
-					//int j = i;
-					//while (j < textEndIndex)
-					//{
-					//    if (!Char.IsWhiteSpace(text[j]))
-					//        break;
-					//    ++j;
-					//}
-
-					//bool includeWhitespace = false;
-					//if (includeWhitespace || j != textEndIndex)
-					//{
-					//    tags.Add(CreateTagIndex(i, textEndIndex - i));
-					//}
-
-					tags.Add(CreateTagIndex(i, textEndIndex - i));
-
-					i = textEndIndex;
-				}
-
+				i = textEndIndex;
 				if (i == text.Length)
 					break;
 
@@ -157,8 +133,8 @@ namespace Snail
 						}
 						else
 						{
-							//long tagLengthIncludingBrackets = tagEndIndex - i + 1;
-							//tags.Add(i | (((long)tagEndIndex - i + 1) << 24) | (((long)tagNameLength) << 48));
+							//long tagLengthIncludingBrackets = tagEndIndex - textStartIndex + 1;
+							//tags.Add(textStartIndex | (((long)tagEndIndex - textStartIndex + 1) << 24) | (((long)tagNameLength) << 48));
 							tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagNameLength));
 						}
 					}
@@ -169,6 +145,25 @@ namespace Snail
 			}
 
 			return tags;
+		}
+
+		private static int FindTextBlock(string text, List<long> tags, int textStartIndex)
+		{
+			// exclude search char
+			//int length = text.Length;
+			//char c;
+			int textEndIndex = textStartIndex;
+			while (textEndIndex < text.Length && (text[textEndIndex]) != '<')
+			{
+				++textEndIndex;
+			}
+
+			if (textEndIndex != textStartIndex)
+			{
+				tags.Add(CreateTagIndex(textStartIndex, textEndIndex - textStartIndex));
+			}
+
+			return textEndIndex;
 		}
 
 		private static int FindEndOfSpecialBlock(string text, List<long> tags, int i, int tagEndIndex, string tagName)
@@ -216,7 +211,7 @@ namespace Snail
 			//    // [special contents]
 			//    // [closing tag]
 
-			//    tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagName.Length));
+			//    tags.Add(CreateTagIndex(textStartIndex, tagEndIndex - textStartIndex + 1, tagName.Length));
 			//    tags.Add(CreateTagIndex(tagEndIndex + 1, endTagStartIndex - tagEndIndex - 1));
 			//    tags.Add(CreateTagIndex(endTagStartIndex, t2Length, t2Length - 2));
 
@@ -265,7 +260,7 @@ namespace Snail
 				//if (closeCommentIndex != -1)
 				//{
 				//    tagEndIndex = closeCommentIndex + "-->".Length - 1;
-				//    tags.Add(i | (((long)tagEndIndex - i + 1) << 24));
+				//    tags.Add(textStartIndex | (((long)tagEndIndex - textStartIndex + 1) << 24));
 				//}
 			}
 			//else if (String.Compare(text, j + 1, "[CDATA[", 0, "[CDATA[".Length, true) == 0)
