@@ -98,7 +98,7 @@ namespace Snail
 						var node = new ElementNode(tagName, isSelfClosingTag);
 
 						int attributeStart = index + other + 1;
-						ParseAttributesFromWellFormedXml(node, text, attributeStart, length - attributeStart - 1);
+						ParseAttributesFromWellFormedXml(node, text, attributeStart, length - (attributeStart - index) - 1);
 
 						current.AppendChild(node);
 						if (!isSelfClosingTag)
@@ -136,7 +136,10 @@ namespace Snail
 			while (index < endIndex)
 			{
 				// get name before '='
-				int indexOfEquals = text.IndexOf('=', index);
+				int indexOfEquals = text.IndexOf('=', index); // bound this (so I don't have the check it below)
+				if (indexOfEquals > endIndex || indexOfEquals == -1)
+					break;
+
 				string name = text.Substring(index, indexOfEquals - index).Trim();
 				index = indexOfEquals + 1;
 				
