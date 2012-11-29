@@ -17,12 +17,14 @@ namespace Snail
 
 			#region Test
 
-			// [ low . . . . . . high ]
-			// [  24  ][  24  ][  16  ]
-			//  index   count   other
+			/* 
+			 * [ low . . . . . . high ]
+			 * [  24  ][  24  ][  16  ]
+			 *  index   count   other
+			 */
 
 			//var test = new List<string>();
-			//var sb = new StringBuilder(text.Length);
+			////var sb = new StringBuilder(text.Length);
 			//foreach (var tag in tags)
 			//{
 			//    int index = ((int)tag << 8) >> 8;
@@ -42,15 +44,15 @@ namespace Snail
 			//    else
 			//    {
 			//        // tag name
-			//        test.Add(string.Format("<{0}>", text.Substring(index + 1, other)));
+			//        //test.Add(string.Format("<{0}>", text.Substring(index + 1, other)));
 			//        //test.Add(text.Substring(index, length));
 			//    }
 
 			//    //test.Add(text.Substring(index, length));
-			//    sb.Append(text.Substring(index, length));
+			//    //sb.Append(text.Substring(index, length));
 			//}
-			//var textRecreated = sb.ToString();
-			//Console.WriteLine(textRecreated.Length);
+			////var textRecreated = sb.ToString();
+			//Console.WriteLine(test.Count);
 
 			//var textRecreated = string.Join("", tags);
 			//Console.WriteLine(textRecreated.Length);
