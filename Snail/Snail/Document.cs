@@ -13,8 +13,9 @@ namespace Snail
 	{
 		public static DocumentNode Parse(string text)
 		{
-			//IParser parser = new LegacyParser();
-			IParser parser = new FastParser();
+			IParser parser = null;
+			//parser = new LegacyParser();
+			parser = new FastParser();
 			return parser.Parse(text);
 		}
 	}
