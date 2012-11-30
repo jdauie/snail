@@ -71,6 +71,7 @@ namespace Snail.App
 		{
 			var text1 = File.ReadAllText(p1);
 			var root1 = Document.Parse(text1);
+			root1.Sort();
 			//File.WriteAllText(@"..\Snail.Test\compare1.txt", root1.ToFormattedString(WhitespaceMode.Insert, "\t"));
 
 			var text2 = File.ReadAllText(p2);

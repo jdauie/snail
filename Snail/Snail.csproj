@@ -47,11 +47,13 @@
     <Compile Include="Document.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="Legacy\Lexer.cs" />
+    <Compile Include="Nodes\AttributeCollection.cs" />
     <Compile Include="Nodes\CDATASectionNode.cs" />
     <Compile Include="Nodes\CommentNode.cs" />
     <Compile Include="Nodes\DocumentNode.cs" />
     <Compile Include="Nodes\DocumentTypeNode.cs" />
     <Compile Include="Nodes\ElementNode.cs" />
+    <Compile Include="Nodes\NodeAttribute.cs" />
     <Compile Include="Nodes\ProcessingInstructionNode.cs" />
     <Compile Include="Nodes\TextNode.cs" />
     <Compile Include="Nodes\Node.cs" />
