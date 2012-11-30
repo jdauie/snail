@@ -86,6 +86,37 @@ namespace Snail.Nodes
 			return (m_childNodes.Count > 0);
 		}
 
+		public void Sort()
+		{
+			if (m_childNodes == null || m_childNodes.Count == 0)
+				return;
+
+			// sort children
+			var orderedChildren = m_childNodes.OrderBy(node => node).ToList();
+			while (m_childNodes.Count > 0)
+				m_childNodes.RemoveFirst();
+			foreach (var child in orderedChildren)
+				AppendChild(child);
+
+			foreach (var child in m_childNodes)
+			{
+				var childElement = child as ElementNode;
+				if (childElement != null)
+					childElement.Sort();
+			}
+		}
+
+		public override int CompareTo(Node other)
+		{
+			int value = base.CompareTo(other);
+			if (value == 0)
+			{
+				// compare attributes
+			}
+
+			return value;
+		}
+
 		protected override string ToString(WhitespaceMode mode, string indentation, int currentDepth)
 		{
 			var indent = "";

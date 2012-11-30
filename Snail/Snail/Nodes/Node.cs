@@ -37,75 +37,7 @@ namespace Snail.Nodes
 		DTD_ATTLIST_NODE
 	}
 
-	public class NodeAttribute
-	{
-		private readonly string m_name;
-		private string m_value;
-
-		public string Name
-		{
-			get { return m_name; }
-		}
-
-		public string Value
-		{
-			get { return m_value; }
-			set { m_value = value; }
-		}
-
-		public NodeAttribute(KeyValuePair<string, string> attribute)
-		{
-			m_name = attribute.Key;
-			m_value = attribute.Value;
-		}
-
-		public NodeAttribute(string name, string value)
-		{
-			m_name = name;
-			m_value = value;
-		}
-
-		public override string ToString()
-		{
-			return string.Format("{0}=\"{1}\"", m_name, m_value);
-		}
-	}
-
-	public class AttributeCollection : IEnumerable<NodeAttribute>
-	{
-		private readonly List<KeyValuePair<string, string>> m_attributes;
-
-		//private readonly SortedDictionary<string, string> m_attributes;
-
-		//public string this[string key]
-		//{
-		//    get { return m_attributes[key]; }
-		//}
-
-		public AttributeCollection()
-		{
-			//m_attributes = new SortedDictionary<string, string>();
-			m_attributes = new List<KeyValuePair<string, string>>();
-		}
-
-		public void Add(string name, string value)
-		{
-			//m_attributes.Add(name, value);
-			m_attributes.Add(new KeyValuePair<string, string>(name, value));
-		}
-
-		public IEnumerator<NodeAttribute> GetEnumerator()
-		{
-			return m_attributes.Select(kvp => new NodeAttribute(kvp)).GetEnumerator();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-	}
-
-	public abstract class Node
+	public abstract class Node : IComparable<Node>
 	{
 		private readonly NodeType m_type;
 		private readonly string m_name;
@@ -140,6 +72,24 @@ namespace Snail.Nodes
 			m_value = value;
 
 			m_parent = null;
+		}
+
+		public virtual int CompareTo(Node other)
+		{
+			int value = m_type.CompareTo(other.m_type);
+			if (value == 0)
+			{
+				if (m_value != null)
+				{
+					value = m_value.CompareTo(other.m_value);
+				}
+				else
+				{
+					value = m_name.CompareTo(other.m_name);
+				}
+			}
+
+			return value;
 		}
 
 		protected abstract string ToString(WhitespaceMode mode, string indentation, int currentDepth);
