@@ -11,11 +11,9 @@ namespace Snail
 {
 	public class XmlParser : IParser
 	{
-		public DocumentNode Parse(string text)
+		public DocumentNode ParseWellFormedXml(string text)
 		{
-			var tags = ParseTags(text);
-			var root = ParseWellFormedXml(text, tags);
-			//DocumentNode root = null;
+			var root = ParseTags(text);
 
 			#region Test
 
@@ -64,55 +62,6 @@ namespace Snail
 			return root;
 		}
 
-		public static DocumentNode ParseWellFormedXml(string text, List<long> tags)
-		{
-			var root = new DocumentNode();
-			ElementNode current = root;
-
-			foreach (var tag in tags)
-			{
-				int index = (int)tag;
-				int length = (int)((tag << 16) >> (32 + 16));
-				ushort other = (ushort)(tag >> ((32 + 32) - 16));
-
-				if (other == 0)
-				{
-					var node = new TextNode(text.Substring(index, length));
-					current.AppendChild(node);
-				}
-				else if (other == ushort.MaxValue)
-				{
-					var node = new CommentNode(text.Substring(index + 4, length - 7).Trim());
-					current.AppendChild(node);
-				}
-				else
-				{
-					bool isClosingTag = text[index + 1] == '/';
-					if (isClosingTag)
-					{
-						current = current.Parent;
-					}
-					else
-					{
-						bool isSelfClosingTag = text[index + length - 2] == '/';
-						string tagName = text.Substring(index + 1, other);
-						var node = new ElementNode(tagName, isSelfClosingTag);
-
-						int attributeStart = index + other + 1;
-						ParseAttributesFromWellFormedXml(node, text, attributeStart, length - (attributeStart - index) - 1);
-
-						current.AppendChild(node);
-						if (!isSelfClosingTag)
-						{
-							current = node;
-						}
-					}
-				}
-			}
-
-			return root;
-		}
-
 		private static void ParseAttributesFromWellFormedXml(ElementNode node, string text, int index, int length)
 		{
 			if (length <= 0)
@@ -140,27 +89,15 @@ namespace Snail
 			}
 		}
 
-		public static List<long> ParseTags(string text)
+		public static DocumentNode ParseTags(string text)
 		{
-			#region Markup Samples
-			// <name attr="value" attr2=value attr3>
-			// <name attr="value" />
-			// </name>
-
-			// <name attr=value">
-			// <name attr="value attr2="value">
-			// <name attr=value </name>
-			// <name <name2 /></name attr=value>
-			// <name>text/name>
-			#endregion
-
-			// pre-allocating is only a marginal improvement
-			var tags = new List<long>();
+			var root = new DocumentNode();
+			ElementNode current = root;
 
 			int i = 0;
 			while (i < text.Length)
 			{
-				var textEndIndex = FindTextBlock(text, tags, i);
+				var textEndIndex = FindTextBlock(text, current, i);
 
 				i = textEndIndex;
 				if (i == text.Length)
@@ -178,7 +115,7 @@ namespace Snail
 					if (jc == '!')
 					{
 						// comment handling
-						tagEndIndex = IdentifyTagStartingWithExclamation(text, tags, i, tagEndIndex);
+						tagEndIndex = IdentifyTagStartingWithExclamation(text, current, i, tagEndIndex);
 					}
 					//else if (jc == '?')
 					//{
@@ -200,7 +137,26 @@ namespace Snail
 
 						int tagNameLength = j - i - 1;
 
-						tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, tagNameLength));
+						bool isClosingTag = text[i + 1] == '/';
+						if (isClosingTag)
+						{
+							current = current.Parent;
+						}
+						else
+						{
+							bool isSelfClosingTag = text[tagEndIndex - 1] == '/';
+							string tagName = text.Substring(i + 1, tagNameLength);
+							var node = new ElementNode(tagName, isSelfClosingTag);
+
+							int attributeStart = j + 1;
+							ParseAttributesFromWellFormedXml(node, text, attributeStart, tagEndIndex - attributeStart);
+
+							current.AppendChild(node);
+							if (!isSelfClosingTag)
+							{
+								current = node;
+							}
+						}
 					}
 					i = tagEndIndex;
 				}
@@ -208,10 +164,10 @@ namespace Snail
 				++i;
 			}
 
-			return tags;
+			return root;
 		}
 
-		private static int FindTextBlock(string text, List<long> tags, int textStartIndex)
+		private static int FindTextBlock(string text, ElementNode current, int textStartIndex)
 		{
 			int length = text.Length;
 			int textEndIndex = textStartIndex;
@@ -226,13 +182,14 @@ namespace Snail
 					++textEndIndex;
 
 				// exclude search char
-				tags.Add(CreateTagIndex(textStartIndex, textEndIndex - textStartIndex));
+				var node = new TextNode(text.Substring(textStartIndex, textEndIndex - textStartIndex));
+				current.AppendChild(node);
 			}
 
 			return textEndIndex;
 		}
 
-		private static int IdentifyTagStartingWithExclamation(string text, List<long> tags, int i, int tagEndIndex)
+		private static int IdentifyTagStartingWithExclamation(string text, ElementNode current, int i, int tagEndIndex)
 		{
 			int j = i + 1;
 
@@ -263,7 +220,8 @@ namespace Snail
 				{
 					// add entire comment as one tag
 					tagEndIndex = searchPos + "-->".Length - 1;
-					tags.Add(CreateTagIndex(i, tagEndIndex - i + 1, int.MaxValue));
+					var node = new CommentNode(text.Substring(i + 4, tagEndIndex - i - 6).Trim());
+					current.AppendChild(node);
 				}
 
 				// equivalent, but slower
@@ -296,16 +254,6 @@ namespace Snail
 			//}
 
 			return tagEndIndex;
-		}
-
-		private static long CreateTagIndex(int index, int length)
-		{
-			return (index | (((long)length) << 32));
-		}
-
-		private static long CreateTagIndex(int index, int length, int tagNameLength)
-		{
-			return (index | (((long)length) << 32) | (((long)tagNameLength) << (32 + 16)));
 		}
 	}
 }
