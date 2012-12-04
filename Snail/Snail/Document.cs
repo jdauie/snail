@@ -15,7 +15,8 @@ namespace Snail
 		{
 			IParser parser = null;
 			//parser = new LegacyParser();
-			parser = new FastParser();
+			//parser = new FastParser();
+			parser = new XmlParser();
 			return parser.Parse(text);
 		}
 	}
