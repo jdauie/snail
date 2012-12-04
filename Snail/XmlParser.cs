@@ -11,53 +11,9 @@ namespace Snail
 {
 	public class XmlParser : IParser
 	{
-		public DocumentNode ParseWellFormedXml(string text)
+		public DocumentNode Parse(string text)
 		{
-			var root = ParseTags(text);
-
-			#region Test
-
-			/* 
-			 * [ low . . . . . . high ]
-			 * [  32  ][  16  ][  16  ]
-			 *  index   count   other
-			 */
-
-			//var test = new List<string>();
-			////var sb = new StringBuilder(text.Length);
-			//foreach (var tag in tags)
-			//{
-			//    int index = ((int)tag << 8) >> 8;
-			//    int length = (int)((tag << 16) >> (24 + 16));
-			//    ushort other = (ushort)(tag >> 64 - 16);
-
-			//    if (other == 0)
-			//    {
-			//        // text block
-			//        test.Add(text.Substring(index, length));
-			//    }
-			//    else if (other == ushort.MaxValue)
-			//    {
-			//        // comment block
-			//        //test.Add(text.Substring(index, length));
-			//    }
-			//    else
-			//    {
-			//        // tag name
-			//        test.Add(string.Format("<{0}>", text.Substring(index + 1, other)));
-			//        //test.Add(text.Substring(index, length));
-			//    }
-
-			//    //test.Add(text.Substring(index, length));
-			//    //sb.Append(text.Substring(index, length));
-			//}
-			////var textRecreated = sb.ToString();
-			//Console.WriteLine(test.Count);
-
-			//var textRecreated = string.Join("", tags);
-			//Console.WriteLine(textRecreated.Length);
-
-			#endregion
+			var root = ParseWellFormedXml(text);
 
 			return root;
 		}
@@ -89,7 +45,7 @@ namespace Snail
 			}
 		}
 
-		public static DocumentNode ParseTags(string text)
+		public static DocumentNode ParseWellFormedXml(string text)
 		{
 			var root = new DocumentNode();
 			ElementNode current = root;
@@ -126,17 +82,6 @@ namespace Snail
 					//}
 					else
 					{
-						// accumulate until whitespace or end
-						//int nameStartIndex = j;
-						while (j < tagEndIndex)
-						{
-							if (Char.IsWhiteSpace(text[j]))
-								break;
-							++j;
-						}
-
-						int tagNameLength = j - i - 1;
-
 						bool isClosingTag = text[i + 1] == '/';
 						if (isClosingTag)
 						{
@@ -144,6 +89,16 @@ namespace Snail
 						}
 						else
 						{
+							// accumulate until whitespace or end
+							while (j < tagEndIndex)
+							{
+								if (Char.IsWhiteSpace(text[j]))
+									break;
+								++j;
+							}
+
+							int tagNameLength = j - i - 1;
+
 							bool isSelfClosingTag = text[tagEndIndex - 1] == '/';
 							string tagName = text.Substring(i + 1, tagNameLength);
 							var node = new ElementNode(tagName, isSelfClosingTag);
@@ -220,6 +175,7 @@ namespace Snail
 				{
 					// add entire comment as one tag
 					tagEndIndex = searchPos + "-->".Length - 1;
+					// this Trim() might be expensive...
 					var node = new CommentNode(text.Substring(i + 4, tagEndIndex - i - 6).Trim());
 					current.AppendChild(node);
 				}
