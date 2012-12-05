@@ -5,7 +5,12 @@ using System.Text;
 
 namespace Snail
 {
-	class LazySubstring
+	public interface IStringContainer
+	{
+		string Value { get; }
+	}
+
+	class LazySubstring : IStringContainer
 	{
 		private string m_actual;
 

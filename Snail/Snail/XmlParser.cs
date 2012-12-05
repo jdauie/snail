@@ -28,11 +28,11 @@ namespace Snail
 			while (index < endIndex)
 			{
 				// get name before '='
-				int indexOfEquals = text.IndexOf('=', index); // bound this (so I don't have the check it below)
-				if (indexOfEquals > endIndex || indexOfEquals == -1)
+				int indexOfEquals = text.IndexOf('=', index, endIndex - index);
+				if (indexOfEquals == -1)
 					break;
 
-				string name = text.Substring(index, indexOfEquals - index).Trim();
+				string name = text.SubstringTrim(index, indexOfEquals - index);
 				index = indexOfEquals + 1;
 				
 				// get value between quotes
@@ -175,8 +175,7 @@ namespace Snail
 				{
 					// add entire comment as one tag
 					tagEndIndex = searchPos + "-->".Length - 1;
-					// this Trim() might be expensive...
-					var node = new CommentNode(text.Substring(i + 4, tagEndIndex - i - 6).Trim());
+					var node = new CommentNode(text.SubstringTrim(i + 4, tagEndIndex - i - 6));
 					current.AppendChild(node);
 				}
 
@@ -214,10 +213,8 @@ namespace Snail
 
 		private static void IdentifyTagStartingWithQuestionMark(string text, ElementNode current, int i, int tagEndIndex)
 		{
-			{
-				var node = new ProcessingInstructionNode(text.Substring(i + 2, tagEndIndex - i - 3));
-				current.AppendChild(node);
-			}
+			var node = new ProcessingInstructionNode(text.Substring(i + 2, tagEndIndex - i - 3));
+			current.AppendChild(node);
 		}
 	}
 }

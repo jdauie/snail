@@ -81,7 +81,7 @@ namespace Snail
 				}
 				else if (other == ushort.MaxValue)
 				{
-					var node = new CommentNode(text.Substring(index + 4, length - 7).Trim());
+					var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
 					current.AppendChild(node);
 				}
 				else
@@ -140,7 +140,7 @@ namespace Snail
 				if (indexOfEquals > endIndex || indexOfEquals == -1)
 					break;
 
-				string name = text.Substring(index, indexOfEquals - index).Trim();
+				string name = text.SubstringTrim(index, indexOfEquals - index);
 				index = indexOfEquals + 1;
 				
 				// get value between quotes
