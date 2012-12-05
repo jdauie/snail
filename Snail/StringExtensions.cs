@@ -16,6 +16,23 @@ namespace Snail
 
 			return builder.ToString();
 		}
+
+		public static string SubstringTrim(this string input, int startIndex, int length)
+		{
+			int endIndex = startIndex + length - 1;
+
+			for (; startIndex <= endIndex; startIndex++)
+			{
+				if (!Char.IsWhiteSpace(input[startIndex])) break;
+			}
+
+			for (; endIndex >= startIndex; endIndex--)
+			{
+				if (!Char.IsWhiteSpace(input[endIndex])) break;
+			}
+
+			return input.Substring(startIndex, endIndex - startIndex + 1);
+		}
 	}
 
 
