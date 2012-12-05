@@ -8,9 +8,8 @@ namespace Snail.Nodes
 {
 	public class AttributeCollection : IEnumerable<NodeAttribute>, IComparable<AttributeCollection>
 	{
-		//private readonly List<KeyValuePair<string, string>> m_attributes;
-
-		private readonly SortedDictionary<string, string> m_attributes;
+		private readonly List<KeyValuePair<string, string>> m_attributes;
+		//private readonly SortedDictionary<string, string> m_attributes;
 
 		//public string this[string key]
 		//{
@@ -19,14 +18,14 @@ namespace Snail.Nodes
 
 		public AttributeCollection()
 		{
-			m_attributes = new SortedDictionary<string, string>();
-			//m_attributes = new List<KeyValuePair<string, string>>();
+			//m_attributes = new SortedDictionary<string, string>();
+			m_attributes = new List<KeyValuePair<string, string>>();
 		}
 
 		public void Add(string name, string value)
 		{
-			m_attributes.Add(name, value);
-			//m_attributes.Add(new KeyValuePair<string, string>(name, value));
+			//m_attributes.Add(name, value);
+			m_attributes.Add(new KeyValuePair<string, string>(name, value));
 		}
 
 		public IEnumerator<NodeAttribute> GetEnumerator()
@@ -43,17 +42,17 @@ namespace Snail.Nodes
 		{
 			int value = 0;
 
-			foreach (var kvp in m_attributes)
-			{
-				if (other.m_attributes.ContainsKey(kvp.Key))
-				{
-					//
-				}
-				else
-				{
-					//
-				}
-			}
+			//foreach (var kvp in m_attributes)
+			//{
+			//    if (other.m_attributes.ContainsKey(kvp.Key))
+			//    {
+			//        //
+			//    }
+			//    else
+			//    {
+			//        //
+			//    }
+			//}
 
 			return value;
 		}
