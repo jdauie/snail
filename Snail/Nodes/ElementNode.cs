@@ -20,7 +20,7 @@ namespace Snail.Nodes
 			get { return m_attributes; }
 		}
 
-		public string StringRepresentation
+		public override string StringRepresentation
 		{
 			get
 			{

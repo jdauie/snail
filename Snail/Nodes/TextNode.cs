@@ -12,6 +12,11 @@ namespace Snail.Nodes
 		{
 		}
 
+		public override string StringRepresentation
+		{
+			get { return Value; }
+		}
+
 		protected override string ToString(WhitespaceMode mode, string indentation, int currentDepth)
 		{
 			var value = Value;

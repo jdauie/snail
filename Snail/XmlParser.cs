@@ -72,14 +72,13 @@ namespace Snail
 					{
 						// comment handling
 						tagEndIndex = IdentifyTagStartingWithExclamation(text, current, i, tagEndIndex);
+						// skip document type declarations and markup declarations
 					}
-					//else if (jc == '?')
-					//{
-					//    // this only matters if I start parsing server-side directives e.g.
-					//    // <?php...?>
-					//    // otherwise, it is just things like xml declarations which can be parsed the default way e.g.
-					//    // <?xml version optional parts?>
-					//}
+					else if (jc == '?')
+					{
+						// <?xml version="1.0" encoding="utf-8"?>
+						IdentifyTagStartingWithQuestionMark(text, current, i, tagEndIndex);
+					}
 					else
 					{
 						bool isClosingTag = text[i + 1] == '/';
@@ -104,7 +103,7 @@ namespace Snail
 							var node = new ElementNode(tagName, isSelfClosingTag);
 
 							int attributeStart = j + 1;
-							//ParseAttributesFromWellFormedXml(node, text, attributeStart, tagEndIndex - attributeStart);
+							ParseAttributesFromWellFormedXml(node, text, attributeStart, tagEndIndex - attributeStart);
 
 							current.AppendChild(node);
 							if (!isSelfClosingTag)
@@ -135,9 +134,9 @@ namespace Snail
 			{
 				while (textEndIndex < length && text[textEndIndex] != '<')
 					++textEndIndex;
-
+				
 				// exclude search char
-				// this substring is expensive!
+				// this substring is expensive!  Is it a cache problem?  Would it be faster to copy as I go?
 				var node = new TextNode(text.Substring(textStartIndex, textEndIndex - textStartIndex));
 				current.AppendChild(node);
 			}
@@ -211,6 +210,14 @@ namespace Snail
 			//}
 
 			return tagEndIndex;
+		}
+
+		private static void IdentifyTagStartingWithQuestionMark(string text, ElementNode current, int i, int tagEndIndex)
+		{
+			{
+				var node = new ProcessingInstructionNode(text.Substring(i + 2, tagEndIndex - i - 3));
+				current.AppendChild(node);
+			}
 		}
 	}
 }

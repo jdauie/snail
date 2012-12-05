@@ -16,9 +16,14 @@ namespace Snail.Nodes
 		{
 		}
 
+		public override string StringRepresentation
+		{
+			get { return Value; }
+		}
+
 		protected override string ToString(WhitespaceMode mode, string indentation, int currentDepth)
 		{
-			var value = string.Format("<?{0}?>", Name);
+			var value = string.Format("<?{0}?>", Value);
 			if(mode == WhitespaceMode.Insert) {
 				value = string.Format("\n{0}{1}", indentation.Repeat(currentDepth - 1), value);
 			}

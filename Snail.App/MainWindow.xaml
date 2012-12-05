@@ -10,7 +10,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Name="textBlock" Text="" Height="40" />
         <TreeView Grid.Row="1" Grid.Column="0" Name="treeView1" ItemsSource="{Binding Children}">
             <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type Nodes:ElementNode}" ItemsSource="{Binding Children}">
+                <HierarchicalDataTemplate DataType="{x:Type Nodes:Node}" ItemsSource="{Binding Children}">
                     <StackPanel>
                         <TextBlock Text="{Binding Path=StringRepresentation}" />
                     </StackPanel>
