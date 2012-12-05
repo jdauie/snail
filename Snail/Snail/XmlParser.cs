@@ -104,7 +104,7 @@ namespace Snail
 							var node = new ElementNode(tagName, isSelfClosingTag);
 
 							int attributeStart = j + 1;
-							ParseAttributesFromWellFormedXml(node, text, attributeStart, tagEndIndex - attributeStart);
+							//ParseAttributesFromWellFormedXml(node, text, attributeStart, tagEndIndex - attributeStart);
 
 							current.AppendChild(node);
 							if (!isSelfClosingTag)
@@ -137,6 +137,7 @@ namespace Snail
 					++textEndIndex;
 
 				// exclude search char
+				// this substring is expensive!
 				var node = new TextNode(text.Substring(textStartIndex, textEndIndex - textStartIndex));
 				current.AppendChild(node);
 			}
