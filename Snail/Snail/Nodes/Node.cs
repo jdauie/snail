@@ -65,6 +65,11 @@ namespace Snail.Nodes
 			set { m_parent = value; }
 		}
 
+		public virtual string StringRepresentation
+		{
+			get { return Name; }
+		}
+
 		protected Node(NodeType type, string name, string value)
 		{
 			m_type = type;
