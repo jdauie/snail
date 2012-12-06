@@ -27,7 +27,9 @@ namespace Snail
 		{
 			//var root = ParseWellFormedXml(text);
 			var tags = ParseWellFormedXml2(text);
-			var root = ParseTreeFromWellFormedXml(text, tags);
+
+			DocumentNode root = null;
+			//root = ParseTreeFromWellFormedXml(text, tags);
 
 			#region Test
 
@@ -126,6 +128,7 @@ namespace Snail
 				{
 					// skip past whitespace between tags
 					// (this is not a valid approach -- I need to remember the fact that there was whitespace sometimes)
+					// this might slow down this parse phase, but saves a lot of time during tree generation
 					while (p != pEnd && char.IsWhiteSpace(*p))
 						++p;
 
