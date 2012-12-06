@@ -13,7 +13,63 @@ namespace Snail
 	{
 		public DocumentNode Parse(string text)
 		{
-			var root = ParseWellFormedXml(text);
+			var root = ParseWellFormedXml2(text);
+
+			return root;
+		}
+
+		public static unsafe DocumentNode ParseWellFormedXml2(string text)
+		{
+			var root = new DocumentNode();
+
+			int length = text.Length;
+			fixed (char* pText = text)
+			{
+				char* p = pText;
+				char* pEnd = pText + length;
+				char* pStart = p;
+
+				while (p < pEnd)
+				{
+					// identify text region (if there is one)
+					if (*p != '<')
+					{
+						pStart = p;
+						while (p != pEnd && *p != '<')
+							++p;
+
+						long textIndex = pStart - pText;
+						long textLength = p - pStart;
+					}
+
+					// identify tag region
+					if (p != pEnd)
+					{
+						pStart = p;
+						++p;
+						if (p[0] == '!' && p[1] == '-' && p[2] == '-')
+						{
+							// comment
+							char* pEndComment = pEnd - 2;
+							while (p != pEndComment && p[0] != '-' && p[1] != '-' && p[2] != '>')
+								++p;
+							p += 2;
+						}
+						else if (*p == '?' || *p == '/')
+						{
+							// processing instruction or closing tag
+							while (p != pEnd && *p != '>') ++p;
+						}
+						else
+						{
+							// normal tag
+							while (p != pEnd && *p != '>') ++p;
+						}
+					}
+
+					++p;
+				}
+			}
 
 			return root;
 		}
