@@ -27,6 +27,7 @@ namespace Snail
 		{
 			//var root = ParseWellFormedXml(text);
 			var tags = ParseWellFormedXml2(text);
+			var root = ParseTreeFromWellFormedXml(text, tags);
 
 			#region Test
 
@@ -45,13 +46,70 @@ namespace Snail
 
 			#endregion
 
-			//return root;
-			return null;
+			return root;
 		}
 
 		private static long CreateTagIndex(long index, long length)
 		{
 			return (index | (length << 32));
+		}
+
+		public static unsafe DocumentNode ParseTreeFromWellFormedXml(string text, List<long> tags)
+		{
+			var root = new DocumentNode();
+			ElementNode current = root;
+			fixed (char* pText = text)
+			{
+				for (int i = 0; i < tags.Count; i++)
+				{
+					long tag = tags[i];
+					int index = (int)tag;
+					int length = (int)(tag >> 32);
+
+					if (text[index] != '<')
+					{
+						var node = new TextNode(text.Substring(index, length));
+						current.AppendChild(node);
+					}
+					//else if (other == ushort.MaxValue)
+					//{
+					//    var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
+					//    current.AppendChild(node);
+					//}
+					else
+					{
+						bool isClosingTag = text[index + 1] == '/';
+						if (isClosingTag)
+						{
+							current = current.Parent;
+						}
+						else
+						{
+							bool isSelfClosingTag = (text[index + length - 2] == '/');
+
+							char* p = pText + index + 1;
+							char* pEnd = p + length - 2;
+							while (p != pEnd && !char.IsWhiteSpace(*p))
+								++p;
+
+							int tagNameLength = (int)(p - (pText + index + 1));
+							string tagName = text.Substring(index + 1, tagNameLength);
+							var node = new ElementNode(tagName, isSelfClosingTag);
+
+							int attributeStart = index + tagNameLength + 1;
+							ParseAttributesFromWellFormedXml(node, text, attributeStart, length - (attributeStart - index) - 1);
+
+							current.AppendChild(node);
+							if (!isSelfClosingTag)
+							{
+								current = node;
+							}
+						}
+					}
+				}
+			}
+
+			return root;
 		}
 
 		public static unsafe List<long> ParseWellFormedXml2(string text)
@@ -66,6 +124,11 @@ namespace Snail
 
 				while (p < pEnd)
 				{
+					// skip past whitespace between tags
+					// (this is not a valid approach -- I need to remember the fact that there was whitespace sometimes)
+					while (p != pEnd && char.IsWhiteSpace(*p))
+						++p;
+
 					// identify text region (if there is one)
 					if (*p != '<')
 					{
