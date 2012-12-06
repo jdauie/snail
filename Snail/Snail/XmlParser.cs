@@ -9,6 +9,18 @@ using Snail.Nodes;
 
 namespace Snail
 {
+	//internal struct TagIndex
+	//{
+	//    public readonly int Index;
+	//    public readonly int Length;
+
+	//    public TagIndex(int index, int length)
+	//    {
+	//        Index = index;
+	//        Length = length;
+	//    }
+	//}
+
 	public class XmlParser : IParser
 	{
 		public DocumentNode Parse(string text)
