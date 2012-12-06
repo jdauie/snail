@@ -122,7 +122,7 @@ namespace Snail
 			{
 				char* p = pText;
 				char* pEnd = pText + text.Length;
-				char* pStart = p;
+				char* pStart;
 
 				while (p < pEnd)
 				{
@@ -155,16 +155,17 @@ namespace Snail
 								++p;
 							p += 2;
 						}
-						else if (*p == '?' || *p == '/')
+						else// if (*p == '?' || *p == '/')
 						{
-							// processing instruction or closing tag
+							// processing instruction, closing tag, or normal tag
 							while (p != pEnd && *p != '>') ++p;
 						}
-						else
-						{
-							// normal tag
-							while (p != pEnd && *p != '>') ++p;
-						}
+						// I don't need to do this separately until I do something different with it.
+						//else
+						//{
+						//    // normal tag
+						//    while (p != pEnd && *p != '>') ++p;
+						//}
 
 						tags.Add(CreateTagIndex(pStart - pText, p - pStart + 1));
 					}
