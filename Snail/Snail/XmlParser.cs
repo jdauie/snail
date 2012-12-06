@@ -133,7 +133,7 @@ namespace Snail
 						++p;
 
 					// identify text region (if there is one)
-					if (*p != '<')
+					if (p != pEnd && *p != '<')
 					{
 						pStart = p;
 						while (p != pEnd && *p != '<')
