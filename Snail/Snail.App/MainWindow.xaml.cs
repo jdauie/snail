@@ -36,14 +36,18 @@ namespace Snail.App
 		{
 			string testFile;
 			//testFile = @"..\Snail.Test\PsyStarcraft_channel.htm";
-			testFile = @"..\Snail.Test\kjv-osis\kjv.osis.xml";
+			//testFile = @"..\Snail.Test\kjv-osis\kjv.osis.xml";
 			//testFile = @"..\Snail.Test\kjv-usfx\eng-kjv_usfx.xml";
 			//testFile = @"..\Snail.Test\ot.xml";
 			//testFile = @"..\Snail.Test\TO_core_last_DEM_AR_forests.shp.afe";
 			//testFile = @"..\Snail.Test\Precompaction_Lrn.shp.afe";
 			//testFile = @"..\Snail.Test\xhtml1-strict.dtd";
 			//testFile = @"..\Snail.Test\Viewer3D.101.vcproj";
+			testFile = @"..\Snail.Test\xmark_standard.xml";
 			string text = File.ReadAllText(testFile);
+
+			GC.Collect();
+			GC.Collect();
 
 			var sw = Stopwatch.StartNew();
 
