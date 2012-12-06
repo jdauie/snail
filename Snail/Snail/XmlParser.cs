@@ -9,7 +9,7 @@ using Snail.Nodes;
 
 namespace Snail
 {
-	//internal struct TagIndex
+	//public struct TagIndex
 	//{
 	//    public readonly int Index;
 	//    public readonly int Length;
