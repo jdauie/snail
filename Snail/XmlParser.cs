@@ -13,20 +13,43 @@ namespace Snail
 	{
 		public DocumentNode Parse(string text)
 		{
-			var root = ParseWellFormedXml2(text);
+			//var root = ParseWellFormedXml(text);
+			var tags = ParseWellFormedXml2(text);
 
-			return root;
+			#region Test
+
+			//var tagStrings = new List<string>();
+			//foreach (var tag in tags)
+			//{
+			//    int index = (int)tag;
+			//    int length = (int)(tag >> 32);
+
+			//    tagStrings.Add(text.Substring(index, length));
+			//}
+			//Console.WriteLine(tagStrings.Count);
+
+			//var textRecreated = string.Join("", tagStrings);
+			//Console.WriteLine(textRecreated.Equals(text));
+
+			#endregion
+
+			//return root;
+			return null;
 		}
 
-		public static unsafe DocumentNode ParseWellFormedXml2(string text)
+		private static long CreateTagIndex(long index, long length)
 		{
-			var root = new DocumentNode();
+			return (index | (length << 32));
+		}
 
-			int length = text.Length;
+		public static unsafe List<long> ParseWellFormedXml2(string text)
+		{
+			var tags = new List<long>();
+
 			fixed (char* pText = text)
 			{
 				char* p = pText;
-				char* pEnd = pText + length;
+				char* pEnd = pText + text.Length;
 				char* pStart = p;
 
 				while (p < pEnd)
@@ -38,8 +61,7 @@ namespace Snail
 						while (p != pEnd && *p != '<')
 							++p;
 
-						long textIndex = pStart - pText;
-						long textLength = p - pStart;
+						tags.Add(CreateTagIndex(pStart - pText, p - pStart));
 					}
 
 					// identify tag region
@@ -65,13 +87,15 @@ namespace Snail
 							// normal tag
 							while (p != pEnd && *p != '>') ++p;
 						}
+
+						tags.Add(CreateTagIndex(pStart - pText, p - pStart + 1));
 					}
 
 					++p;
 				}
 			}
 
-			return root;
+			return tags;
 		}
 
 		private static void ParseAttributesFromWellFormedXml(ElementNode node, string text, int index, int length)
