@@ -65,6 +65,10 @@ namespace Snail
 				for (int i = 0; i < tags.Count; i++)
 				{
 					long tag = tags[i];
+
+					if (tag == 0)
+						continue;
+
 					int index = (int)tag;
 					int length = (int)(tag >> 32);
 
@@ -127,20 +131,23 @@ namespace Snail
 				while (p < pEnd)
 				{
 					// skip past whitespace between tags
-					// (this is not a valid approach -- I need to remember the fact that there was whitespace sometimes)
-					// this might slow down this parse phase, but saves a lot of time during tree generation
+					pStart = p;
 					while (p != pEnd && char.IsWhiteSpace(*p))
 						++p;
 
 					// identify text region (if there is one)
 					if (p != pEnd && *p != '<')
 					{
-						pStart = p;
 						while (p != pEnd && *p != '<')
 							++p;
 
 						tags.Add(CreateTagIndex(pStart - pText, p - pStart));
 					}
+					//else if(p != pStart)
+					//{
+					//    // remember that this is whitespace, but no more details
+					//    tags.Add(0L);
+					//}
 
 					// identify tag region
 					if (p != pEnd)
