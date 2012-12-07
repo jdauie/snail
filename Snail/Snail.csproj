@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HtmlParser.cs" />
     <Compile Include="LazySubstring.cs" />
     <Compile Include="XmlParser.cs" />
     <Compile Include="FastParser.cs" />
