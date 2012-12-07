@@ -9,11 +9,15 @@ using Snail.Nodes;
 
 namespace Snail
 {
-	public class XmlParser : IParser
+	public class HtmlParser : IParser
 	{
 		public DocumentNode Parse(string text)
 		{
+			//var root = ParseWellFormedXml(text);
 			var tags = ParseTags(text);
+
+			DocumentNode root = null;
+			//root = ParseTreeFromWellFormedXml(text, tags);
 
 			#region Test
 
@@ -31,9 +35,6 @@ namespace Snail
 			//Console.WriteLine(textRecreated.Equals(text));
 
 			#endregion
-
-			DocumentNode root = null;
-			//root = BuildTree(text, tags);
 
 			return root;
 		}
@@ -78,6 +79,7 @@ namespace Snail
 					// identify tag region
 					if (p != pEnd)
 					{
+						char* pActual = null;
 						pStart = p;
 						++p;
 						if (p[0] == '!' && p[1] == '-' && p[2] == '-')
@@ -88,19 +90,23 @@ namespace Snail
 								++p;
 							p += 2;
 						}
-						else// if (*p == '?' || *p == '/')
+						else if (*p == '?' || *p == '/')
 						{
-							// processing instruction, closing tag, or normal tag
+							// processing instruction, closing tag
 							while (p != pEnd && *p != '>') ++p;
 						}
-						// I don't need to do this separately until I do something different with it.
-						//else
-						//{
-						//    // normal tag
-						//    while (p != pEnd && *p != '>') ++p;
-						//}
+						else
+						{
+							// normal tag
+							while (p != pEnd && *p != '>') ++p;
 
-						tags.Add(CreateTagIndex(pStart - pText, p - pStart + 1));
+							pActual = CheckForScriptOrStyleBlock(tags, pText, pStart, p, pEnd);
+						}
+
+						if (pActual == null || pActual == p)
+							tags.Add(CreateTagIndex(pStart - pText, p - pStart + 1));
+						else
+							p = pActual;
 					}
 
 					++p;
@@ -110,7 +116,7 @@ namespace Snail
 			return tags;
 		}
 
-		public static unsafe DocumentNode BuildTree(string text, List<long> tags)
+		public static unsafe DocumentNode ParseTreeFromWellFormedXml(string text, List<long> tags)
 		{
 			var root = new DocumentNode();
 			ElementNode current = root;
@@ -170,6 +176,50 @@ namespace Snail
 			}
 
 			return root;
+		}
+
+		private static unsafe char* CheckForScriptOrStyleBlock(List<long> tags, char* pText, char* pTagStart, char* pTagEnd, char* pEnd)
+		{
+			long tagLengthMinusOne = pTagEnd - pTagStart;
+			if (tagLengthMinusOne > 6 && (pTagStart[1] == 's' || pTagStart[1] == 'S') && (pTagStart[2] == 'c' || pTagStart[2] == 'C') && (pTagStart[3] == 'r' || pTagStart[3] == 'R') && (pTagStart[4] == 'i' || pTagStart[4] == 'I') && (pTagStart[5] == 'p' || pTagStart[5] == 'P') && (pTagStart[6] == 't' || pTagStart[6] == 'T'))
+			{
+				// script?
+				if (pTagStart[7] == '>' || char.IsWhiteSpace(pTagStart[7]))
+				{
+					char* p = pTagEnd + 1;
+					char* pEndMinusEndTag = pEnd - 9;
+					while (p != pEndMinusEndTag && (p[0] != '<' || p[1] != '/' || p[8] != '>' || (p[2] != 's' && p[2] != 'S') || (p[3] != 'c' && p[3] != 'C') || (p[4] != 'r' && p[4] != 'R') || (p[5] != 'i' && p[5] != 'I') || (p[6] != 'p' && p[6] != 'P') || (p[7] != 't' && p[7] != 'T')))
+						++p;
+
+					// add start tag
+					tags.Add(CreateTagIndex(pTagStart - pText, pTagEnd - pTagStart + 1));
+
+					// add contents as text block
+					tags.Add(CreateTagIndex((pTagEnd + 1) - pText, p - pTagEnd - 1));
+
+					// add end tag
+					tags.Add(CreateTagIndex(p - pText, 9));
+
+					return p + (9 - 1);
+				}
+			}
+			else if (tagLengthMinusOne > 5 && (pTagStart[1] == 's' || pTagStart[1] == 'S') && (pTagStart[2] == 't' || pTagStart[2] == 'T') && (pTagStart[3] == 'y' || pTagStart[3] == 'Y') && (pTagStart[4] == 'l' || pTagStart[4] == 'L') && (pTagStart[5] == 'e' || pTagStart[5] == 'E'))
+			{
+				// style?
+				if (pTagStart[7] == '>' || char.IsWhiteSpace(pTagStart[6]))
+				{
+					// do the same as with style
+				}
+			}
+
+			//char* pName = pTagStart + 1;
+			//while (pName != p && !char.IsWhiteSpace(*pName))
+			//    ++pName;
+
+			//int tagNameLength = (int)(pName - (pTagStart + 1));
+			//string tagName = text.Substring((int)(pTagStart - pText) + 1, tagNameLength);
+
+			return pTagEnd;
 		}
 
 		private static void ParseAttributesFromWellFormedXml(ElementNode node, string text, int index, int length)
