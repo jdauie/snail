@@ -40,20 +40,15 @@ namespace Snail
 
 		private static long CreateTagIndex(long index, long length, long type)
 		{
-			// format  : [  32  ][  28  ][  4  ]
+			// format : [  32  ][  28  ][  4  ]
 			//            index   length  type
 			// 
-			// type    : [  1  ][   3   ]
-			//            text   options
-			// 
-			// text    : 0 = tag (see options for type)
-			//         : 1 = text (options must be zero)
-			// 
-			// options : 0 = '<'  #opening
-			//         : 1 = '<!' #comment, CDATA, DOCTYPE, ENTITY, ELEMENT, ATTLIST
-			//         : 2 = '<?' #processing-instruction
-			//         : 3 = '</' #closing
-			//         : 3 = '/>' #self-closing
+			// type   : 0 =      #text
+			//        : 1 = '</' #closing
+			//        : 2 = '<!' #comment
+			//        : 3 = '<!' #declaration (CDATA, DOCTYPE, ENTITY, ELEMENT, ATTLIST)
+			//        : 4 = '<?' #processing-instruction
+			//        : 5 = '/>' #self-closing
 			// 
 			// Assume length will fit, rather than explicitly clipping it.
 			// It will be garbage either way -- I would really have to throw.
@@ -130,6 +125,81 @@ namespace Snail
 			}
 
 			return tags;
+		}
+
+		public static unsafe DocumentNode BuildTree2(string text, List<long> tags)
+		{
+			const int TAG_TYPE_TEXT = 0;
+			const int TAG_TYPE_CLOSING = 1;
+			const int TAG_TYPE_COMMENT = 2;
+			const int TAG_TYPE_DECLARATION = 3;
+			const int TAG_TYPE_PROCESSING_INSTRUCTION = 4;
+			const int TAG_TYPE_SELF_CLOSING = 5;
+
+			var root = new DocumentNode();
+			ElementNode current = root;
+			fixed (char* pText = text)
+			{
+				for (int i = 0; i < tags.Count; i++)
+				{
+					long tag = tags[i];
+
+					if (tag == 0)
+						continue;
+
+					int index  = (int)tag;
+					int length = (int)((tag << 4) >> (32 + 4));
+					int type   = (int)(tag >> (32 + 28));
+
+					if (type == TAG_TYPE_CLOSING)
+					{
+						current = current.Parent;
+					}
+					if (type == TAG_TYPE_TEXT)
+					{
+						var node = new TextNode(text.Substring(index, length));
+						current.AppendChild(node);
+					}
+					else if (type == TAG_TYPE_COMMENT)
+					{
+						var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
+						current.AppendChild(node);
+					}
+					else if (type == TAG_TYPE_DECLARATION)
+					{
+						//
+					}
+					else if (type == TAG_TYPE_PROCESSING_INSTRUCTION)
+					{
+						var node = new ProcessingInstructionNode(text.Substring(index, length));
+						current.AppendChild(node);
+					}
+					else
+					{
+						bool isSelfClosingTag = (type == TAG_TYPE_SELF_CLOSING);
+
+						char* p = pText + index + 1;
+						char* pEnd = p + length - 2;
+						while (p != pEnd && !char.IsWhiteSpace(*p))
+							++p;
+
+						int tagNameLength = (int)(p - (pText + index + 1));
+						string tagName = text.Substring(index + 1, tagNameLength);
+						var node = new ElementNode(tagName, isSelfClosingTag);
+
+						int attributeStart = index + tagNameLength + 1;
+						ParseAttributesFromWellFormedXml(node, text, attributeStart, length - (attributeStart - index) - 1);
+
+						current.AppendChild(node);
+						if (isSelfClosingTag)
+						{
+							current = node;
+						}
+					}
+				}
+			}
+
+			return root;
 		}
 
 		public static unsafe DocumentNode BuildTree(string text, List<long> tags)
