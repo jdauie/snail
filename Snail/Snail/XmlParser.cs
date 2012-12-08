@@ -111,7 +111,7 @@ namespace Snail
 						{
 							// comment
 							char* pEndComment = pEnd - 2;
-							while (p != pEndComment && p[0] != '-' && p[1] != '-' && p[2] != '>')
+							while (p != pEndComment && (p[0] != '-' || p[1] != '-' || p[2] != '>'))
 								++p;
 							p += 2;
 
