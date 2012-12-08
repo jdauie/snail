@@ -11,6 +11,13 @@ namespace Snail
 {
 	public class XmlParser : IParser
 	{
+		const int TAG_TYPE_TEXT = 0;
+		const int TAG_TYPE_OPENING = 1;
+		const int TAG_TYPE_CLOSING = 2;
+		const int TAG_TYPE_COMMENT = 3;
+		const int TAG_TYPE_DECLARATION = 4;
+		const int TAG_TYPE_PROCESSING = 5;
+
 		public DocumentNode Parse(string text)
 		{
 			var tags = ParseTags(text);
@@ -21,7 +28,8 @@ namespace Snail
 			//foreach (var tag in tags)
 			//{
 			//    int index = (int)tag;
-			//    int length = (int)(tag >> 32);
+			//    int length = (int)((tag << 4) >> (32 + 4));
+			//    int type = (int)(tag >> (32 + 28));
 
 			//    tagStrings.Add(text.Substring(index, length));
 			//}
@@ -41,14 +49,14 @@ namespace Snail
 		private static long CreateTagIndex(long index, long length, long type)
 		{
 			// format : [  32  ][  28  ][  4  ]
-			//            index   length  type
+			//           index   length  type
 			// 
 			// type   : 0 =      #text
-			//        : 1 = '</' #closing
-			//        : 2 = '<!' #comment
-			//        : 3 = '<!' #declaration (CDATA, DOCTYPE, ENTITY, ELEMENT, ATTLIST)
-			//        : 4 = '<?' #processing-instruction
-			//        : 5 = '/>' #self-closing
+			//        : 1 = '<'  #opening
+			//        : 2 = '</' #closing
+			//        : 3 = '<!' #comment
+			//        : 4 = '<!' #declaration (CDATA, DOCTYPE, ENTITY, ELEMENT, ATTLIST)
+			//        : 5 = '<?' #processing-instruction
 			// 
 			// Assume length will fit, rather than explicitly clipping it.
 			// It will be garbage either way -- I would really have to throw.
@@ -86,7 +94,7 @@ namespace Snail
 
 						tags.Add(CreateTagIndex(pStart - pText, p - pStart));
 					}
-					//else if(p != pTagStart)
+					//else if (p != pStart)
 					//{
 					//    // remember that this is whitespace, but no more details
 					//    tags.Add(0L);
@@ -95,6 +103,8 @@ namespace Snail
 					// identify tag region
 					if (p != pEnd)
 					{
+						long type = 0;
+
 						pStart = p;
 						++p;
 						if (p[0] == '!' && p[1] == '-' && p[2] == '-')
@@ -104,20 +114,24 @@ namespace Snail
 							while (p != pEndComment && p[0] != '-' && p[1] != '-' && p[2] != '>')
 								++p;
 							p += 2;
+
+							type = TAG_TYPE_COMMENT;
 						}
-						else// if (*p == '?' || *p == '/')
+						else
 						{
-							// processing instruction, closing tag, or normal tag
+							if (*p == '/')
+								type = TAG_TYPE_CLOSING;
+							else if (*p == '?')
+								type = TAG_TYPE_PROCESSING;
+							else if (*p == '!')
+								type = TAG_TYPE_DECLARATION;
+							else
+								type = TAG_TYPE_OPENING;
+
 							while (p != pEnd && *p != '>') ++p;
 						}
-						// I don't need to do this separately until I do something different with it.
-						//else
-						//{
-						//    // normal tag
-						//    while (p != pEnd && *p != '>') ++p;
-						//}
 
-						tags.Add(CreateTagIndex(pStart - pText, p - pStart + 1));
+						tags.Add(CreateTagIndex(pStart - pText, p - pStart + 1, type));
 					}
 
 					++p;
@@ -127,15 +141,8 @@ namespace Snail
 			return tags;
 		}
 
-		public static unsafe DocumentNode BuildTree2(string text, List<long> tags)
+		public static unsafe DocumentNode BuildTree(string text, List<long> tags)
 		{
-			const int TAG_TYPE_TEXT = 0;
-			const int TAG_TYPE_CLOSING = 1;
-			const int TAG_TYPE_COMMENT = 2;
-			const int TAG_TYPE_DECLARATION = 3;
-			const int TAG_TYPE_PROCESSING_INSTRUCTION = 4;
-			const int TAG_TYPE_SELF_CLOSING = 5;
-
 			var root = new DocumentNode();
 			ElementNode current = root;
 			fixed (char* pText = text)
@@ -144,6 +151,7 @@ namespace Snail
 				{
 					long tag = tags[i];
 
+					// whitespace
 					if (tag == 0)
 						continue;
 
@@ -151,32 +159,18 @@ namespace Snail
 					int length = (int)((tag << 4) >> (32 + 4));
 					int type   = (int)(tag >> (32 + 28));
 
-					if (type == TAG_TYPE_CLOSING)
-					{
-						current = current.Parent;
-					}
 					if (type == TAG_TYPE_TEXT)
 					{
 						var node = new TextNode(text.Substring(index, length));
 						current.AppendChild(node);
 					}
-					else if (type == TAG_TYPE_COMMENT)
+					else if (type == TAG_TYPE_CLOSING)
 					{
-						var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
-						current.AppendChild(node);
+						current = current.Parent;
 					}
-					else if (type == TAG_TYPE_DECLARATION)
+					else if (type == TAG_TYPE_OPENING)
 					{
-						//
-					}
-					else if (type == TAG_TYPE_PROCESSING_INSTRUCTION)
-					{
-						var node = new ProcessingInstructionNode(text.Substring(index, length));
-						current.AppendChild(node);
-					}
-					else
-					{
-						bool isSelfClosingTag = (type == TAG_TYPE_SELF_CLOSING);
+						bool isSelfClosingTag = (text[index + length - 2] == '/');
 
 						char* p = pText + index + 1;
 						char* pEnd = p + length - 2;
@@ -191,72 +185,24 @@ namespace Snail
 						ParseAttributesFromWellFormedXml(node, text, attributeStart, length - (attributeStart - index) - 1);
 
 						current.AppendChild(node);
-						if (isSelfClosingTag)
+						if (!isSelfClosingTag)
 						{
 							current = node;
 						}
 					}
-				}
-			}
-
-			return root;
-		}
-
-		public static unsafe DocumentNode BuildTree(string text, List<long> tags)
-		{
-			var root = new DocumentNode();
-			ElementNode current = root;
-			fixed (char* pText = text)
-			{
-				for (int i = 0; i < tags.Count; i++)
-				{
-					long tag = tags[i];
-
-					if (tag == 0)
-						continue;
-
-					int index = (int)tag;
-					int length = (int)((tag << 4) >> (32 + 4));
-
-					if (text[index] != '<')
+					else if (type == TAG_TYPE_COMMENT)
 					{
-						var node = new TextNode(text.Substring(index, length));
+						var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
 						current.AppendChild(node);
 					}
-					//else if (other == ushort.MaxValue)
-					//{
-					//    var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
-					//    current.AppendChild(node);
-					//}
-					else
+					else if (type == TAG_TYPE_DECLARATION)
 					{
-						bool isClosingTag = text[index + 1] == '/';
-						if (isClosingTag)
-						{
-							current = current.Parent;
-						}
-						else
-						{
-							bool isSelfClosingTag = (text[index + length - 2] == '/');
-
-							char* p = pText + index + 1;
-							char* pEnd = p + length - 2;
-							while (p != pEnd && !char.IsWhiteSpace(*p))
-								++p;
-
-							int tagNameLength = (int)(p - (pText + index + 1));
-							string tagName = text.Substring(index + 1, tagNameLength);
-							var node = new ElementNode(tagName, isSelfClosingTag);
-
-							int attributeStart = index + tagNameLength + 1;
-							ParseAttributesFromWellFormedXml(node, text, attributeStart, length - (attributeStart - index) - 1);
-
-							current.AppendChild(node);
-							if (!isSelfClosingTag)
-							{
-								current = node;
-							}
-						}
+						//
+					}
+					else if (type == TAG_TYPE_PROCESSING)
+					{
+						var node = new ProcessingInstructionNode(text.Substring(index, length));
+						current.AppendChild(node);
 					}
 				}
 			}
