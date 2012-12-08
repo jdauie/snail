@@ -51,11 +51,7 @@ namespace Snail.App
 
 			var sw = Stopwatch.StartNew();
 
-			DocumentNode root = null;
-			for (int i = 0; i < 1; i++)
-			{
-				root = Document.Parse(text);
-			}
+			DocumentNode root = Document.Parse(text);
 
 			sw.Stop();
 
