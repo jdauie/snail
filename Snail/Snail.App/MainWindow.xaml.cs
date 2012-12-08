@@ -36,9 +36,12 @@ namespace Snail.App
 		{
 			string testFile;
 			//testFile = @"..\Snail.Test\PsyStarcraft_channel.htm";
-			testFile = @"..\Snail.Test\kjv-osis\kjv.osis.xml";
+			//testFile = @"..\Snail.Test\stackoverflow.htm";
+			//testFile = @"..\Snail.Test\slashdot.htm";
+			//testFile = @"..\Snail.Test\text.htm";
+			//testFile = @"..\Snail.Test\kjv-osis\kjv.osis.xml";
 			//testFile = @"..\Snail.Test\kjv-usfx\eng-kjv_usfx.xml";
-			//testFile = @"..\Snail.Test\ot.xml";
+			testFile = @"..\Snail.Test\ot.xml";
 			//testFile = @"..\Snail.Test\TO_core_last_DEM_AR_forests.shp.afe";
 			//testFile = @"..\Snail.Test\Precompaction_Lrn.shp.afe";
 			//testFile = @"..\Snail.Test\xhtml1-strict.dtd";
