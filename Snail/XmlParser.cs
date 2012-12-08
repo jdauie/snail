@@ -38,6 +38,29 @@ namespace Snail
 			return root;
 		}
 
+		private static long CreateTagIndex(long index, long length, long type)
+		{
+			// format : [  32  ][  28  ][  4  ]
+			//         index   length  type
+			// 
+			// type   : [ 1 ][  2  ][ 1 ]
+			//          tag  start  end
+			// 
+			// tag    : 0 = #text
+			//          1 = tag
+			// 
+			// start  : 0 = "<"
+			//        : 1 = "<!"
+			//        : 2 = "<?"
+			//        : 3 = "</"
+			// 
+			// end    : 0 = normal
+			//          1 = self-closing
+			// 
+			// Assume length will fit, rather than explicitly clipping it.
+			return (index | (length << 28) | (type << (32 + 28)));
+		}
+
 		private static long CreateTagIndex(long index, long length)
 		{
 			return (index | (length << 32));
