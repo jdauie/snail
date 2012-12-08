@@ -40,22 +40,20 @@ namespace Snail
 
 		private static long CreateTagIndex(long index, long length, long type)
 		{
-			// format : [  32  ][  28  ][  4  ]
-			//           index   length  type
+			// format  : [  32  ][  28  ][  4  ]
+			//            index   length  type
 			// 
-			// type   : [ 1 ][  2  ][ 1 ]
-			//           tag  start  end
+			// type    : [  1  ][   3   ]
+			//            text   options
 			// 
-			// tag    : 0 = text
-			//          1 = tag
+			// text    : 0 = tag (see options for type)
+			//         : 1 = text (options must be zero)
 			// 
-			// start  : 0 = normal
-			//        : 1 = '!'
-			//        : 2 = '?'
-			//        : 3 = '/'
-			// 
-			// end    : 0 = normal
-			//          1 = self-closing
+			// options : 0 = '<'  #opening
+			//         : 1 = '<!' #comment, CDATA, DOCTYPE, ENTITY, ELEMENT, ATTLIST
+			//         : 2 = '<?' #processing-instruction
+			//         : 3 = '</' #closing
+			//         : 3 = '/>' #self-closing
 			// 
 			// Assume length will fit, rather than explicitly clipping it.
 			// It will be garbage either way -- I would really have to throw.
