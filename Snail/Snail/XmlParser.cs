@@ -44,7 +44,7 @@ namespace Snail
 			#endregion
 
 			DocumentNode root = null;
-			//root = BuildTree(text, tags);
+			root = BuildTree(text, tags);
 
 			return root;
 		}
@@ -69,6 +69,13 @@ namespace Snail
 		private static long CreateTagIndex(long index, long length)
 		{
 			return (index | (length << 32));
+		}
+
+		private static void ReadTagIndex(long tag, out int index, out int length, out TagType type)
+		{
+			index  = (int)tag;
+			length = (int)((tag << 4) >> (32 + 4));
+			type   = (TagType)(tag >> (32 + 28));
 		}
 
 		public static unsafe List<long> ParseTags(string text)
@@ -158,9 +165,10 @@ namespace Snail
 					if (tag == 0)
 						continue;
 
-					int index  = (int)tag;
-					int length = (int)((tag << 4) >> (32 + 4));
-					var type = (TagType)(tag >> (32 + 28));
+					int index;
+					int length;
+					TagType type;
+					ReadTagIndex(tag, out index, out length, out type);
 
 					if (type == TagType.TAG_TYPE_TEXT)
 					{
