@@ -92,8 +92,7 @@ namespace Snail
 				{
 					// skip past whitespace between tags
 					pStart = p;
-					char c = *p;
-					while (p != pEnd && ((c == ' ') || (c >= '\x0009' && c <= '\x000d') || c == '\x00a0' || c == '\x0085'))
+					while (p != pEnd && ((*p == ' ') || (*p >= '\x0009' && *p <= '\x000d') || *p == '\x00a0' || *p == '\x0085'))
 						++p;
 
 					// identify text region (if there is one)
@@ -104,11 +103,11 @@ namespace Snail
 
 						tags.Add(CreateTagIndex(pStart - pText, p - pStart));
 					}
-					else if (p != pStart)
-					{
-						// remember that this is whitespace, but no more details
-						tags.Add(0L);
-					}
+					//else if (p != pStart)
+					//{
+					//    // remember that this is whitespace, but no more details
+					//    tags.Add(0L);
+					//}
 
 					// identify tag region
 					if (p != pEnd)
