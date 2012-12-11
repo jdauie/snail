@@ -9,14 +9,24 @@ using Snail.Nodes;
 
 namespace Snail
 {
+	enum TagType : long
+	{
+		TAG_TYPE_TEXT = 0,
+		TAG_TYPE_OPENING = 1,
+		TAG_TYPE_CLOSING = 2,
+		TAG_TYPE_COMMENT = 3,
+		TAG_TYPE_DECLARATION = 4,
+		TAG_TYPE_PROCESSING = 5
+	}
+
 	public class XmlParser : IParser
 	{
-		const int TAG_TYPE_TEXT = 0;
-		const int TAG_TYPE_OPENING = 1;
-		const int TAG_TYPE_CLOSING = 2;
-		const int TAG_TYPE_COMMENT = 3;
-		const int TAG_TYPE_DECLARATION = 4;
-		const int TAG_TYPE_PROCESSING = 5;
+		//const int TAG_TYPE_TEXT = 0;
+		//const int TAG_TYPE_OPENING = 1;
+		//const int TAG_TYPE_CLOSING = 2;
+		//const int TAG_TYPE_COMMENT = 3;
+		//const int TAG_TYPE_DECLARATION = 4;
+		//const int TAG_TYPE_PROCESSING = 5;
 
 		public DocumentNode Parse(string text)
 		{
@@ -46,7 +56,7 @@ namespace Snail
 			return root;
 		}
 
-		private static long CreateTagIndex(long index, long length, long type)
+		private static long CreateTagIndex(long index, long length, TagType type)
 		{
 			// format : [  32  ][  28  ][  4  ]
 			//           index   length  type
@@ -60,7 +70,7 @@ namespace Snail
 			// 
 			// Assume length will fit, rather than explicitly clipping it.
 			// It will be garbage either way -- I would really have to throw.
-			return (index | (length << 32) | (type << (32 + 28)));
+			return (index | (length << 32) | ((int)type << (32 + 28)));
 		}
 
 		private static long CreateTagIndex(long index, long length)
@@ -103,7 +113,7 @@ namespace Snail
 					// identify tag region
 					if (p != pEnd)
 					{
-						long type = 0;
+						TagType type = 0;
 
 						pStart = p;
 						++p;
@@ -115,18 +125,18 @@ namespace Snail
 								++p;
 							p += 2;
 
-							type = TAG_TYPE_COMMENT;
+							type = TagType.TAG_TYPE_COMMENT;
 						}
 						else
 						{
 							if (*p == '/')
-								type = TAG_TYPE_CLOSING;
+								type = TagType.TAG_TYPE_CLOSING;
 							else if (*p == '?')
-								type = TAG_TYPE_PROCESSING;
+								type = TagType.TAG_TYPE_PROCESSING;
 							else if (*p == '!')
-								type = TAG_TYPE_DECLARATION;
+								type = TagType.TAG_TYPE_DECLARATION;
 							else
-								type = TAG_TYPE_OPENING;
+								type = TagType.TAG_TYPE_OPENING;
 
 							while (p != pEnd && *p != '>') ++p;
 						}
@@ -157,18 +167,18 @@ namespace Snail
 
 					int index  = (int)tag;
 					int length = (int)((tag << 4) >> (32 + 4));
-					int type   = (int)(tag >> (32 + 28));
+					var type = (TagType)(tag >> (32 + 28));
 
-					if (type == TAG_TYPE_TEXT)
+					if (type == TagType.TAG_TYPE_TEXT)
 					{
 						var node = new TextNode(text.Substring(index, length));
 						current.AppendChild(node);
 					}
-					else if (type == TAG_TYPE_CLOSING)
+					else if (type == TagType.TAG_TYPE_CLOSING)
 					{
 						current = current.Parent;
 					}
-					else if (type == TAG_TYPE_OPENING)
+					else if (type == TagType.TAG_TYPE_OPENING)
 					{
 						bool isSelfClosingTag = (text[index + length - 2] == '/');
 
@@ -190,16 +200,16 @@ namespace Snail
 							current = node;
 						}
 					}
-					else if (type == TAG_TYPE_COMMENT)
+					else if (type == TagType.TAG_TYPE_COMMENT)
 					{
 						var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
 						current.AppendChild(node);
 					}
-					else if (type == TAG_TYPE_DECLARATION)
+					else if (type == TagType.TAG_TYPE_DECLARATION)
 					{
 						//
 					}
-					else if (type == TAG_TYPE_PROCESSING)
+					else if (type == TagType.TAG_TYPE_PROCESSING)
 					{
 						var node = new ProcessingInstructionNode(text.Substring(index, length));
 						current.AppendChild(node);
