@@ -11,23 +11,16 @@ namespace Snail
 {
 	enum TagType : long
 	{
-		TAG_TYPE_TEXT = 0,
-		TAG_TYPE_OPENING = 1,
-		TAG_TYPE_CLOSING = 2,
-		TAG_TYPE_COMMENT = 3,
+		TAG_TYPE_TEXT        = 0,
+		TAG_TYPE_OPENING     = 1,
+		TAG_TYPE_CLOSING     = 2,
+		TAG_TYPE_COMMENT     = 3,
 		TAG_TYPE_DECLARATION = 4,
-		TAG_TYPE_PROCESSING = 5
+		TAG_TYPE_PROCESSING  = 5
 	}
 
 	public class XmlParser : IParser
 	{
-		//const int TAG_TYPE_TEXT = 0;
-		//const int TAG_TYPE_OPENING = 1;
-		//const int TAG_TYPE_CLOSING = 2;
-		//const int TAG_TYPE_COMMENT = 3;
-		//const int TAG_TYPE_DECLARATION = 4;
-		//const int TAG_TYPE_PROCESSING = 5;
-
 		public DocumentNode Parse(string text)
 		{
 			var tags = ParseTags(text);
@@ -70,7 +63,7 @@ namespace Snail
 			// 
 			// Assume length will fit, rather than explicitly clipping it.
 			// It will be garbage either way -- I would really have to throw.
-			return (index | (length << 32) | ((int)type << (32 + 28)));
+			return (index | (length << 32) | ((long)type << (32 + 28)));
 		}
 
 		private static long CreateTagIndex(long index, long length)
