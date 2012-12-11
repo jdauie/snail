@@ -92,7 +92,7 @@ namespace Snail
 				{
 					// skip past whitespace between tags
 					pStart = p;
-					while (p != pEnd && ((*p == ' ') || (*p >= '\x0009' && *p <= '\x000d') || *p == '\x00a0' || *p == '\x0085'))
+					while (p != pEnd && (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n'))
 						++p;
 
 					// identify text region (if there is one)
