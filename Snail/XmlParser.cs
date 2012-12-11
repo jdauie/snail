@@ -44,7 +44,7 @@ namespace Snail
 			#endregion
 
 			DocumentNode root = null;
-			root = BuildTree(text, tags);
+			//root = BuildTree(text, tags);
 
 			return root;
 		}
@@ -93,8 +93,9 @@ namespace Snail
 					// skip past whitespace between tags
 					// this is okay for the AFE SOAP format, but not for stuff like html
 					pStart = p;
-					while (p != pEnd && char.IsWhiteSpace(*p))
-						++p;
+					// this removes whitespace, but at ~10% time penalty
+					//while (p != pEnd && char.IsWhiteSpace(*p))
+					//    ++p;
 
 					// identify text region (if there is one)
 					if (p != pEnd && *p != '<')
@@ -104,6 +105,7 @@ namespace Snail
 
 						tags.Add(CreateTagIndex(pStart - pText, p - pStart));
 					}
+					//// this remembers whitespace, but at ~10% time penalty
 					//else if (p != pStart)
 					//{
 					//    // remember that this is whitespace, but no more details
