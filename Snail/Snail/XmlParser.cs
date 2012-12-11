@@ -97,8 +97,9 @@ namespace Snail
 					//while (p != pEnd && char.IsWhiteSpace(*p))
 					//    ++p;
 					// this doesn't slow things down, but doesn't cover unicode
-					//while (p != pEnd && ((*p == ' ') || (*p >= '\x0009' && *p <= '\x000d') || *p == '\x00a0' || *p == '\x0085'))
-					//    ++p;
+					char c = *p; // apparently, using "*p" repeatedly is slow
+					while (p != pEnd && ((c == ' ') || (c >= '\x0009' && c <= '\x000d') || c == '\x00a0' || c == '\x0085'))
+						++p;
 
 					// identify text region (if there is one)
 					if (p != pEnd && *p != '<')
@@ -108,12 +109,12 @@ namespace Snail
 
 						tags.Add(CreateTagIndex(pStart - pText, p - pStart));
 					}
-					//// this remembers whitespace, but at ~10% time penalty
-					//else if (p != pStart)
-					//{
-					//    // remember that this is whitespace, but no more details
-					//    tags.Add(0L);
-					//}
+					// this remembers whitespace, but at ~10% time penalty
+					else if (p != pStart)
+					{
+						// remember that this is whitespace, but no more details
+						tags.Add(0L);
+					}
 
 					// identify tag region
 					if (p != pEnd)
