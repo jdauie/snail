@@ -96,6 +96,9 @@ namespace Snail
 					// this removes whitespace, but at ~10% time penalty
 					//while (p != pEnd && char.IsWhiteSpace(*p))
 					//    ++p;
+					// this doesn't slow things down, but doesn't cover unicode
+					//while (p != pEnd && ((*p == ' ') || (*p >= '\x0009' && *p <= '\x000d') || *p == '\x00a0' || *p == '\x0085'))
+					//    ++p;
 
 					// identify text region (if there is one)
 					if (p != pEnd && *p != '<')
