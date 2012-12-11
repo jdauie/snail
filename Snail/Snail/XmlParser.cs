@@ -98,7 +98,12 @@ namespace Snail
 					//    ++p;
 					// this doesn't slow things down, but doesn't cover unicode
 					char c = *p; // apparently, using "*p" repeatedly is slow
-					while (p != pEnd && ((c == ' ') || (c >= '\x0009' && c <= '\x000d') || c == '\x00a0' || c == '\x0085'))
+					//while (p != pEnd && ((c == ' ') || (c >= '\x0009' && c <= '\x000d') || c == '\x00a0' || c == '\x0085'))
+					//    ++p;
+					while (p != pEnd && ((*p <= '\x00ff' && ((*p == ' ') || (*p >= '\x0009' && *p <= '\x000d') || *p == '\x00a0' || *p == '\x0085'))
+						|| (*p > '\x00ff' && (*p == '\x1680' || *p == '\x180e'
+						|| *p == '\x2000' || *p == '\x2001' || *p == '\x2002' || *p == '\x2003' || *p == '\x2004' || *p == '\x2005' || *p == '\x2006' || *p == '\x2007' || *p == '\x2008' || *p == '\x2009' || *p == '\x200a'
+						|| *p == '\x2028' || *p == '\x2029' || *p == '\x202f' || *p == '\x205f' || *p == '\x3000'))))
 						++p;
 
 					// identify text region (if there is one)
