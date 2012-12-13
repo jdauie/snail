@@ -122,19 +122,13 @@ namespace Snail
 						{
 							type = TagType.TAG_TYPE_COMMENT;
 
-							char* pEndComment = pEnd - 2;
-							while (p != pEndComment && (p[0] != '-' || p[1] != '-' || p[2] != '>'))
-								++p;
-							p += 2;
+							p = FindEndComment(p, pEnd);
 						}
 						else if (p[0] == '!' && p[1] == '[' && p[2] == 'C' && p[3] == 'D' && p[4] == 'A' && p[5] == 'T' && p[6] == 'A' && p[7] == '[')
 						{
 							type = TagType.TAG_TYPE_CDATA;
-							
-							char* pEndCDATA = pEnd - 2;
-							while (p != pEndCDATA && (p[0] != ']' || p[1] != ']' || p[2] != '>'))
-								++p;
-							p += 2;
+
+							p = FindEndCDATA(p, pEnd);
 						}
 						else
 						{
@@ -158,6 +152,24 @@ namespace Snail
 			}
 
 			return tags;
+		}
+
+		private static unsafe char* FindEndCDATA(char* p, char* pEnd)
+		{
+			char* pEndCDATA = pEnd - 2;
+			while (p != pEndCDATA && (p[0] != ']' || p[1] != ']' || p[2] != '>'))
+				++p;
+			p += 2;
+			return p;
+		}
+
+		private static unsafe char* FindEndComment(char* p, char* pEnd)
+		{
+			char* pEndComment = pEnd - 2;
+			while (p != pEndComment && (p[0] != '-' || p[1] != '-' || p[2] != '>'))
+				++p;
+			p += 2;
+			return p;
 		}
 
 		public static unsafe DocumentNode BuildTree(string text, List<long> tags)
