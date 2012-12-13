@@ -21,6 +21,9 @@ namespace Snail
 		TAG_TYPE_PROCESSING  = 6
 	}
 
+	/// <summary>
+	/// This can be better for massive files.
+	/// </summary>
 	public class TagList : IEnumerable<long>
 	{
 		private const int CHUNK_SIZE = 1000;
