@@ -120,23 +120,21 @@ namespace Snail
 						++p;
 						if (p[0] == '!' && p[1] == '-' && p[2] == '-')
 						{
-							// comment
+							type = TagType.TAG_TYPE_COMMENT;
+
 							char* pEndComment = pEnd - 2;
 							while (p != pEndComment && (p[0] != '-' || p[1] != '-' || p[2] != '>'))
 								++p;
 							p += 2;
-
-							type = TagType.TAG_TYPE_COMMENT;
 						}
 						else if (p[0] == '!' && p[1] == '[' && p[2] == 'C' && p[3] == 'D' && p[4] == 'A' && p[5] == 'T' && p[6] == 'A' && p[7] == '[')
 						{
-							// CDATA
-							char* pEndComment = pEnd - 2;
-							while (p != pEndComment && (p[0] != ']' || p[1] != ']' || p[2] != '>'))
+							type = TagType.TAG_TYPE_CDATA;
+							
+							char* pEndCDATA = pEnd - 2;
+							while (p != pEndCDATA && (p[0] != ']' || p[1] != ']' || p[2] != '>'))
 								++p;
 							p += 2;
-
-							type = TagType.TAG_TYPE_CDATA;
 						}
 						else
 						{
