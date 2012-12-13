@@ -230,16 +230,14 @@ namespace Snail
 			return p;
 		}
 
-		public static unsafe DocumentNode BuildTree(string text, List<long> tags)
+		public static unsafe DocumentNode BuildTree(string text, IEnumerable<long> tags)
 		{
 			var root = new DocumentNode();
 			ElementNode current = root;
 			fixed (char* pText = text)
 			{
-				for (int i = 0; i < tags.Count; i++)
+				foreach (var tag in tags)
 				{
-					long tag = tags[i];
-
 					// whitespace
 					if (tag == 0)
 						continue;
