@@ -15,8 +15,9 @@ namespace Snail
 		TAG_TYPE_OPENING     = 1,
 		TAG_TYPE_CLOSING     = 2,
 		TAG_TYPE_COMMENT     = 3,
-		TAG_TYPE_DECLARATION = 4,
-		TAG_TYPE_PROCESSING  = 5
+		TAG_TYPE_CDATA       = 4,
+		TAG_TYPE_DECLARATION = 5,
+		TAG_TYPE_PROCESSING  = 6
 	}
 
 	public class XmlParser : IParser
@@ -58,8 +59,9 @@ namespace Snail
 			//        : 1 = '<'  #opening
 			//        : 2 = '</' #closing
 			//        : 3 = '<!' #comment
-			//        : 4 = '<!' #declaration (CDATA, DOCTYPE, ENTITY, ELEMENT, ATTLIST)
-			//        : 5 = '<?' #processing-instruction
+			//        : 4 = '<!' #CDATA
+			//        : 5 = '<!' #declaration (DOCTYPE, ENTITY, ELEMENT, ATTLIST)
+			//        : 6 = '<?' #processing-instruction
 			// 
 			// Assume length will fit, rather than explicitly clipping it.
 			// It will be garbage either way -- I would really have to throw.
@@ -125,6 +127,16 @@ namespace Snail
 							p += 2;
 
 							type = TagType.TAG_TYPE_COMMENT;
+						}
+						else if (p[0] == '!' && p[1] == '[' && p[2] == 'C' && p[3] == 'D' && p[4] == 'A' && p[5] == 'T' && p[6] == 'A' && p[7] == '[')
+						{
+							// CDATA
+							char* pEndComment = pEnd - 2;
+							while (p != pEndComment && (p[0] != ']' || p[1] != ']' || p[2] != '>'))
+								++p;
+							p += 2;
+
+							type = TagType.TAG_TYPE_CDATA;
 						}
 						else
 						{
@@ -203,6 +215,11 @@ namespace Snail
 					else if (type == TagType.TAG_TYPE_COMMENT)
 					{
 						var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
+						current.AppendChild(node);
+					}
+					else if (type == TagType.TAG_TYPE_CDATA)
+					{
+						var node = new CDATASectionNode(text.SubstringTrim(index + 9, length - 12));
 						current.AppendChild(node);
 					}
 					else if (type == TagType.TAG_TYPE_DECLARATION)
