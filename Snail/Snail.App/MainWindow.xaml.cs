@@ -35,18 +35,26 @@ namespace Snail.App
 		private void ParseTest()
 		{
 			string testFile;
-			//testFile = @"..\Snail.Test\PsyStarcraft_channel.htm";
-			//testFile = @"..\Snail.Test\stackoverflow.htm";
-			//testFile = @"..\Snail.Test\slashdot.htm";
-			//testFile = @"..\Snail.Test\text.htm";
+			
+			//testFile = @"..\Snail.Test\html\PsyStarcraft_channel.htm";
+			//testFile = @"..\Snail.Test\html\stackoverflow.htm";
+			//testFile = @"..\Snail.Test\html\slashdot.htm";
+			//testFile = @"..\Snail.Test\html\text.htm";
+			//testFile = @"..\Snail.Test\html\xhtml1-strict.dtd";
+
 			testFile = @"..\Snail.Test\kjv-osis\kjv.osis.xml";
 			//testFile = @"..\Snail.Test\kjv-usfx\eng-kjv_usfx.xml";
-			//testFile = @"..\Snail.Test\ot.xml";
-			//testFile = @"..\Snail.Test\TO_core_last_DEM_AR_forests.shp.afe";
-			//testFile = @"..\Snail.Test\Precompaction_Lrn.shp.afe";
-			//testFile = @"..\Snail.Test\xhtml1-strict.dtd";
-			//testFile = @"..\Snail.Test\Viewer3D.101.vcproj";
-			//testFile = @"..\Snail.Test\xmark_standard.xml";
+			//testFile = @"..\Snail.Test\religion-1.02\ot.xml";
+
+			//testFile = @"..\Snail.Test\pugixml-benchmark-data\terrover.xml";
+
+			//testFile = @"..\Snail.Test\afe\TO_core_last_DEM_AR_forests.shp.afe";
+			//testFile = @"..\Snail.Test\afe\Precompaction_Lrn.shp.afe";
+
+			//testFile = @"..\Snail.Test\vcproj\Viewer3D.101.vcproj";
+
+			//testFile = @"..\Snail.Test\xmark\standard.xml";
+
 			string text = File.ReadAllText(testFile);
 
 			GC.Collect();
@@ -69,8 +77,8 @@ namespace Snail.App
 		private void CompareProjectFilesTest()
 		{
 			CompareProjectFiles(
-				@"..\Snail.Test\Viewer3D.101.vcproj",
-				@"..\Snail.Test\Viewer3D.102.vcproj"
+				@"..\Snail.Test\vcproj\Viewer3D.101.vcproj",
+				@"..\Snail.Test\vcproj\Viewer3D.102.vcproj"
 				);
 		}
 
