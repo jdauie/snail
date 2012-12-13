@@ -46,6 +46,7 @@ namespace Snail.App
 			//testFile = @"..\Snail.Test\kjv-usfx\eng-kjv_usfx.xml";
 			//testFile = @"..\Snail.Test\religion-1.02\ot.xml";
 
+			//testFile = @"..\Snail.Test\pugixml-benchmark-data\house.dae";
 			//testFile = @"..\Snail.Test\pugixml-benchmark-data\terrover.xml";
 
 			//testFile = @"..\Snail.Test\afe\TO_core_last_DEM_AR_forests.shp.afe";
