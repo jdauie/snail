@@ -88,12 +88,11 @@ namespace Snail
 			{
 				char* p = pText;
 				char* pEnd = pText + text.Length;
-				char* pStart;
 
 				while (p < pEnd)
 				{
 					// skip past whitespace between tags
-					pStart = p;
+					char* pStart = p;
 					while (p != pEnd && (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n'))
 						++p;
 
@@ -121,19 +120,16 @@ namespace Snail
 						if (*p == '!' && p[1] == '-' && p[2] == '-')
 						{
 							type = TagType.TAG_TYPE_COMMENT;
-
 							p = FindEndComment(p, pEnd);
 						}
 						else if (*p == '!' && p[1] == '[' && p[2] == 'C' && p[3] == 'D' && p[4] == 'A' && p[5] == 'T' && p[6] == 'A' && p[7] == '[')
 						{
 							type = TagType.TAG_TYPE_CDATA;
-
 							p = FindEndCDATA(p, pEnd);
 						}
 						else if (*p == '?')
 						{
 							type = TagType.TAG_TYPE_PROCESSING;
-
 							p = FindEndProcessing(p, pEnd);
 						}
 						else
