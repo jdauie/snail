@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -18,6 +19,50 @@ namespace Snail
 		TAG_TYPE_CDATA       = 4,
 		TAG_TYPE_DECLARATION = 5,
 		TAG_TYPE_PROCESSING  = 6
+	}
+
+	public class TagList : IEnumerable<long>
+	{
+		private const int CHUNK_SIZE = 1000;
+
+		private readonly List<long[]> m_chunks;
+		private long[] m_current;
+		private int m_index;
+
+		public TagList()
+		{
+			m_chunks = new List<long[]>();
+		}
+
+		public int Count
+		{
+			get { return (m_chunks.Count * CHUNK_SIZE) + m_index; }
+		}
+
+		public void Add(long item)
+		{
+			if (m_index == CHUNK_SIZE)
+			{
+				m_chunks.Add(m_current);
+				m_current = new long[CHUNK_SIZE];
+				m_index = 0;
+			}
+
+			m_current[m_index] = item;
+			++m_index;
+		}
+
+		public IEnumerator<long> GetEnumerator()
+		{
+			foreach (var chunk in m_chunks)
+				foreach (var tag in chunk)
+					yield return tag;
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
 	}
 
 	public class XmlParser : IParser
@@ -80,7 +125,7 @@ namespace Snail
 			type   = (TagType)(tag >> (32 + 28));
 		}
 
-		public static unsafe List<long> ParseTags(string text)
+		public static unsafe IEnumerable<long> ParseTags(string text)
 		{
 			var tags = new List<long>();
 
