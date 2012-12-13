@@ -95,7 +95,7 @@ namespace Snail
 			#endregion
 
 			DocumentNode root = null;
-			//root = BuildTree(text, tags);
+			root = BuildTree(text, tags);
 
 			return root;
 		}
@@ -115,6 +115,17 @@ namespace Snail
 			// 
 			// Assume length will fit, rather than explicitly clipping it.
 			// It will be garbage either way -- I would really have to throw.
+			// 
+			// I could limit the bits for [length] even more, and use either zero or all ones to indicate that it doesn't fit.
+			// This would require reading forward again or backing up from the next tag (when I want to read the data).
+			// 
+			// I could shrink the [index] bits by grouping tags using a common offset.
+			// 
+			// I want to start storing tag name/namespace length again.
+			// Also start storing depth of nesting.
+			// 
+			// Add start-tag index (to navigate like a tree).
+
 			return (index | (length << 32) | ((long)type << (32 + 28)));
 		}
 
