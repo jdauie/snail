@@ -118,24 +118,28 @@ namespace Snail
 
 						pStart = p;
 						++p;
-						if (p[0] == '!' && p[1] == '-' && p[2] == '-')
+						if (*p == '!' && p[1] == '-' && p[2] == '-')
 						{
 							type = TagType.TAG_TYPE_COMMENT;
 
 							p = FindEndComment(p, pEnd);
 						}
-						else if (p[0] == '!' && p[1] == '[' && p[2] == 'C' && p[3] == 'D' && p[4] == 'A' && p[5] == 'T' && p[6] == 'A' && p[7] == '[')
+						else if (*p == '!' && p[1] == '[' && p[2] == 'C' && p[3] == 'D' && p[4] == 'A' && p[5] == 'T' && p[6] == 'A' && p[7] == '[')
 						{
 							type = TagType.TAG_TYPE_CDATA;
 
 							p = FindEndCDATA(p, pEnd);
 						}
+						else if (*p == '?')
+						{
+							type = TagType.TAG_TYPE_PROCESSING;
+
+							p = FindEndProcessing(p, pEnd);
+						}
 						else
 						{
 							if (*p == '/')
 								type = TagType.TAG_TYPE_CLOSING;
-							else if (*p == '?')
-								type = TagType.TAG_TYPE_PROCESSING;
 							else if (*p == '!')
 								type = TagType.TAG_TYPE_DECLARATION;
 							else
@@ -169,6 +173,15 @@ namespace Snail
 			while (p != pEndComment && (p[0] != '-' || p[1] != '-' || p[2] != '>'))
 				++p;
 			p += 2;
+			return p;
+		}
+
+		private static unsafe char* FindEndProcessing(char* p, char* pEnd)
+		{
+			char* pEndComment = pEnd - 1;
+			while (p != pEndComment && (p[0] != '?' || p[1] != '>'))
+				++p;
+			p += 1;
 			return p;
 		}
 
