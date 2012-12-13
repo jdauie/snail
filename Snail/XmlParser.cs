@@ -114,7 +114,7 @@ namespace Snail
 					// identify tag region
 					if (p != pEnd)
 					{
-						TagType type = 0;
+						TagType type = TagType.TAG_TYPE_OPENING;
 
 						pStart = p;
 						++p;
@@ -142,8 +142,6 @@ namespace Snail
 								type = TagType.TAG_TYPE_CLOSING;
 							else if (*p == '!')
 								type = TagType.TAG_TYPE_DECLARATION;
-							else
-								type = TagType.TAG_TYPE_OPENING;
 
 							while (p != pEnd && *p != '>') ++p;
 						}
