@@ -118,13 +118,17 @@ namespace Snail
 			// 
 			// I could limit the bits for [length] even more, and use either zero or all ones to indicate that it doesn't fit.
 			// This would require reading forward again or backing up from the next tag (when I want to read the data).
+			// Also, I don't necessarily care about length...sometimes tag name/prefix length is all I want.  
+			// Should they share the bits (depending on the type of tag and how expensive it is to re-read)?
 			// 
 			// I could shrink the [index] bits by grouping tags using a common offset.
 			// 
 			// I want to start storing tag name/namespace length again.
-			// Also start storing depth of nesting.
+			// Also start storing depth of nesting (then I don't need to store end tags).
 			// 
 			// Add start-tag index (to navigate like a tree).
+			// 
+			// I don't know yet if I want attributes to be included as tags (which obviously would become tokens at that point).
 
 			return (index | (length << 32) | ((long)type << (32 + 28)));
 		}
