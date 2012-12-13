@@ -32,6 +32,8 @@ namespace Snail
 		public TagList()
 		{
 			m_chunks = new List<long[]>();
+			m_current = new long[CHUNK_SIZE];
+			m_index = 0;
 		}
 
 		public int Count
@@ -128,6 +130,7 @@ namespace Snail
 		public static unsafe IEnumerable<long> ParseTags(string text)
 		{
 			var tags = new List<long>();
+			//var tags = new TagList();
 
 			fixed (char* pText = text)
 			{
