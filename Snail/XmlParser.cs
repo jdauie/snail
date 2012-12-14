@@ -95,7 +95,7 @@ namespace Snail
 			#endregion
 
 			DocumentNode root = null;
-			root = BuildTree(text, tags);
+			//root = BuildTree(text, tags);
 
 			return root;
 		}
