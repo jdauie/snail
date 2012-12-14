@@ -10,7 +10,7 @@ using Snail.Nodes;
 
 namespace Snail
 {
-	enum TagType : long
+	public enum TagType : long
 	{
 		TAG_TYPE_TEXT        = 0,
 		TAG_TYPE_OPENING     = 1,
@@ -26,16 +26,23 @@ namespace Snail
 	/// </summary>
 	public class TagList : IEnumerable<long>
 	{
-		private const int CHUNK_SIZE = 1000;
+		private const int CHUNK_SIZE = (1 << 20) / sizeof(long);
+		private const int CHUNK_RANGE = 1 << 20;
 
 		private readonly List<long[]> m_chunks;
-		private long[] m_current;
+		private readonly List<int> m_chunkOffsets;
+		private readonly long[] m_current;
+		private int m_currentOffset;
+		private long m_currentOffsetMax; // for comparison only
 		private int m_index;
 
 		public TagList()
 		{
 			m_chunks = new List<long[]>();
+			m_chunkOffsets = new List<int>();
 			m_current = new long[CHUNK_SIZE];
+			m_currentOffset = 0;
+			m_currentOffsetMax = m_currentOffset + CHUNK_RANGE;
 			m_index = 0;
 		}
 
@@ -44,17 +51,26 @@ namespace Snail
 			get { return (m_chunks.Count * CHUNK_SIZE) + m_index; }
 		}
 
-		public void Add(long item)
+		public void Add(long index, long length, TagType type)
 		{
-			if (m_index == CHUNK_SIZE)
-			{
-				m_chunks.Add(m_current);
-				m_current = new long[CHUNK_SIZE];
-				m_index = 0;
-			}
+			// subtract offset from index so that it fits within allotted bits
+			if (m_index == CHUNK_SIZE || index > m_currentOffsetMax)
+				CreateChunk(index);
 
-			m_current[m_index] = item;
+			m_current[m_index] = (index - m_currentOffset) | (length << 32) | ((long)type << (32 + 28));
 			++m_index;
+		}
+
+		private void CreateChunk(long index)
+		{
+			var arr = new long[m_index];
+			Array.Copy(m_current, 0, arr, 0, m_index);
+			m_chunks.Add(arr);
+			m_chunkOffsets.Add(m_currentOffset);
+
+			m_currentOffset = (int)index;
+			m_currentOffsetMax = m_currentOffset + CHUNK_RANGE;
+			m_index = 0;
 		}
 
 		public IEnumerator<long> GetEnumerator()
@@ -169,6 +185,7 @@ namespace Snail
 							++p;
 
 						tags.Add(CreateTagIndex(pStart - pText, p - pStart));
+						//tags.Add(pStart - pText, p - pStart, TagType.TAG_TYPE_TEXT);
 					}
 					//else if (p != pStart)
 					//{
@@ -209,6 +226,7 @@ namespace Snail
 						}
 
 						tags.Add(CreateTagIndex(pStart - pText, p - pStart + 1, type));
+						//tags.Add(pStart - pText, p - pStart + 1, type);
 					}
 
 					++p;
