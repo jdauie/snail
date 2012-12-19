@@ -137,6 +137,10 @@ namespace Snail
 			// Also, I don't necessarily care about length...sometimes tag name/prefix length is all I want.  
 			// Should they share the bits (depending on the type of tag and how expensive it is to re-read)?
 			// 
+			// NEW IDEA:  I can get the benefits of using fewer bits for the length *and* not storing end tags if I add a second
+			// token after a token that overflows the length.  That would be wasteful if all the lengths are large, but if that is
+			// the case, then there will not be many tags, making it acceptable.
+			// 
 			// I could shrink the [index] bits by grouping tags using a common offset.
 			// 
 			// I want to start storing tag name/namespace length again.
