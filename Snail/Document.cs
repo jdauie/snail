@@ -20,5 +20,11 @@ namespace Snail
 			parser = new XmlParser();
 			return parser.Parse(text);
 		}
+
+		public static DocumentNode ParseXml(string text)
+		{
+			var parser = new XmlParser();
+			return parser.Parse(text);
+		}
 	}
 }

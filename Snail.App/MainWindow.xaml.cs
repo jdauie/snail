@@ -66,6 +66,28 @@ namespace Snail.App
 			CommandBindings.Add(Commands.CloseWindowDefaultBinding);
 		}
 
+		private void ParseTest2()
+		{
+			string testFile;
+
+			testFile = @"..\Snail.Test\kjv-osis\kjv.osis.xml";
+
+			string text = File.ReadAllText(testFile);
+
+			GC.Collect();
+			GC.Collect();
+
+			var sw = Stopwatch.StartNew();
+
+			var root = Document.ParseXml(text);
+
+			sw.Stop();
+
+			var status = string.Format("Parsed in {0} ms", sw.Elapsed.TotalMilliseconds);
+			Trace.WriteLine(status);
+			textBlock.Text = status;
+		}
+
 		private void ParseTest()
 		{
 			string testFile;
