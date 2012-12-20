@@ -55,7 +55,7 @@ namespace Snail.App
 		{
 			InitializeComponent();
 
-			ParseTest();
+			ParseTest2();
 			//CompareProjectFilesTest();
 
 			AddCommandBindings();
@@ -77,15 +77,22 @@ namespace Snail.App
 			GC.Collect();
 			GC.Collect();
 
+			var sw = ParseTime(text);
+
+			var status = string.Format("Parsed in {0} ms", sw.Elapsed.TotalMilliseconds);
+			//var status = string.Format("Parsed {0} tags in {1} ms", (root != null) ? 1 : 0, sw.Elapsed.TotalMilliseconds);
+			Trace.WriteLine(status);
+			textBlock.Text = status;
+		}
+
+		private static Stopwatch ParseTime(string text)
+		{
 			var sw = Stopwatch.StartNew();
 
 			var root = Document.ParseXml(text);
 
 			sw.Stop();
-
-			var status = string.Format("Parsed in {0} ms", sw.Elapsed.TotalMilliseconds);
-			Trace.WriteLine(status);
-			textBlock.Text = status;
+			return sw;
 		}
 
 		private void ParseTest()
