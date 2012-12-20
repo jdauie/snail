@@ -77,22 +77,30 @@ namespace Snail.App
 			GC.Collect();
 			GC.Collect();
 
-			var sw = ParseTime(text);
+			var obj = ParseTime(text);
+			var sw = (Stopwatch)obj[0];
+			var tags = (TagList)obj[1];
 
-			var status = string.Format("Parsed in {0} ms", sw.Elapsed.TotalMilliseconds);
-			//var status = string.Format("Parsed {0} tags in {1} ms", (root != null) ? 1 : 0, sw.Elapsed.TotalMilliseconds);
+			var status = string.Format("parse:\t{0} ms\n", sw.Elapsed.TotalMilliseconds);
+			status += string.Format("tags:\t{0:#,#} ({1})\n", tags.Count, ((long)tags.Count * sizeof(long)));
+
+			//var status = "";
+			//status += string.Format("parse:\t{0} ms\n", sw.Elapsed.TotalMilliseconds);
+			//status += string.Format("chars:\t{0:#,#}\n", text.Length);
+			//status += string.Format("tags:\t{0:#,#} ({1:#,#,,.00} MB)\n", tags.Count, ((long)tags.Count * sizeof(long)));
+
 			Trace.WriteLine(status);
 			textBlock.Text = status;
 		}
 
-		private static Stopwatch ParseTime(string text)
+		private static object[] ParseTime(string text)
 		{
 			var sw = Stopwatch.StartNew();
 
-			var root = Document.ParseXml(text);
+			var tags = Document.ParseXml(text);
 
 			sw.Stop();
-			return sw;
+			return new object[] { sw, tags };
 		}
 
 		private void ParseTest()
