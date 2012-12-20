@@ -58,6 +58,11 @@ namespace Snail.App
 			ParseTest();
 			//CompareProjectFilesTest();
 
+			AddCommandBindings();
+		}
+
+		private void AddCommandBindings()
+		{
 			CommandBindings.Add(Commands.CloseWindowDefaultBinding);
 		}
 
