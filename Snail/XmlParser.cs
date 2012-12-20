@@ -86,7 +86,7 @@ namespace Snail
 		}
 	}
 
-	public class XmlParser : IParser
+	public class XmlParser// : IParser
 	{
 		public DocumentNode Parse(string text)
 		{
