@@ -48,13 +48,22 @@ namespace Snail
 		{
 			// subtract offset from index so that it fits within allotted bits
 			if (m_index == CHUNK_SIZE)
-				CreateChunk(index);
+				CreateChunk();
 
 			m_current[m_index] = (index) | (length << 32) | ((long)type << (32 + 28));
 			++m_index;
 		}
 
-		private void CreateChunk(long index)
+		public void AddWhitespace()
+		{
+			if (m_index == CHUNK_SIZE)
+				CreateChunk();
+
+			m_current[m_index] = 0;
+			++m_index;
+		}
+
+		private void CreateChunk()
 		{
 			m_chunks.Add(m_current);
 			m_current = new long[m_index];
@@ -182,7 +191,7 @@ namespace Snail
 					//else if (p != pStart)
 					//{
 					//    // remember that this is whitespace, but no more details
-					//    tags.Add(0L);
+					//    tags.AddWhitespace();
 					//}
 
 					// identify tag region
