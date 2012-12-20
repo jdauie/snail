@@ -14,6 +14,10 @@ namespace Snail.Cmd
 			string testFile;
 
 			testFile = @"..\Snail.Test\kjv-osis\kjv.osis.xml";
+			//testFile = @"..\Snail.Test\xmark\standard.xml";
+			//testFile = @"..\Snail.Test\pugixml-benchmark-data\house.dae";
+			//testFile = @"..\Snail.Test\pugixml-benchmark-data\terrover.xml";
+			//testFile = @"..\Snail.Test\afe\Precompaction_Lrn.shp.afe";
 
 			string text = File.ReadAllText(testFile);
 
