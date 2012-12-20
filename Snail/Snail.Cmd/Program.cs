@@ -17,6 +17,8 @@ namespace Snail.Cmd
 
 			string text = File.ReadAllText(testFile);
 
+			var status = string.Format("\n{0}\n", testFile);
+
 			GC.Collect();
 			GC.Collect();
 
@@ -24,7 +26,7 @@ namespace Snail.Cmd
 			var sw = (Stopwatch)obj[0];
 			var tags = (TagList)obj[1];
 
-			var status = string.Format("parse:\t{0} ms\n", sw.Elapsed.TotalMilliseconds);
+			status += string.Format("parse:\t{0:.00} ms\n", sw.Elapsed.TotalMilliseconds);
 			status += string.Format("tags:\t{0:#,#} ({1})\n", tags.Count, ((long)tags.Count * sizeof(long)));
 
 			//var status = "";
@@ -32,7 +34,7 @@ namespace Snail.Cmd
 			//status += string.Format("chars:\t{0:#,#}\n", text.Length);
 			//status += string.Format("tags:\t{0:#,#} ({1:#,#,,.00} MB)\n", tags.Count, ((long)tags.Count * sizeof(long)));
 
-			Console.WriteLine(status);
+			Console.Write(status);
 		}
 
 		private static object[] ParseTime(string text)
