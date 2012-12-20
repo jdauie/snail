@@ -44,6 +44,11 @@ namespace Snail
 			get { return (m_chunks.Count * CHUNK_SIZE) + m_index; }
 		}
 
+		public int Capacity
+		{
+			get { return ((m_chunks.Count + 1) * CHUNK_SIZE); }
+		}
+
 		public void Add(long index, long length, TagType type)
 		{
 			// subtract offset from index so that it fits within allotted bits
