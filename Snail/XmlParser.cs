@@ -85,7 +85,7 @@ namespace Snail
 
 	public class XmlParser// : IParser
 	{
-		public DocumentNode Parse(string text)
+		public TagList Parse(string text)
 		{
 			var tags = ParseTags(text);
 
@@ -107,10 +107,10 @@ namespace Snail
 
 			#endregion
 
-			DocumentNode root = null;
+			//DocumentNode root = null;
 			//root = BuildTree(text, tags);
 
-			return root;
+			return tags;
 		}
 
 		private static long CreateTagIndex(long index, long length, TagType type)
@@ -162,7 +162,7 @@ namespace Snail
 			type   = (TagType)(tag >> (32 + 28));
 		}
 
-		public static unsafe IEnumerable<long> ParseTags(string text)
+		public static unsafe TagList ParseTags(string text)
 		{
 			//var tags = new List<long>();
 			var tags = new TagList();
@@ -191,6 +191,7 @@ namespace Snail
 					//else if (p != pStart)
 					//{
 					//    // remember that this is whitespace, but no more details
+					//    //tags.Add(0L);
 					//    tags.AddWhitespace();
 					//}
 
