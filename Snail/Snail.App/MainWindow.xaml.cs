@@ -19,6 +19,33 @@ using Snail.Nodes;
 
 namespace Snail.App
 {
+	public static class Commands
+	{
+		static Commands()
+		{
+			CloseWindow = NewCommand("Close Window", "CloseWindow", new KeyGesture(Key.Escape));
+			CloseWindowDefaultBinding = new CommandBinding(CloseWindow, CloseWindowExecute, CloseWindowCanExecute);
+		}
+
+		static RoutedUICommand NewCommand(string text, string name, KeyGesture gesture)
+		{
+			return new RoutedUICommand(text, name, typeof(System.Windows.Window), new InputGestureCollection { gesture });
+		}
+
+		public static CommandBinding CloseWindowDefaultBinding { get; private set; }
+		public static RoutedUICommand CloseWindow { get; private set; }
+
+		static void CloseWindowCanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = sender != null && sender is System.Windows.Window;
+			e.Handled = true;
+		}
+		static void CloseWindowExecute(object sender, ExecutedRoutedEventArgs e)
+		{
+			 ((System.Windows.Window)sender).Close();
+		}
+	}
+
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
@@ -30,6 +57,8 @@ namespace Snail.App
 
 			ParseTest();
 			//CompareProjectFilesTest();
+
+			CommandBindings.Add(Commands.CloseWindowDefaultBinding);
 		}
 
 		private void ParseTest()
