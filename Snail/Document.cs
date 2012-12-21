@@ -21,7 +21,7 @@ namespace Snail
 			return parser.Parse(text);
 		}
 
-		public static TagList ParseXml(string text)
+		public static TokenList ParseXml(string text)
 		{
 			var parser = new XmlParser();
 			return parser.Parse(text);
