@@ -172,6 +172,8 @@ namespace Snail
 			//var tags = new List<long>();
 			var tags = new TagList();
 
+			int depth = 0;
+
 			fixed (char* pText = text)
 			{
 				char* p = pText;
@@ -230,6 +232,12 @@ namespace Snail
 								type = TagType.TAG_TYPE_DECLARATION;
 
 							while (p != pEnd && *p != '>') ++p;
+
+							if (type == TagType.TAG_TYPE_OPENING)
+							{
+								if (*(p - 1) != '/')
+									++depth;
+							}
 						}
 
 						if (type != TagType.TAG_TYPE_CLOSING)
@@ -237,11 +245,18 @@ namespace Snail
 							//tags.Add(CreateTagIndex(pStart - pText, p - pStart + 1, type));
 							tags.Add(pStart - pText, p - pStart + 1, type);
 						}
+						else
+						{
+							--depth;
+						}
 					}
 
 					++p;
 				}
 			}
+
+			if (depth != 0)
+				throw new Exception("bad depth");
 
 			return tags;
 		}
