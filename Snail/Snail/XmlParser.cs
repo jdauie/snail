@@ -21,6 +21,21 @@ namespace Snail
 		TAG_TYPE_PROCESSING  = 6
 	}
 
+	//public const int TOKEN_STARTING_TAG = 0;
+	//public const int TOKEN_ENDING_TAG = 1;
+	//public const int TOKEN_ATTR_NAME = 2;
+	//public const int TOKEN_ATTR_NS = 3;
+	//public const int TOKEN_ATTR_VAL = 4;
+	//public const int TOKEN_CHARACTER_DATA = 5;
+	//public const int TOKEN_COMMENT = 6;
+	//public const int TOKEN_PI_NAME = 7;
+	//public const int TOKEN_PI_VAL = 8;
+	//public const int TOKEN_DEC_ATTR_NAME = 9;
+	//public const int TOKEN_DEC_ATTR_VAL = 10;
+	//public const int TOKEN_CDATA_VAL = 11;
+	//public const int TOKEN_DTD_VAL = 12;
+	//public const int TOKEN_DOCUMENT = 13;
+
 	/// <summary>
 	/// This can be better for massive files.
 	/// </summary>
@@ -59,18 +74,9 @@ namespace Snail
 		}
 
 		/// <summary>
-		/// <![CDATA[
 		/// format : [  30  ][  20  ][  8  ][  4  ][  2  ]
 		///           index   length  depth  type   ?
 		/// 
-		/// type   : 0 =      #text
-		///        : 1 = '<'  #opening
-		///        : 2 = '</' #closing
-		///        : 3 = '<!' #comment
-		///        : 4 = '<!' #CDATA
-		///        : 5 = '<!' #declaration (DOCTYPE, ENTITY, ELEMENT, ATTLIST)
-		///        : 6 = '<?' #processing-instruction
-		/// ]]>
 		/// Can I pack this in 32 bits (by grouping "index" regions and shortening "length")?  Would it be more efficient?
 		/// </summary>
 		/// <param name="index">The index.</param>
@@ -173,7 +179,7 @@ namespace Snail
 			//        : 2 = '</' #closing
 			//        : 3 = '<!' #comment
 			//        : 4 = '<!' #CDATA
-			//        : 5 = '<!' #declaration (DOCTYPE, ENTITY, ELEMENT, ATTLIST)
+			//        : 5 = '<!' #declaration (DOCTYPE, ENTITY, ELEMENT, ATTLIST, NOTATION)
 			//        : 6 = '<?' #processing-instruction
 			// 
 			// Assume length will fit, rather than explicitly clipping it.
