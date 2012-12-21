@@ -10,29 +10,36 @@ using Snail.Nodes;
 
 namespace Snail
 {
-	public enum TagType : long
+	public enum TokenType : byte
 	{
-		TAG_TYPE_TEXT        = 0,
-		TAG_TYPE_OPENING     = 1,
-		TAG_TYPE_CLOSING     = 2,
-		TAG_TYPE_COMMENT     = 3,
-		TAG_TYPE_CDATA       = 4,
-		TAG_TYPE_DECLARATION = 5,
-		TAG_TYPE_PROCESSING  = 6
+		Text = 0,
+		OpeningTag = 1,
+		ClosingTag = 2,
+
+		// special blocks
+		Comment = 3,
+		CDATA = 4,
+		Declaration = 5,
+		Processing = 6, // currently, this includes "<?xml ...>"
+
+		AttrName = 7,
+		AttrNS = 8,
+		AttrValue = 9,
+
+		Reserved10 = 10,
+		Reserved11 = 11,
+		Reserved12 = 12,
+		Reserved13 = 13,
+		Reserved14 = 14,
+		Reserved15 = 15
 	}
 
-	//public const int TOKEN_STARTING_TAG = 0;
-	//public const int TOKEN_ENDING_TAG = 1;
-	//public const int TOKEN_ATTR_NAME = 2;
-	//public const int TOKEN_ATTR_NS = 3;
-	//public const int TOKEN_ATTR_VAL = 4;
-	//public const int TOKEN_CHARACTER_DATA = 5;
-	//public const int TOKEN_COMMENT = 6;
 	//public const int TOKEN_PI_NAME = 7;
 	//public const int TOKEN_PI_VAL = 8;
+
 	//public const int TOKEN_DEC_ATTR_NAME = 9;
 	//public const int TOKEN_DEC_ATTR_VAL = 10;
-	//public const int TOKEN_CDATA_VAL = 11;
+
 	//public const int TOKEN_DTD_VAL = 12;
 	//public const int TOKEN_DOCUMENT = 13;
 
@@ -43,14 +50,14 @@ namespace Snail
 	{
 		private const int CHUNK_SIZE = (1 << 20) / sizeof(long);
 
-		private const int BITS_INDEX  = 30;
+		private const int BITS_INDEX = 30;
 		private const int BITS_LENGTH = 20;
-		private const int BITS_DEPTH  = 8;
-		private const int BITS_TYPE   = 4;
-		
-		private const int MAX_INDEX  = (1 << 30) - 1;
+		private const int BITS_DEPTH = 8;
+		private const int BITS_TYPE = 4;
+
+		private const int MAX_INDEX = (1 << 30) - 1;
 		private const int MAX_LENGTH = (1 << 20) - 1;
-		private const int MAX_DEPTH  = (1 << 8) - 1;
+		private const int MAX_DEPTH = (1 << 8) - 1;
 
 		private readonly List<long[]> m_chunks;
 		private long[] m_current;
@@ -83,7 +90,7 @@ namespace Snail
 		/// <param name="length">The length.</param>
 		/// <param name="depth">The depth.</param>
 		/// <param name="type">The type.</param>
-		public void Add(long index, long length, long depth, TagType type)
+		public void Add(long index, long length, long depth, TokenType type)
 		{
 			if (m_index == CHUNK_SIZE)
 				CreateChunk();
@@ -169,7 +176,7 @@ namespace Snail
 			return tags;
 		}
 
-		private static long CreateTagIndex(long index, long length, TagType type)
+		private static long CreateTagIndex(long index, long length, TokenType type)
 		{
 			// format : [  32  ][  28  ][  4  ]
 			//           index   length  type
@@ -211,11 +218,11 @@ namespace Snail
 			return (index | (length << 32));
 		}
 
-		private static void ReadTagIndex(long tag, out int index, out int length, out TagType type)
+		private static void ReadTagIndex(long tag, out int index, out int length, out TokenType type)
 		{
-			index  = (int)tag;
+			index = (int)tag;
 			length = (int)((tag << 4) >> (32 + 4));
-			type   = (TagType)(tag >> (32 + 28));
+			type = (TokenType)(tag >> (32 + 28));
 		}
 
 		public static unsafe TagList ParseTags(string text)
@@ -244,7 +251,7 @@ namespace Snail
 							++p;
 
 						//tags.Add(CreateTagIndex(pStart - pText, p - pStart));
-						tags.Add(pStart - pText, p - pStart, depth, TagType.TAG_TYPE_TEXT);
+						tags.Add(pStart - pText, p - pStart, depth, TokenType.Text);
 					}
 					//else if (p != pStart)
 					//{
@@ -256,39 +263,40 @@ namespace Snail
 					// identify tag region
 					if (p != pEnd)
 					{
-						TagType type = TagType.TAG_TYPE_OPENING;
+						TokenType type = TokenType.OpeningTag;
 
 						pStart = p;
 						++p;
 						if (*p == '!' && p[1] == '-' && p[2] == '-')
 						{
-							type = TagType.TAG_TYPE_COMMENT;
+							type = TokenType.Comment;
 							p = FindEndComment(p, pEnd);
+							tags.Add(pStart - pText, p - pStart + 1, depth, type);
 						}
 						else if (*p == '!' && p[1] == '[' && p[2] == 'C' && p[3] == 'D' && p[4] == 'A' && p[5] == 'T' && p[6] == 'A' && p[7] == '[')
 						{
-							type = TagType.TAG_TYPE_CDATA;
+							type = TokenType.CDATA;
 							p = FindEndCDATA(p, pEnd);
 						}
 						else if (*p == '?')
 						{
-							type = TagType.TAG_TYPE_PROCESSING;
+							type = TokenType.Processing;
 							p = FindEndProcessing(p, pEnd);
 						}
 						else
 						{
 							if (*p == '/')
-								type = TagType.TAG_TYPE_CLOSING;
+								type = TokenType.ClosingTag;
 							else if (*p == '!')
-								type = TagType.TAG_TYPE_DECLARATION;
+								type = TokenType.Declaration;
 
 							while (p != pEnd && *p != '>') ++p;
 
-							if (type == TagType.TAG_TYPE_OPENING && (*(p - 1) != '/'))
+							if (type == TokenType.OpeningTag && (*(p - 1) != '/'))
 								++depth;
 						}
 
-						if (type != TagType.TAG_TYPE_CLOSING)
+						if (type != TokenType.ClosingTag)
 						{
 							//tags.Add(CreateTagIndex(pStart - pText, p - pStart + 1, type));
 							tags.Add(pStart - pText, p - pStart + 1, depth, type);
@@ -350,19 +358,19 @@ namespace Snail
 
 					int index;
 					int length;
-					TagType type;
+					TokenType type;
 					ReadTagIndex(tag, out index, out length, out type);
 
-					if (type == TagType.TAG_TYPE_TEXT)
+					if (type == TokenType.Text)
 					{
 						var node = new TextNode(text.Substring(index, length));
 						current.AppendChild(node);
 					}
-					else if (type == TagType.TAG_TYPE_CLOSING)
+					else if (type == TokenType.ClosingTag)
 					{
 						current = current.Parent;
 					}
-					else if (type == TagType.TAG_TYPE_OPENING)
+					else if (type == TokenType.OpeningTag)
 					{
 						bool isSelfClosingTag = (text[index + length - 2] == '/');
 
@@ -384,21 +392,21 @@ namespace Snail
 							current = node;
 						}
 					}
-					else if (type == TagType.TAG_TYPE_COMMENT)
+					else if (type == TokenType.Comment)
 					{
 						var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
 						current.AppendChild(node);
 					}
-					else if (type == TagType.TAG_TYPE_CDATA)
+					else if (type == TokenType.CDATA)
 					{
 						var node = new CDATASectionNode(text.SubstringTrim(index + 9, length - 12));
 						current.AppendChild(node);
 					}
-					else if (type == TagType.TAG_TYPE_DECLARATION)
+					else if (type == TokenType.Declaration)
 					{
 						//
 					}
-					else if (type == TagType.TAG_TYPE_PROCESSING)
+					else if (type == TokenType.Processing)
 					{
 						var node = new ProcessingInstructionNode(text.Substring(index, length));
 						current.AppendChild(node);
@@ -425,7 +433,7 @@ namespace Snail
 
 				string name = text.SubstringTrim(index, indexOfEquals - index);
 				index = indexOfEquals + 1;
-				
+
 				// get value between quotes
 				int indexOfQuote1 = text.IndexOf('"', index);
 				int indexOfQuote2 = text.IndexOf('"', indexOfQuote1 + 1);
