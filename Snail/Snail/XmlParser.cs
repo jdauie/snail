@@ -69,7 +69,6 @@ namespace Snail
 						{
 							type = TokenType.Comment;
 							p = FindEndComment(p, pEnd);
-							tags.Add(pStart - pText, p - pStart + 1, depth, type);
 						}
 						else if (*p == '!' && p[1] == '[' && p[2] == 'C' && p[3] == 'D' && p[4] == 'A' && p[5] == 'T' && p[6] == 'A' && p[7] == '[')
 						{

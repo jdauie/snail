@@ -79,8 +79,6 @@ namespace Snail
 		/// <summary>
 		/// format : [  30  ][  20  ][  8  ][  4  ][  2  ]
 		///           index   length  depth  type   ?
-		/// 
-		/// Can I pack this in 32 bits (by grouping "index" regions and shortening "length")?  Would it be more efficient?
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="length">The length.</param>
