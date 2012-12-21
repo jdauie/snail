@@ -292,14 +292,49 @@ namespace Snail
 
 							while (p != pEnd && *p != '>') ++p;
 
-							if (type == TokenType.OpeningTag && (*(p - 1) != '/'))
-								++depth;
+							if (type == TokenType.OpeningTag)
+							{
+								// self-closing
+								if (*(p - 1) != '/')
+									++depth;
+							}
 						}
 
 						if (type != TokenType.ClosingTag)
 						{
+							long length = 0;
+							if (type == TokenType.OpeningTag)
+							{
+								char* pTmp = pStart + 1;
+								while (pTmp != p && (*pTmp == ' ' || *pTmp == '\t' || *pTmp == '\r' || *pTmp == '\n'))
+									++pTmp;
+								char* pNameEnd = pTmp;
+
+								length = pTmp - (pStart + 1);
+								long namePrefixLength = 0;
+
+								pTmp = pStart + 1;
+								while (pTmp != pNameEnd && *pTmp != ':')
+									++pTmp;
+								if (pTmp != pNameEnd)
+								{
+									// prefix:qname
+									namePrefixLength = pTmp - (pStart + 1);
+								}
+
+								// attributes
+								//if (pTmp != p)
+								//{
+
+								//}
+							}
+							else
+							{
+								length = (p - pStart + 1);
+							}
+
 							//tags.Add(CreateTagIndex(pStart - pText, p - pStart + 1, type));
-							tags.Add(pStart - pText, p - pStart + 1, depth, type);
+							tags.Add(pStart - pText, length, depth, type);
 						}
 						else
 						{
