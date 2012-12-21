@@ -28,6 +28,15 @@ namespace Snail
 	{
 		private const int CHUNK_SIZE = (1 << 20) / sizeof(long);
 
+		private const int BITS_INDEX  = 30;
+		private const int BITS_LENGTH = 20;
+		private const int BITS_DEPTH  = 8;
+		private const int BITS_TYPE   = 4;
+		
+		private const int MAX_INDEX  = (1 << 30) - 1;
+		private const int MAX_LENGTH = (1 << 20) - 1;
+		private const int MAX_DEPTH  = (1 << 8) - 1;
+
 		private readonly List<long[]> m_chunks;
 		private long[] m_current;
 		private int m_index;
@@ -49,13 +58,49 @@ namespace Snail
 			get { return ((m_chunks.Count + 1) * CHUNK_SIZE); }
 		}
 
-		public void Add(long index, long length, TagType type)
+		/// <summary>
+		/// <![CDATA[
+		/// format : [  30  ][  20  ][  8  ][  4  ][  2  ]
+		///           index   length  depth  type   ?
+		/// 
+		/// type   : 0 =      #text
+		///        : 1 = '<'  #opening
+		///        : 2 = '</' #closing
+		///        : 3 = '<!' #comment
+		///        : 4 = '<!' #CDATA
+		///        : 5 = '<!' #declaration (DOCTYPE, ENTITY, ELEMENT, ATTLIST)
+		///        : 6 = '<?' #processing-instruction
+		/// ]]>
+		/// Can I pack this in 32 bits (by grouping "index" regions and shortening "length")?  Would it be more efficient?
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="length">The length.</param>
+		/// <param name="depth">The depth.</param>
+		/// <param name="type">The type.</param>
+		public void Add(long index, long length, long depth, TagType type)
 		{
-			// subtract offset from index so that it fits within allotted bits
 			if (m_index == CHUNK_SIZE)
 				CreateChunk();
 
-			m_current[m_index] = (index) | (length << 32) | ((long)type << (32 + 28));
+			if (length > MAX_LENGTH)
+			{
+				m_current[m_index] = (index) | (MAX_LENGTH << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
+				++m_index;
+				AddLength(length);
+			}
+			else
+			{
+				m_current[m_index] = (index) | (length << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
+				++m_index;
+			}
+		}
+
+		private void AddLength(long length)
+		{
+			if (m_index == CHUNK_SIZE)
+				CreateChunk();
+
+			m_current[m_index] = length;
 			++m_index;
 		}
 
@@ -172,7 +217,7 @@ namespace Snail
 			//var tags = new List<long>();
 			var tags = new TagList();
 
-			int depth = 0;
+			long depth = 0;
 
 			fixed (char* pText = text)
 			{
@@ -193,7 +238,7 @@ namespace Snail
 							++p;
 
 						//tags.Add(CreateTagIndex(pStart - pText, p - pStart));
-						tags.Add(pStart - pText, p - pStart, TagType.TAG_TYPE_TEXT);
+						tags.Add(pStart - pText, p - pStart, depth, TagType.TAG_TYPE_TEXT);
 					}
 					//else if (p != pStart)
 					//{
@@ -233,17 +278,14 @@ namespace Snail
 
 							while (p != pEnd && *p != '>') ++p;
 
-							if (type == TagType.TAG_TYPE_OPENING)
-							{
-								if (*(p - 1) != '/')
-									++depth;
-							}
+							if (type == TagType.TAG_TYPE_OPENING && (*(p - 1) != '/'))
+								++depth;
 						}
 
 						if (type != TagType.TAG_TYPE_CLOSING)
 						{
 							//tags.Add(CreateTagIndex(pStart - pText, p - pStart + 1, type));
-							tags.Add(pStart - pText, p - pStart + 1, type);
+							tags.Add(pStart - pText, p - pStart + 1, depth, type);
 						}
 						else
 						{
