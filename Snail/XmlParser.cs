@@ -83,18 +83,14 @@ namespace Snail
 						else
 						{
 							if (*p == '/')
+							{
 								type = TokenType.ClosingTag;
+								--depth;
+							}
 							else if (*p == '!')
 								type = TokenType.Declaration;
 
 							while (p != pEnd && *p != '>') ++p;
-
-							if (type == TokenType.OpeningTag)
-							{
-								// self-closing
-								if (*(p - 1) != '/')
-									++depth;
-							}
 						}
 
 						if (type != TokenType.ClosingTag)
@@ -118,12 +114,6 @@ namespace Snail
 									// prefix:qname
 									namePrefixLength = pTmp - (pStart + 1);
 								}
-
-								// attributes
-								//if (pTmp != p)
-								//{
-
-								//}
 							}
 							else
 							{
@@ -131,10 +121,12 @@ namespace Snail
 							}
 
 							tags.Add(pStart - pText, length, depth, type);
-						}
-						else
-						{
-							--depth;
+
+							// add attributes
+
+							// check for self-closing
+							if (type == TokenType.OpeningTag && (*(p - 1) != '/'))
+								++depth;
 						}
 					}
 
