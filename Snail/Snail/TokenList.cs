@@ -102,6 +102,21 @@ namespace Snail
 			}
 		}
 
+		public void AddMarkup(long index, long length, long depth, TokenType type)
+		{
+			
+		}
+
+		public void AddAttribute(long index, long length, long depth)
+		{
+			
+		}
+
+		public void AddText(long index, long length, long depth)
+		{
+			
+		}
+
 		private void AddLength(long length)
 		{
 			if (m_index == CHUNK_SIZE)

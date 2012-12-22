@@ -103,7 +103,7 @@ namespace Snail
 							if (type == TokenType.OpeningTag)
 							{
 								char* pTmp = pStart + 1;
-								while (pTmp != p && (*pTmp == ' ' || *pTmp == '\t' || *pTmp == '\r' || *pTmp == '\n'))
+								while (pTmp != p && (*pTmp != ' ' && *pTmp != '\t' && *pTmp != '\r' && *pTmp != '\n'))
 									++pTmp;
 								char* pNameEnd = pTmp;
 
