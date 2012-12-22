@@ -79,7 +79,7 @@ namespace Snail.App
 
 			var obj = ParseTime(text);
 			var sw = (Stopwatch)obj[0];
-			var tags = (TagList)obj[1];
+			var tags = (TokenList)obj[1];
 
 			var status = string.Format("parse:\t{0} ms\n", sw.Elapsed.TotalMilliseconds);
 			status += string.Format("tags:\t{0:#,#} ({1})\n", tags.Count, ((long)tags.Count * sizeof(long)));
