@@ -68,10 +68,12 @@ namespace Snail
 
 						if (*p == '!')
 						{
+							// TEST
 							p = HandleExclamationPoint(pStart, pEnd);
 						}
 						else if (*p == '?')
 						{
+							// TEST
 							type = TokenType.Processing;
 							p = FindEndProcessing(p, pEnd);
 						}
@@ -181,7 +183,7 @@ namespace Snail
 		{
 			char* p = pStart + 2;
 
-			TokenType type = TokenType.Declaration;
+			TokenType type;
 
 			if (p[0] == '-' && p[1] == '-')
 			{
