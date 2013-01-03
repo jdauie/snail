@@ -46,14 +46,15 @@ namespace Snail
 	{
 		private const int CHUNK_SIZE = (1 << 20) / sizeof(long);
 
-		private const int BITS_INDEX = 30;
-		private const int BITS_LENGTH = 20;
-		private const int BITS_DEPTH = 8;
-		private const int BITS_TYPE = 4;
+		public const int BITS_INDEX  = 30;
+		public const int BITS_LENGTH = 20;
+		public const int BITS_DEPTH  = 8;
+		public const int BITS_TYPE   = 4;
 
-		private const int MAX_INDEX = (1 << 30) - 1;
-		private const int MAX_LENGTH = (1 << 20) - 1;
-		private const int MAX_DEPTH = (1 << 8) - 1;
+		public const int MAX_INDEX   = (1 << BITS_INDEX) - 1;
+		public const int MAX_LENGTH  = (1 << BITS_LENGTH) - 1;
+		public const int MAX_DEPTH   = (1 << BITS_DEPTH) - 1;
+		public const int MAX_TYPE    = (1 << BITS_TYPE) - 1;
 
 		private readonly List<long[]> m_chunks;
 		private long[] m_current;
@@ -74,6 +75,16 @@ namespace Snail
 		public int Capacity
 		{
 			get { return ((m_chunks.Count + 1) * CHUNK_SIZE); }
+		}
+
+		public static Token Convert(string text, long token)
+		{
+			long index  = (token & MAX_INDEX);
+			long length = ((token >> (BITS_INDEX)) & MAX_LENGTH);
+			long depth  = ((token >> (BITS_INDEX + BITS_LENGTH)) & MAX_DEPTH);
+			long type   = ((token >> (BITS_INDEX + BITS_LENGTH + BITS_DEPTH)) & MAX_TYPE);
+
+			return new Token(text, (int)index, (int)length, (int)depth, (TokenType)type);
 		}
 
 		private static long CreateToken(long index, long length, long depth, TokenType type)
@@ -152,6 +163,12 @@ namespace Snail
 			foreach (var chunk in m_chunks)
 				foreach (var tag in chunk)
 					yield return tag;
+
+			if (m_index > 0)
+			{
+				for (int i = 0; i < m_index; i++)
+					yield return m_current[i];
+			}
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

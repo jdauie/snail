@@ -86,28 +86,29 @@ namespace Snail
 							}
 							else
 							{
-								//long length = (p - pStart + 1);
+								// QName format
+								// [prefix:]local
 
-
-								char* pTmp = pStart + 1;
+								char* pFirstSymbol = pStart + 1;
+								char* pTmp = pFirstSymbol;
 								while (pTmp != p && (*pTmp != ' ' && *pTmp != '\t' && *pTmp != '\r' && *pTmp != '\n'))
 									++pTmp;
 								char* pNameEnd = pTmp;
 
-								long length = pTmp - (pStart + 1);
-								long namePrefixLength = 0;
+								long length = pTmp - pFirstSymbol;
+								//long namePrefixLength = 0;
 
-								pTmp = pStart + 1;
-								while (pTmp != pNameEnd && *pTmp != ':')
-									++pTmp;
-								if (pTmp != pNameEnd)
-								{
-									// prefix:qname
-									namePrefixLength = pTmp - (pStart + 1);
-								}
+								//pTmp = pStart + 1;
+								//while (pTmp != pNameEnd && *pTmp != ':')
+								//    ++pTmp;
+								//if (pTmp != pNameEnd)
+								//{
+								//    // prefix:qname
+								//    namePrefixLength = pTmp - (pStart + 1);
+								//}
 
 
-								tags.Add(pStart - pText, length, depth, TokenType.OpeningTag);
+								tags.Add(pFirstSymbol - pText, length, depth, TokenType.OpeningTag);
 
 								// check for self-closing
 								if ((*(p - 1) != '/'))
