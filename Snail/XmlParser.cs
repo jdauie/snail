@@ -68,18 +68,15 @@ namespace Snail
 
 						if (*p == '!')
 						{
-							// TEST
-							p = HandleExclamationPoint(pStart, pEnd);
+							p = HandleExclamationPoint(pText, pStart, pEnd, depth, tags);
 						}
 						else if (*p == '?')
 						{
-							// TEST
-							type = TokenType.Processing;
-							p = FindEndProcessing(p, pEnd);
+							p = HandleQuestionMark(pText, pStart, pEnd, depth, tags);
 						}
 						//else if (*p == '/')
 						//{
-						//    // end tag
+						//    --depth;
 						//}
 						else
 						{
@@ -179,7 +176,7 @@ namespace Snail
 			return tags;
 		}
 
-		private static unsafe char* HandleExclamationPoint(char* pStart, char* pEnd)
+		private static unsafe char* HandleExclamationPoint(char* pText, char* pStart, char* pEnd, long depth, TokenList tokens)
 		{
 			char* p = pStart + 2;
 
@@ -200,6 +197,19 @@ namespace Snail
 				type = TokenType.Declaration;
 				while (p != pEnd && *p != '>') ++p;
 			}
+
+			tokens.Add(pStart - pText, p - pStart, depth, type);
+
+			return p;
+		}
+
+		private static unsafe char* HandleQuestionMark(char* pText, char* pStart, char* pEnd, long depth, TokenList tokens)
+		{
+			char* p = pStart + 2;
+
+			p = FindEndProcessing(p, pEnd);
+
+			tokens.Add(pStart - pText, p - pStart, depth, TokenType.Processing);
 
 			return p;
 		}
