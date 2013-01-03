@@ -77,6 +77,30 @@ namespace Snail
 			get { return ((m_chunks.Count + 1) * CHUNK_SIZE); }
 		}
 
+		public long this[int index]
+		{
+			get
+			{
+				int chunkIndex = index / CHUNK_SIZE;
+				int localIndex = index % CHUNK_SIZE;
+
+				if (chunkIndex < m_chunks.Count)
+				{
+					return m_chunks[chunkIndex][localIndex];
+				}
+
+				if (chunkIndex == m_chunks.Count)
+				{
+					if(localIndex > m_index)
+						throw new ArgumentException("index out of range");
+
+					return m_current[localIndex];
+				}
+
+				throw new ArgumentException("chunk out of range");
+			}
+		}
+
 		public static Token Convert(string text, long token)
 		{
 			long index  = (token & MAX_INDEX);
