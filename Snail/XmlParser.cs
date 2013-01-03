@@ -86,6 +86,10 @@ namespace Snail
 							}
 							else
 							{
+								//long length = (p - pStart + 1);
+								//tags.Add(pStart - pText, length, depth, TokenType.OpeningTag);
+
+
 								// QName format
 								// [prefix:]local
 
@@ -107,8 +111,8 @@ namespace Snail
 								//    namePrefixLength = pTmp - (pStart + 1);
 								//}
 
-
 								tags.Add(pFirstSymbol - pText, length, depth, TokenType.OpeningTag);
+
 
 								// check for self-closing
 								if ((*(p - 1) != '/'))
