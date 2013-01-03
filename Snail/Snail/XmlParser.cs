@@ -61,8 +61,6 @@ namespace Snail
 					// identify tag region
 					if (p != pEnd)
 					{
-						TokenType type = TokenType.OpeningTag;
-
 						pStart = p;
 						++p;
 
@@ -74,96 +72,48 @@ namespace Snail
 						{
 							p = HandleQuestionMark(pText, pStart, pEnd, depth, tags);
 						}
-						//else if (*p == '/')
-						//{
-						//    --depth;
-						//}
 						else
 						{
-							if (*p == '/')
-							{
-								type = TokenType.ClosingTag;
-								--depth;
-							}
+							// normal tags (closing, opening, self-closing)
+
+							bool isClosing = (*p == '/');
 
 							while (p != pEnd && *p != '>') ++p;
 
-							if (type != TokenType.ClosingTag)
+							if (isClosing)
 							{
-								long length = (p - pStart + 1);
-								tags.Add(pStart - pText, length, depth, type);
+								--depth;
+							}
+							else
+							{
+								//long length = (p - pStart + 1);
+
+
+								char* pTmp = pStart + 1;
+								while (pTmp != p && (*pTmp != ' ' && *pTmp != '\t' && *pTmp != '\r' && *pTmp != '\n'))
+									++pTmp;
+								char* pNameEnd = pTmp;
+
+								long length = pTmp - (pStart + 1);
+								long namePrefixLength = 0;
+
+								pTmp = pStart + 1;
+								while (pTmp != pNameEnd && *pTmp != ':')
+									++pTmp;
+								if (pTmp != pNameEnd)
+								{
+									// prefix:qname
+									namePrefixLength = pTmp - (pStart + 1);
+								}
+
+
+								tags.Add(pStart - pText, length, depth, TokenType.OpeningTag);
 
 								// check for self-closing
-								if (type == TokenType.OpeningTag && (*(p - 1) != '/'))
+								if ((*(p - 1) != '/'))
 									++depth;
 							}
 						}
-
-
-
-						//if (*p == '!' && p[1] == '-' && p[2] == '-')
-						//{
-						//    type = TokenType.Comment;
-						//    p = FindEndComment(p, pEnd);
-						//}
-						//else if (*p == '!' && p[1] == '[' && p[2] == 'C' && p[3] == 'D' && p[4] == 'A' && p[5] == 'T' && p[6] == 'A' && p[7] == '[')
-						//{
-						//    type = TokenType.CDATA;
-						//    p = FindEndCDATA(p, pEnd);
-						//}
-						//else if (*p == '?')
-						//{
-						//    type = TokenType.Processing;
-						//    p = FindEndProcessing(p, pEnd);
-						//}
-						//else
-						//{
-						//    if (*p == '/')
-						//    {
-						//        type = TokenType.ClosingTag;
-						//        --depth;
-						//    }
-						//    else if (*p == '!')
-						//        type = TokenType.Declaration;
-
-						//    while (p != pEnd && *p != '>') ++p;
-						//}
-
-						//if (type != TokenType.ClosingTag)
-						//{
-						//    long length = 0;
-						//    //if (type == TokenType.OpeningTag)
-						//    //{
-						//    //    char* pTmp = pStart + 1;
-						//    //    while (pTmp != p && (*pTmp != ' ' && *pTmp != '\t' && *pTmp != '\r' && *pTmp != '\n'))
-						//    //        ++pTmp;
-						//    //    char* pNameEnd = pTmp;
-
-						//    //    length = pTmp - (pStart + 1);
-						//    //    long namePrefixLength = 0;
-
-						//    //    pTmp = pStart + 1;
-						//    //    while (pTmp != pNameEnd && *pTmp != ':')
-						//    //        ++pTmp;
-						//    //    if (pTmp != pNameEnd)
-						//    //    {
-						//    //        // prefix:qname
-						//    //        namePrefixLength = pTmp - (pStart + 1);
-						//    //    }
-						//    //}
-						//    //else
-						//    {
-						//        length = (p - pStart + 1);
-						//    }
-
-						//    tags.Add(pStart - pText, length, depth, type);
-
-						//    // add attributes
-
-						//    // check for self-closing
-						//    if (type == TokenType.OpeningTag && (*(p - 1) != '/'))
-						//        ++depth;
-						//}
 					}
 
 					++p;
