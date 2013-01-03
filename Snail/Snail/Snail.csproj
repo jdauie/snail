@@ -46,6 +46,7 @@
     <Compile Include="Extensions\LongToSizeExtension.cs" />
     <Compile Include="HtmlParser.cs" />
     <Compile Include="LazySubstring.cs" />
+    <Compile Include="Token.cs" />
     <Compile Include="TokenList.cs" />
     <Compile Include="XmlParser.cs" />
     <Compile Include="FastParser.cs" />

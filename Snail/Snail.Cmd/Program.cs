@@ -28,10 +28,16 @@ namespace Snail.Cmd
 
 			var obj = ParseTime(text);
 			var sw = (Stopwatch)obj[0];
-			var tags = (TokenList)obj[1];
+			var tokens = (TokenList)obj[1];
+
+			//var tokenList = new List<Token>();
+			//foreach (var token in tokens)
+			//{
+			//    tokenList.Add(TokenList.Convert(text, token));
+			//}
 
 			status += string.Format("parse:\t{0:.00} ms\n", sw.Elapsed.TotalMilliseconds);
-			status += string.Format("tags:\t{0:#,#} ({1:f} MB)\n", tags.Count, (tags.Count * ((double)sizeof(long) / (1 << 20))));
+			status += string.Format("tokens:\t{0:#,#} ({1:f} MB)\n", tokens.Count, (tokens.Count * ((double)sizeof(long) / (1 << 20))));
 
 			//var status = "";
 			//status += string.Format("parse:\t{0} ms\n", sw.Elapsed.TotalMilliseconds);
