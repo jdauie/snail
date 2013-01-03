@@ -149,7 +149,7 @@ namespace Snail
 				while (p != pEnd && *p != '>') ++p;
 			}
 
-			tokens.Add(pStart - pText, p - pStart, depth, type);
+			tokens.Add(pStart - pText, p - pStart + 1, depth, type);
 
 			return p;
 		}
@@ -160,7 +160,7 @@ namespace Snail
 
 			p = FindEndProcessing(p, pEnd);
 
-			tokens.Add(pStart - pText, p - pStart, depth, TokenType.Processing);
+			tokens.Add(pStart - pText, p - pStart + 1, depth, TokenType.Processing);
 
 			return p;
 		}
