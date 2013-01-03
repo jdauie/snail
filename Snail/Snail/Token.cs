@@ -25,7 +25,7 @@ namespace Snail
 
 		public override string ToString()
 		{
-			return m_text.Substring(m_index, m_length);
+			return m_text.SubstringTrim(m_index, m_length);
 		}
 	}
 }
