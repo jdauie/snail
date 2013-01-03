@@ -76,6 +76,11 @@ namespace Snail
 			get { return ((m_chunks.Count + 1) * CHUNK_SIZE); }
 		}
 
+		private static long CreateToken(long index, long length, long depth, TokenType type)
+		{
+			return (index) | (length << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
+		}
+
 		/// <summary>
 		/// format : [  30  ][  20  ][  8  ][  4  ][  2  ]
 		///           index   length  depth  type   ?
@@ -91,13 +96,13 @@ namespace Snail
 
 			if (length > MAX_LENGTH)
 			{
-				m_current[m_index] = (index) | (MAX_LENGTH << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
+				m_current[m_index] = CreateToken(index, MAX_LENGTH, depth, type);
 				++m_index;
 				AddLength(length);
 			}
 			else
 			{
-				m_current[m_index] = (index) | (length << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
+				m_current[m_index] = CreateToken(index, length, depth, type);
 				++m_index;
 			}
 		}
