@@ -101,7 +101,7 @@ namespace Snail
 			}
 		}
 
-		public static Token Convert(string text, long token)
+		public static Token CreateToken(string text, long token)
 		{
 			long index  = (token & MAX_INDEX);
 			long length = ((token >> (BITS_INDEX)) & MAX_LENGTH);
@@ -142,9 +142,9 @@ namespace Snail
 			}
 		}
 
-		public void AddMarkup(long index, long length, long depth, TokenType type)
+		public void AddTag(long index, long length, long depth)
 		{
-			
+			Add(index, length, depth, TokenType.OpeningTag);
 		}
 
 		public void AddAttribute(long index, long length, long depth)
@@ -154,7 +154,7 @@ namespace Snail
 
 		public void AddText(long index, long length, long depth)
 		{
-			
+			Add(index, length, depth, TokenType.Text);
 		}
 
 		private void AddLength(long length)
