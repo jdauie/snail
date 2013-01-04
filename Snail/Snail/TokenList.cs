@@ -56,12 +56,14 @@ namespace Snail
 		public const int MAX_DEPTH   = (1 << BITS_DEPTH) - 1;
 		public const int MAX_TYPE    = (1 << BITS_TYPE) - 1;
 
+		private readonly string m_text;
 		private readonly List<long[]> m_chunks;
 		private long[] m_current;
 		private int m_index;
 
-		public TokenList()
+		public TokenList(string text)
 		{
+			m_text = text;
 			m_chunks = new List<long[]>();
 			m_current = new long[CHUNK_SIZE];
 			m_index = 0;
@@ -101,19 +103,42 @@ namespace Snail
 			}
 		}
 
-		public static Token CreateToken(string text, long token)
+		public Token CreateToken(long token)
 		{
 			long index  = (token & MAX_INDEX);
 			long length = ((token >> (BITS_INDEX)) & MAX_LENGTH);
 			long depth  = ((token >> (BITS_INDEX + BITS_LENGTH)) & MAX_DEPTH);
 			long type   = ((token >> (BITS_INDEX + BITS_LENGTH + BITS_DEPTH)) & MAX_TYPE);
 
-			return new Token(text, (int)index, (int)length, (int)depth, (TokenType)type);
+			return new Token(m_text, (int)index, (int)length, (int)depth, (TokenType)type);
 		}
 
 		private static long CreateToken(long index, long length, long depth, TokenType type)
 		{
 			return (index) | (length << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
+		}
+
+		public List<int> Analyze()
+		{
+			var chunks = new List<long[]>(m_chunks);
+			if (m_index != 0)
+			{
+				var currentSlice = new long[m_index];
+				Array.Copy(m_current, currentSlice, m_index);
+				chunks.Add(currentSlice);
+			}
+
+			var chunkRanges = new List<int>();
+
+			foreach (var chunk in chunks)
+			{
+				var firstToken = CreateToken(chunk[0]);
+				var lastToken = CreateToken(chunk[chunk.Length - 1]);
+
+				chunkRanges.Add(lastToken.Index - firstToken.Index);
+			}
+
+			return chunkRanges;
 		}
 
 		/// <summary>

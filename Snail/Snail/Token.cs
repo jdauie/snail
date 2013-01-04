@@ -13,6 +13,11 @@ namespace Snail
 		private readonly int m_depth;
 		private readonly TokenType m_type;
 
+		public int Index
+		{
+			get { return m_index; }
+		}
+
 		public Token(string text, int index, int length, int depth, TokenType type)
 		{
 			m_text = text;
