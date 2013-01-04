@@ -33,7 +33,7 @@ namespace Snail.Cmd
 			//var tokenList = new List<Token>();
 			//foreach (var token in tokens)
 			//{
-			//    tokenList.Add(TokenList.Convert(text, token));
+			//    tokenList.Add(TokenList.CreateToken(text, token));
 			//}
 
 			status += string.Format("parse:\t{0:.00} ms\n", sw.Elapsed.TotalMilliseconds);

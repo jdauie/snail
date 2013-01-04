@@ -50,7 +50,7 @@ namespace Snail
 						while (p != pEnd && *p != '<')
 							++p;
 
-						tags.Add(pStart - pText, p - pStart, depth, TokenType.Text);
+						tags.AddText(pStart - pText, p - pStart, depth);
 					}
 					//else if (p != pStart)
 					//{
@@ -111,7 +111,7 @@ namespace Snail
 								//    namePrefixLength = pTmp - (pStart + 1);
 								//}
 
-								tags.Add(pFirstSymbol - pText, length, depth, TokenType.OpeningTag);
+								tags.AddTag(pFirstSymbol - pText, length, depth);
 
 
 								// check for self-closing
