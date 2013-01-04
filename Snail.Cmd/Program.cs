@@ -33,8 +33,10 @@ namespace Snail.Cmd
 			//var tokenList = new List<Token>();
 			//foreach (var token in tokens)
 			//{
-			//    tokenList.Add(TokenList.CreateToken(text, token));
+			//    tokenList.Add(tokens.CreateToken(token));
 			//}
+			//var result = tokens.Analyze();
+			//result.Add(0);
 
 			status += string.Format("parse:\t{0:.00} ms\n", sw.Elapsed.TotalMilliseconds);
 			status += string.Format("tokens:\t{0:#,#} ({1:f} MB)\n", tokens.Count, (tokens.Count * ((double)sizeof(long) / (1 << 20))));

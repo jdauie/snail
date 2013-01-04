@@ -28,7 +28,7 @@ namespace Snail
 
 		public static unsafe TokenList ParseTags(string text)
 		{
-			var tags = new TokenList();
+			var tags = new TokenList(text);
 
 			long depth = 0;
 
