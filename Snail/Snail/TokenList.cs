@@ -39,12 +39,33 @@ namespace Snail
 	//public const int TOKEN_DTD_VAL = 12;
 	//public const int TOKEN_DOCUMENT = 13;
 
+	public class TokenGroup
+	{
+		//public readonly int TokenOffset;
+		public readonly int CharOffset;
+		public readonly long[] Data;
+
+		public TokenGroup(int charOffset, long[] source, int count)
+		{
+			//TokenOffset = tokenOffset;
+			CharOffset = charOffset;
+			Data = new long[count];
+			Array.Copy(source, Data, count);
+		}
+
+		public override string ToString()
+		{
+			return string.Format("Offset: {0} ({1} tokens)", CharOffset, Data.Length);
+		}
+	}
+
 	/// <summary>
 	/// This can be better for massive files.
 	/// </summary>
 	public class TokenList : IEnumerable<long>
 	{
 		private const int CHUNK_SIZE = (1 << 20) / sizeof(long);
+		private const int INDEX_RANGE = (1 << 18);
 
 		public const int BITS_INDEX  = 30;
 		public const int BITS_LENGTH = 20;
@@ -57,27 +78,39 @@ namespace Snail
 		public const int MAX_TYPE    = (1 << BITS_TYPE) - 1;
 
 		private readonly string m_text;
-		private readonly List<long[]> m_chunks;
-		private long[] m_current;
+		private readonly List<TokenGroup> m_chunks;
+		private readonly long[] m_current;
 		private int m_index;
+
+		//private int m_currentTokenOffset;
+		private int m_currentCharOffset;
 
 		public TokenList(string text)
 		{
 			m_text = text;
-			m_chunks = new List<long[]>();
+			m_chunks = new List<TokenGroup>();
 			m_current = new long[CHUNK_SIZE];
 			m_index = 0;
+
+			//m_currentTokenOffset = 0;
+			m_currentCharOffset = 0;
 		}
 
 		public int Count
 		{
-			get { return (m_chunks.Count * CHUNK_SIZE) + m_index; }
+			get
+			{
+				int count = m_index;
+				foreach (var chunk in m_chunks)
+					count += chunk.Data.Length;
+				return count;
+			}
 		}
 
-		public int Capacity
-		{
-			get { return ((m_chunks.Count + 1) * CHUNK_SIZE); }
-		}
+		//public int Capacity
+		//{
+		//    get { return ((m_chunks.Count + 1) * CHUNK_SIZE); }
+		//}
 
 		public long this[int index]
 		{
@@ -88,7 +121,7 @@ namespace Snail
 
 				if (chunkIndex < m_chunks.Count)
 				{
-					return m_chunks[chunkIndex][localIndex];
+					return m_chunks[chunkIndex].Data[localIndex];
 				}
 
 				if (chunkIndex == m_chunks.Count)
@@ -118,28 +151,28 @@ namespace Snail
 			return (index) | (length << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
 		}
 
-		public List<int> Analyze()
-		{
-			var chunks = new List<long[]>(m_chunks);
-			if (m_index != 0)
-			{
-				var currentSlice = new long[m_index];
-				Array.Copy(m_current, currentSlice, m_index);
-				chunks.Add(currentSlice);
-			}
+		//public List<int> Analyze()
+		//{
+		//    var chunks = new List<long[]>(m_chunks);
+		//    if (m_index != 0)
+		//    {
+		//        var currentSlice = new long[m_index];
+		//        Array.Copy(m_current, currentSlice, m_index);
+		//        chunks.Add(currentSlice);
+		//    }
 
-			var chunkRanges = new List<int>();
+		//    var chunkRanges = new List<int>();
 
-			foreach (var chunk in chunks)
-			{
-				var firstToken = CreateToken(chunk[0]);
-				var lastToken = CreateToken(chunk[chunk.Length - 1]);
+		//    foreach (var chunk in chunks)
+		//    {
+		//        var firstToken = CreateToken(chunk[0]);
+		//        var lastToken = CreateToken(chunk[chunk.Length - 1]);
 
-				chunkRanges.Add(lastToken.Index - firstToken.Index);
-			}
+		//        chunkRanges.Add(lastToken.Index - firstToken.Index);
+		//    }
 
-			return chunkRanges;
-		}
+		//    return chunkRanges;
+		//}
 
 		/// <summary>
 		/// format : [  30  ][  20  ][  8  ][  4  ][  2  ]
@@ -151,8 +184,8 @@ namespace Snail
 		/// <param name="type">The type.</param>
 		public void Add(long index, long length, long depth, TokenType type)
 		{
-			if (m_index == CHUNK_SIZE)
-				CreateChunk();
+			if (m_index == CHUNK_SIZE || (index - m_currentCharOffset > INDEX_RANGE))
+				CreateChunk(index);
 
 			if (length > MAX_LENGTH)
 			{
@@ -184,8 +217,11 @@ namespace Snail
 
 		private void AddLength(long length)
 		{
+			// INVALID
+			throw new Exception();
+
 			if (m_index == CHUNK_SIZE)
-				CreateChunk();
+				CreateChunk(0);
 
 			m_current[m_index] = length;
 			++m_index;
@@ -193,24 +229,30 @@ namespace Snail
 
 		public void AddWhitespace()
 		{
+			// INVALID
+			throw new Exception();
+
 			if (m_index == CHUNK_SIZE)
-				CreateChunk();
+				CreateChunk(0);
 
 			m_current[m_index] = 0;
 			++m_index;
 		}
 
-		private void CreateChunk()
+		private void CreateChunk(long index)
 		{
-			m_chunks.Add(m_current);
-			m_current = new long[m_index];
+			m_chunks.Add(new TokenGroup(m_currentCharOffset, m_current, m_index));
+
+			//m_currentTokenOffset += m_index;
+			m_currentCharOffset = (int)index;
+
 			m_index = 0;
 		}
 
 		public IEnumerator<long> GetEnumerator()
 		{
 			foreach (var chunk in m_chunks)
-				foreach (var tag in chunk)
+				foreach (var tag in chunk.Data)
 					yield return tag;
 
 			if (m_index > 0)
