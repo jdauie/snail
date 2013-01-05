@@ -96,6 +96,11 @@ namespace Snail
 			m_currentCharOffset = 0;
 		}
 
+		public string Text
+		{
+			get { return m_text; }
+		}
+
 		public int Count
 		{
 			get
@@ -143,7 +148,7 @@ namespace Snail
 			long depth  = ((token >> (BITS_INDEX + BITS_LENGTH)) & MAX_DEPTH);
 			long type   = ((token >> (BITS_INDEX + BITS_LENGTH + BITS_DEPTH)) & MAX_TYPE);
 
-			return new Token(m_text, (int)index, (int)length, (int)depth, (TokenType)type);
+			return new Token(this, (int)index, (int)length, (int)depth, (TokenType)type);
 		}
 
 		private static long CreateToken(long index, long length, long depth, TokenType type)

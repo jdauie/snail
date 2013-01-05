@@ -6,7 +6,7 @@ namespace Snail
 {
 	public struct Token
 	{
-		private readonly string m_text;
+		private readonly TokenList m_list;
 
 		private readonly int m_index;
 		private readonly int m_length;
@@ -18,9 +18,9 @@ namespace Snail
 			get { return m_index; }
 		}
 
-		public Token(string text, int index, int length, int depth, TokenType type)
+		public Token(TokenList list, int index, int length, int depth, TokenType type)
 		{
-			m_text = text;
+			m_list = list;
 
 			m_index  = index;
 			m_length = length;
@@ -30,7 +30,7 @@ namespace Snail
 
 		public override string ToString()
 		{
-			return m_text.SubstringTrim(m_index, m_length);
+			return m_list.Text.SubstringTrim(m_index, m_length);
 		}
 	}
 }
