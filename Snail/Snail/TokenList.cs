@@ -8,19 +8,19 @@ namespace Snail
 {
 	public enum TokenType : byte
 	{
-		Text = 0,
-		OpeningTag = 1,
-		ClosingTag = 2,
+		Text        = 0,
+		OpeningTag  = 1,
+		ClosingTag  = 2,
 
 		// special blocks
-		Comment = 3,
-		CDATA = 4,
+		Comment     = 3,
+		CDATA       = 4,
 		Declaration = 5,
-		Processing = 6, // currently, this includes "<?xml ...>"
+		Processing  = 6, // currently, this includes "<?xml ...>"
 
-		AttrName = 7,
-		AttrNS = 8,
-		AttrValue = 9,
+		AttrName    = 7,
+		AttrNS      = 8,
+		AttrValue   = 9,
 
 		Reserved10 = 10,
 		Reserved11 = 11,
@@ -46,15 +46,15 @@ namespace Snail
 	{
 		private const int CHUNK_SIZE = (1 << 20) / sizeof(long);
 
-		public const int BITS_INDEX = 30;
+		public const int BITS_INDEX  = 30;
 		public const int BITS_LENGTH = 20;
-		public const int BITS_DEPTH = 8;
-		public const int BITS_TYPE = 4;
+		public const int BITS_DEPTH  = 8;
+		public const int BITS_TYPE   = 4;
 
-		public const int MAX_INDEX = (1 << BITS_INDEX) - 1;
-		public const int MAX_LENGTH = (1 << BITS_LENGTH) - 1;
-		public const int MAX_DEPTH = (1 << BITS_DEPTH) - 1;
-		public const int MAX_TYPE = (1 << BITS_TYPE) - 1;
+		public const int MAX_INDEX   = (1 << BITS_INDEX) - 1;
+		public const int MAX_LENGTH  = (1 << BITS_LENGTH) - 1;
+		public const int MAX_DEPTH   = (1 << BITS_DEPTH) - 1;
+		public const int MAX_TYPE    = (1 << BITS_TYPE) - 1;
 
 		private readonly string m_text;
 		private readonly List<long[]> m_chunks;
@@ -98,7 +98,7 @@ namespace Snail
 
 				if (chunkIndex == m_chunks.Count)
 				{
-					if (localIndex > m_index)
+					if(localIndex > m_index)
 						throw new ArgumentException("index out of range");
 
 					return m_current[localIndex];
@@ -110,10 +110,10 @@ namespace Snail
 
 		public Token CreateToken(long token)
 		{
-			long index = (token & MAX_INDEX);
+			long index  = (token & MAX_INDEX);
 			long length = ((token >> (BITS_INDEX)) & MAX_LENGTH);
-			long depth = ((token >> (BITS_INDEX + BITS_LENGTH)) & MAX_DEPTH);
-			long type = ((token >> (BITS_INDEX + BITS_LENGTH + BITS_DEPTH)) & MAX_TYPE);
+			long depth  = ((token >> (BITS_INDEX + BITS_LENGTH)) & MAX_DEPTH);
+			long type   = ((token >> (BITS_INDEX + BITS_LENGTH + BITS_DEPTH)) & MAX_TYPE);
 
 			return new Token(this, (int)index, (int)length, (int)depth, (TokenType)type);
 		}
@@ -179,7 +179,7 @@ namespace Snail
 
 		public void AddAttribute(long index, long length, long depth)
 		{
-
+			
 		}
 
 		public void AddText(long index, long length, long depth)
