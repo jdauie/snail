@@ -22,10 +22,10 @@ namespace Snail
 		{
 			m_list = list;
 
-			m_index  = index;
+			m_index = index;
 			m_length = length;
-			m_depth  = depth;
-			m_type   = type;
+			m_depth = depth;
+			m_type = type;
 		}
 
 		public override string ToString()
