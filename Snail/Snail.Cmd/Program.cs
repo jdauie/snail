@@ -21,7 +21,8 @@ namespace Snail.Cmd
 
 			string text = File.ReadAllText(testFile);
 
-			var status = string.Format("\n{0}\n", testFile);
+			var status = string.Format("\nfile\t: {0}\n", testFile);
+			status += string.Format("size\t: {0:f} MB\n", (double)(new FileInfo(testFile).Length) / (1 << 20));
 
 			GC.Collect();
 			GC.Collect();
@@ -38,8 +39,8 @@ namespace Snail.Cmd
 			//var result = tokens.Analyze();
 			//result.Add(0);
 
-			status += string.Format("parse:\t{0:.00} ms\n", sw.Elapsed.TotalMilliseconds);
-			status += string.Format("tokens:\t{0:#,#} ({1:f} MB)\n", tokens.Count, (tokens.Count * ((double)sizeof(long) / (1 << 20))));
+			status += string.Format("parse\t: {0:.00} ms\n", sw.Elapsed.TotalMilliseconds);
+			status += string.Format("tokens\t: {0:#,#} ({1:f} MB)\n", tokens.Count, (tokens.Count * ((double)sizeof(long) / (1 << 20))));
 
 			//var status = "";
 			//status += string.Format("parse:\t{0} ms\n", sw.Elapsed.TotalMilliseconds);
