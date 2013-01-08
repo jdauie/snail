@@ -61,12 +61,18 @@ namespace Snail
 		private long[] m_current;
 		private int m_index;
 
+		//private readonly List<List<int>> m_depthIndex;
+
 		public TokenList(string text)
 		{
 			m_text = text;
 			m_chunks = new List<long[]>();
 			m_current = new long[CHUNK_SIZE];
 			m_index = 0;
+
+			//m_depthIndex = new List<List<int>>(MAX_DEPTH);
+			//for (int i = 0; i < MAX_DEPTH; i++)
+			//    m_depthIndex.Add(new List<int>());
 		}
 
 		public string Text
@@ -147,8 +153,14 @@ namespace Snail
 		}
 
 		/// <summary>
-		/// format : [  30  ][  20  ][  8  ][  4  ][  2  ]
-		///           index   length  depth  type   ?
+		/// Should I change the order (move type earlier)?
+		/// 
+		/// format (tags) : [  30  ][  20  ][  8  ][  4  ][  2  ]
+		///                  index   length  depth  type   ?
+		/// 
+		/// TODO: figure this out
+		/// format (attr) : [  30  ][  28  ][  4  ][  2  ]
+		///                  index   length  type   ?
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="length">The length.</param>
