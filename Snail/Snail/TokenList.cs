@@ -18,10 +18,10 @@ namespace Snail
 		Declaration = 5,
 		Processing  = 6, // currently, this includes "<?xml ...>"
 
-		AttrName    = 7,
+		Attr        = 7,
 		AttrNS      = 8,
-		AttrValue   = 9,
 
+		Reserved09 = 9,
 		Reserved10 = 10,
 		Reserved11 = 11,
 		Reserved12 = 12,
@@ -70,6 +70,7 @@ namespace Snail
 			m_current = new long[CHUNK_SIZE];
 			m_index = 0;
 
+			// should this be lazy?
 			//m_depthIndex = new List<List<int>>(MAX_DEPTH);
 			//for (int i = 0; i < MAX_DEPTH; i++)
 			//    m_depthIndex.Add(new List<int>());
@@ -124,7 +125,39 @@ namespace Snail
 			return new Token(this, (int)index, (int)length, (int)depth, (TokenType)type);
 		}
 
+		/// <summary>
+		/// token    = [         64        ]
+		///          = [  30  ][  4  ][ 30 ]
+		///             index   type   @1
+		/// 
+		/// @1(attr) = [  11  ][   9   ][  10  ]
+		///             qname   prefix   value
+		/// 
+		/// @1(node) = [ 22 ][  8  ]
+		///             @2   depth
+		/// 
+		/// @2(decl),
+		/// @2(tag)  = [  11  ][   9   ][  2  ]
+		///             qname   prefix    ?
+		/// 
+		/// @2(proc) = [  9  ][   13   ]
+		///             target  content
+		/// 
+		/// @2(comment),
+		/// @2(cdata),
+		/// @2(text) = [  22  ]
+		///             length
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="length">The length.</param>
+		/// <param name="depth">The depth.</param>
+		/// <param name="type">The type.</param>
 		private static long CreateToken(long index, long length, long depth, TokenType type)
+		{
+			return (index) | (length << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
+		}
+
+		private static long CreateTokenRegion(long index, long length, long depth, TokenType type)
 		{
 			return (index) | (length << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
 		}
@@ -152,20 +185,6 @@ namespace Snail
 			return chunkRanges;
 		}
 
-		/// <summary>
-		/// Should I change the order (move type earlier)?
-		/// 
-		/// format (tags) : [  30  ][  20  ][  8  ][  4  ][  2  ]
-		///                  index   length  depth  type   ?
-		/// 
-		/// TODO: figure this out
-		/// format (attr) : [  30  ][  28  ][  4  ][  2  ]
-		///                  index   length  type   ?
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <param name="length">The length.</param>
-		/// <param name="depth">The depth.</param>
-		/// <param name="type">The type.</param>
 		public void Add(long index, long length, long depth, TokenType type)
 		{
 			if (m_index == CHUNK_SIZE)
