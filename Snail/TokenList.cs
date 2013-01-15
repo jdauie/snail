@@ -127,6 +127,9 @@ namespace Snail
 
 		#region NEW TOKEN FORMAT
 
+
+		#region Token Bits
+
 		/// <summary>
 		/// token    = [         64        ]
 		///          = [  30  ][  4  ][ 30 ]
@@ -175,7 +178,10 @@ namespace Snail
 		/// </summary>
 		public const int TokenDataNodeLengthBits  = 22;
 
-		//public const int aMAX_INDEX = (1 << BITS_INDEX) - 1;
+		#endregion
+
+		#region Token Max Values (post-shift masks)
+
 		public const int TokenIndexMax           = (1 << TokenIndexBits) - 1;
 		public const int TokenTypeMax            = (1 << TokenTypeBits) - 1;
 		public const int TokenDataMax            = (1 << TokenDataBits) - 1;
@@ -196,26 +202,31 @@ namespace Snail
 
 		public const int TokenDataNodeLengthMax  = (1 << TokenDataNodeLengthBits) - 1;
 
+		#endregion
 
-		//public const int TokenIndexMask           = 30;
-		//public const int TokenTypeMask            = 4;
-		//public const int TokenDataMask            = 30;
+		#region Token Shifts
 
-		//public const int TokenDataAttrQNameMask   = 11;
-		//public const int TokenDataAttrPrefixMask  = 9;
-		//public const int TokenDataAttrValueMask   = 10;
+		public const int TokenIndexShift           = 0; // NOT NECESSARY
+		public const int TokenTypeShift            = TokenIndexShift + TokenIndexBits;
+		public const int TokenDataShift            = TokenTypeShift + TokenTypeBits;
 
-		//public const int TokenDataNodeMask        = 22;
-		//public const int TokenDataNodeDepthMask   = 8;
+		public const int TokenDataAttrQNameShift   = TokenDataShift;
+		public const int TokenDataAttrPrefixShift  = TokenDataAttrQNameShift + TokenDataAttrQNameBits;
+		public const int TokenDataAttrValueShift   = TokenDataAttrPrefixShift + TokenDataAttrPrefixBits;
 
-		//public const int TokenDataNodeQNameMask   = 11;
-		//public const int TokenDataNodePrefixMask  = 9;
-		//public const int TokenDataNodeOtherMask   = 2;
+		public const int TokenDataNodeShift        = TokenDataShift;
+		public const int TokenDataNodeDepthShift   = TokenDataNodeShift + TokenDataNodeBits;
 
-		//public const int TokenDataNodeTargetMask  = 9;
-		//public const int TokenDataNodeContentMask = 13;
+		public const int TokenDataNodeQNameShift   = TokenDataNodeShift;
+		public const int TokenDataNodePrefixShift  = TokenDataNodeQNameShift + TokenDataNodeQNameBits;
+		public const int TokenDataNodeOtherShift   = TokenDataNodePrefixShift + TokenDataNodePrefixBits;
 
-		//public const int TokenDataNodeLengthMask  = 22;
+		public const int TokenDataNodeTargetShift  = TokenDataNodeShift;
+		public const int TokenDataNodeContentShift = TokenDataNodeTargetShift + TokenDataNodeTargetBits;
+
+		public const int TokenDataNodeLengthShift  = TokenDataNodeShift;
+
+		#endregion
 
 		/// <summary>
 		/// token    = [         64        ]
