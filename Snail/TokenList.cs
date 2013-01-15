@@ -227,6 +227,8 @@ namespace Snail
 
 		#endregion
 
+		#region Token Creators
+
 		/// <summary>
 		/// token    = [         64        ]
 		///          = [  30  ][  4  ][ 30 ]
@@ -250,13 +252,10 @@ namespace Snail
 		/// @2(text) = [  22  ]
 		///             length
 		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <param name="qname">The qname.</param>
-		/// <param name="prefix">The prefix.</param>
-		/// <param name="depth">The depth.</param>
-		private static long CreateTagToken(long index, long qname, long prefix, long depth)
+		
+		private static long CreateTagToken(long index, long qName, long prefix, long depth)
 		{
-			return (index) | ((long)TokenType.OpeningTag << TokenTypeShift) | (qname << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (depth << TokenDataNodeDepthShift);
+			return (index) | ((long)TokenType.OpeningTag << TokenTypeShift) | (qName << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (depth << TokenDataNodeDepthShift);
 		}
 
 		private static long CreateRegionToken(long index, TokenType type, long length, long depth)
@@ -266,22 +265,91 @@ namespace Snail
 
 		private static long CreateProcToken(long index, long target, long content, long depth)
 		{
-			return (index) | ((long)TokenType.OpeningTag << TokenTypeShift) | (target << TokenDataNodeTargetShift) | (content | TokenDataNodeContentShift) | (depth << TokenDataNodeDepthShift);
+			return (index) | ((long)TokenType.Processing << TokenTypeShift) | (target << TokenDataNodeTargetShift) | (content | TokenDataNodeContentShift) | (depth << TokenDataNodeDepthShift);
 		}
 
 		private static long CreateAttrToken(long index, long qname, long prefix, long value)
 		{
-			return (index) | ((long)TokenType.OpeningTag << TokenTypeShift) | (qname << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (value << TokenDataAttrValueShift);
+			return (index) | ((long)TokenType.Attr << TokenTypeShift) | (qname << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (value << TokenDataAttrValueShift);
 		}
 
 		#endregion
 
-		private static long CreateToken(long index, long length, long depth, TokenType type)
+		#region TEST ADD METHODS
+
+		public void TestAdd(long token)
 		{
-			return (index) | (length << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
+			//if (m_index == CHUNK_SIZE)
+			//    CreateChunk();
+
+			//if (length > MAX_LENGTH)
+			//{
+			//    m_current[m_index] = CreateToken(index, MAX_LENGTH, depth, type);
+			//    ++m_index;
+			//    AddLength(length);
+			//}
+			//else
+			//{
+			//    m_current[m_index] = CreateToken(index, length, depth, type);
+			//    ++m_index;
+			//}
 		}
 
-		private static long CreateTokenRegion(long index, long length, long depth, TokenType type)
+		public void TestAddTag(long index, long qName, long prefix, long depth)
+		{
+			TestAdd(CreateTagToken(index, qName, prefix, depth));
+		}
+
+		public void TestAddRegion(long index, TokenType type, long length, long depth)
+		{
+			//// Can I speed this up with bitwise operations?
+			//TestAdd(CreateRegionToken(index, type, (length & TokenDataNodeLengthMax), depth));
+
+			if (length >= TokenDataNodeLengthMax)
+			{
+				// add two tokens
+				TestAdd(CreateRegionToken(index, type, TokenDataNodeLengthMax, depth));
+				TestAdd(length);
+			}
+			else
+			{
+				TestAdd(CreateRegionToken(index, type, length, depth));
+			}
+		}
+
+		public void TestAddProc(long index, long target, long content, long depth)
+		{
+			TestAdd(CreateProcToken(index, target, content, depth));
+		}
+
+		public void TestAddAttr(long index, long qName, long prefix, long value)
+		{
+			TestAdd(CreateAttrToken(index, qName, prefix, value));
+		}
+
+		//private void AddLength(long length)
+		//{
+		//    if (m_index == CHUNK_SIZE)
+		//        CreateChunk();
+
+		//    m_current[m_index] = length;
+		//    ++m_index;
+		//}
+
+		//public void AddWhitespace()
+		//{
+		//    if (m_index == CHUNK_SIZE)
+		//        CreateChunk();
+
+		//    m_current[m_index] = 0;
+		//    ++m_index;
+		//}
+
+		#endregion
+
+		#endregion
+
+		private static long CreateToken(long index, long length, long depth, TokenType type)
 		{
 			return (index) | (length << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
 		}
