@@ -127,7 +127,6 @@ namespace Snail
 
 		#region NEW TOKEN FORMAT
 
-
 		#region Token Bits
 
 		/// <summary>
@@ -252,10 +251,27 @@ namespace Snail
 		///             length
 		/// </summary>
 		/// <param name="index">The index.</param>
-		/// <param name="type">The type.</param>
-		private static long CreateToken2(long index, TokenType type, long other)
+		/// <param name="qname">The qname.</param>
+		/// <param name="prefix">The prefix.</param>
+		/// <param name="depth">The depth.</param>
+		private static long CreateTagToken(long index, long qname, long prefix, long depth)
 		{
-			return (index);
+			return (index) | ((long)TokenType.OpeningTag << TokenTypeShift) | (qname << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (depth << TokenDataNodeDepthShift);
+		}
+
+		private static long CreateRegionToken(long index, TokenType type, long length, long depth)
+		{
+			return (index) | ((long)type << TokenTypeShift) | (length << TokenDataNodeLengthShift) | (depth << TokenDataNodeDepthShift);
+		}
+
+		private static long CreateProcToken(long index, long target, long content, long depth)
+		{
+			return (index) | ((long)TokenType.OpeningTag << TokenTypeShift) | (target << TokenDataNodeTargetShift) | (content | TokenDataNodeContentShift) | (depth << TokenDataNodeDepthShift);
+		}
+
+		private static long CreateAttrToken(long index, long qname, long prefix, long value)
+		{
+			return (index) | ((long)TokenType.OpeningTag << TokenTypeShift) | (qname << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (value << TokenDataAttrValueShift);
 		}
 
 		#endregion
