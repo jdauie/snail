@@ -125,6 +125,98 @@ namespace Snail
 			return new Token(this, (int)index, (int)length, (int)depth, (TokenType)type);
 		}
 
+		#region NEW TOKEN FORMAT
+
+		/// <summary>
+		/// token    = [         64        ]
+		///          = [  30  ][  4  ][ 30 ]
+		///             index   type   @1
+		/// </summary>
+		public const int TokenIndexBits           = 30;
+		public const int TokenTypeBits            = 4;
+		public const int TokenDataBits            = 30;
+
+		/// <summary>
+		/// @1(attr) = [  11  ][   9   ][  10  ]
+		///             qname   prefix   value
+		/// </summary>
+		public const int TokenDataAttrQNameBits   = 11;
+		public const int TokenDataAttrPrefixBits  = 9;
+		public const int TokenDataAttrValueBits   = 10;
+
+		/// <summary>
+		/// @1(node) = [ 22 ][  8  ]
+		///             @2   depth
+		/// </summary>
+		public const int TokenDataNodeBits        = 22;
+		public const int TokenDataNodeDepthBits   = 8;
+
+		/// <summary>
+		/// @2(decl),
+		/// @2(tag)  = [  11  ][   9   ][  2  ]
+		///             qname   prefix    ?
+		/// </summary>
+		public const int TokenDataNodeQNameBits   = 11;
+		public const int TokenDataNodePrefixBits  = 9;
+		public const int TokenDataNodeOtherBits   = 2;
+
+		/// <summary>
+		/// @2(proc) = [  9  ][   13   ]
+		///             target  content
+		/// </summary>
+		public const int TokenDataNodeTargetBits  = 9;
+		public const int TokenDataNodeContentBits = 13;
+
+		/// <summary>
+		/// @2(comment),
+		/// @2(cdata),
+		/// @2(text) = [  22  ]
+		///             length
+		/// </summary>
+		public const int TokenDataNodeLengthBits  = 22;
+
+		//public const int aMAX_INDEX = (1 << BITS_INDEX) - 1;
+		public const int TokenIndexMax           = (1 << TokenIndexBits) - 1;
+		public const int TokenTypeMax            = (1 << TokenTypeBits) - 1;
+		public const int TokenDataMax            = (1 << TokenDataBits) - 1;
+
+		public const int TokenDataAttrQNameMax   = (1 << TokenDataAttrQNameBits) - 1;
+		public const int TokenDataAttrPrefixMax  = (1 << TokenDataAttrPrefixBits) - 1;
+		public const int TokenDataAttrValueMax   = (1 << TokenDataAttrValueBits) - 1;
+
+		public const int TokenDataNodeMax        = (1 << TokenDataNodeBits) - 1;
+		public const int TokenDataNodeDepthMax   = (1 << TokenDataNodeDepthBits) - 1;
+
+		public const int TokenDataNodeQNameMax   = (1 << TokenDataNodeQNameBits) - 1;
+		public const int TokenDataNodePrefixMax  = (1 << TokenDataNodePrefixBits) - 1;
+		public const int TokenDataNodeOtherMax   = (1 << TokenDataNodeOtherBits) - 1;
+
+		public const int TokenDataNodeTargetMax  = (1 << TokenDataNodeTargetBits) - 1;
+		public const int TokenDataNodeContentMax = (1 << TokenDataNodeContentBits) - 1;
+
+		public const int TokenDataNodeLengthMax  = (1 << TokenDataNodeLengthBits) - 1;
+
+
+		//public const int TokenIndexMask           = 30;
+		//public const int TokenTypeMask            = 4;
+		//public const int TokenDataMask            = 30;
+
+		//public const int TokenDataAttrQNameMask   = 11;
+		//public const int TokenDataAttrPrefixMask  = 9;
+		//public const int TokenDataAttrValueMask   = 10;
+
+		//public const int TokenDataNodeMask        = 22;
+		//public const int TokenDataNodeDepthMask   = 8;
+
+		//public const int TokenDataNodeQNameMask   = 11;
+		//public const int TokenDataNodePrefixMask  = 9;
+		//public const int TokenDataNodeOtherMask   = 2;
+
+		//public const int TokenDataNodeTargetMask  = 9;
+		//public const int TokenDataNodeContentMask = 13;
+
+		//public const int TokenDataNodeLengthMask  = 22;
+
 		/// <summary>
 		/// token    = [         64        ]
 		///          = [  30  ][  4  ][ 30 ]
@@ -149,9 +241,14 @@ namespace Snail
 		///             length
 		/// </summary>
 		/// <param name="index">The index.</param>
-		/// <param name="length">The length.</param>
-		/// <param name="depth">The depth.</param>
 		/// <param name="type">The type.</param>
+		private static long CreateToken2(long index, TokenType type, long other)
+		{
+			return (index);
+		}
+
+		#endregion
+
 		private static long CreateToken(long index, long length, long depth, TokenType type)
 		{
 			return (index) | (length << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
