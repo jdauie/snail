@@ -268,16 +268,12 @@ namespace Snail
 
 		public void AddRegion(long index, TokenType type, long length, long depth)
 		{
-			//// Precondition: INT_MIN <= (x - y) <= INT_MAX
+			//// Precondition: MIN <= (x - y) <= MAX
 			//// min(length, TokenDataNodeLengthMax)
-			//// CHAR_BIT => 8
 			//long clippedLength = TokenDataNodeLengthMax + ((length - TokenDataNodeLengthMax) & ((length - TokenDataNodeLengthMax) >> 63));
 			//Add(CreateRegionToken(index, type, clippedLength, depth));
-			//if (length >= TokenDataNodeLengthMax)
-			//{
-			//    // add another tokens
+			//if (clippedLength == TokenDataNodeLengthMax)
 			//    Add(length);
-			//}
 
 			if (length >= TokenDataNodeLengthMax)
 			{
