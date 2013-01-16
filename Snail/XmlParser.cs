@@ -14,7 +14,7 @@ namespace Snail
 	{
 		public TokenList Parse(string text)
 		{
-			var tags = ParseTags(text);
+			var tags = ParseTokens(text);
 
 			return tags;
 		}
@@ -26,9 +26,9 @@ namespace Snail
 			type = (TokenType)(tag >> (32 + 28));
 		}
 
-		public static unsafe TokenList ParseTags(string text)
+		public static unsafe TokenList ParseTokens(string text)
 		{
-			var tags = new TokenList(text);
+			var tokens = new TokenList(text);
 
 			long depth = 0;
 
@@ -50,12 +50,12 @@ namespace Snail
 						while (p != pEnd && *p != '<')
 							++p;
 
-						tags.AddText(pStart - pText, p - pStart, depth);
+						tokens.AddRegion(pStart - pText, TokenType.Text, p - pStart, depth);
 					}
 					//else if (p != pStart)
 					//{
 					//    // remember that this is whitespace, but no more details
-					//    tags.AddWhitespace();
+					//    tokens.AddWhitespace();
 					//}
 
 					// identify tag region
@@ -66,11 +66,11 @@ namespace Snail
 
 						if (*p == '!')
 						{
-							p = HandleExclamationPoint(pText, pStart, pEnd, depth, tags);
+							p = HandleExclamationPoint(pText, pStart, pEnd, depth, tokens);
 						}
 						else if (*p == '?')
 						{
-							p = HandleQuestionMark(pText, pStart, pEnd, depth, tags);
+							p = HandleQuestionMark(pText, pStart, pEnd, depth, tokens);
 						}
 						else
 						{
@@ -111,8 +111,7 @@ namespace Snail
 								//    namePrefixLength = pTmp - (pStart + 1);
 								//}
 
-								tags.AddTag(pFirstSymbol - pText, length, depth);
-
+								tokens.AddTag(pFirstSymbol - pText, length, 0, depth);
 
 								// check for self-closing
 								if ((*(p - 1) != '/'))
@@ -128,32 +127,28 @@ namespace Snail
 			if (depth != 0)
 				throw new Exception("bad depth");
 
-			return tags;
+			return tokens;
 		}
 
 		private static unsafe char* HandleExclamationPoint(char* pText, char* pStart, char* pEnd, long depth, TokenList tokens)
 		{
 			char* p = pStart + 2;
 
-			TokenType type;
-
 			if (p[0] == '-' && p[1] == '-')
 			{
-				type = TokenType.Comment;
 				p = FindEndComment(p + 2, pEnd);
+				tokens.AddRegion(pStart - pText, TokenType.Comment, p - pStart + 1, depth);
 			}
 			else if (p[0] == '[' && p[1] == 'C' && p[2] == 'D' && p[3] == 'A' && p[4] == 'T' && p[5] == 'A' && p[6] == '[')
 			{
-				type = TokenType.CDATA;
 				p = FindEndCDATA(p + 7, pEnd);
+				tokens.AddRegion(pStart - pText, TokenType.CDATA, p - pStart + 1, depth);
 			}
 			else
 			{
-				type = TokenType.Declaration;
 				while (p != pEnd && *p != '>') ++p;
+				tokens.AddDecl(pStart - pText, p - pStart + 1, depth);
 			}
-
-			tokens.Add(pStart - pText, p - pStart + 1, depth, type);
 
 			return p;
 		}
@@ -164,7 +159,8 @@ namespace Snail
 
 			p = FindEndProcessing(p, pEnd);
 
-			tokens.Add(pStart - pText, p - pStart + 1, depth, TokenType.Processing);
+			tokens.AddProc(pStart - pText, 0, p - pStart + 1, depth);
+			//tokens.Add(pStart - pText, p - pStart + 1, depth, TokenType.Processing);
 
 			return p;
 		}
