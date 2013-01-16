@@ -46,16 +46,6 @@ namespace Snail
 	{
 		private const int CHUNK_SIZE = (1 << 20) / sizeof(long);
 
-		public const int BITS_INDEX  = 30;
-		public const int BITS_LENGTH = 20;
-		public const int BITS_DEPTH  = 8;
-		public const int BITS_TYPE   = 4;
-
-		public const int MAX_INDEX   = (1 << BITS_INDEX) - 1;
-		public const int MAX_LENGTH  = (1 << BITS_LENGTH) - 1;
-		public const int MAX_DEPTH   = (1 << BITS_DEPTH) - 1;
-		public const int MAX_TYPE    = (1 << BITS_TYPE) - 1;
-
 		private readonly string m_text;
 		private readonly List<long[]> m_chunks;
 		private long[] m_current;
@@ -117,15 +107,14 @@ namespace Snail
 
 		public Token CreateToken(long token)
 		{
-			long index  = (token & MAX_INDEX);
-			long length = ((token >> (BITS_INDEX)) & MAX_LENGTH);
-			long depth  = ((token >> (BITS_INDEX + BITS_LENGTH)) & MAX_DEPTH);
-			long type   = ((token >> (BITS_INDEX + BITS_LENGTH + BITS_DEPTH)) & MAX_TYPE);
+			//long index  = (token & MAX_INDEX);
+			//long length = ((token >> (BITS_INDEX)) & MAX_LENGTH);
+			//long depth  = ((token >> (BITS_INDEX + BITS_LENGTH)) & MAX_DEPTH);
+			//long type   = ((token >> (BITS_INDEX + BITS_LENGTH + BITS_DEPTH)) & MAX_TYPE);
 
-			return new Token(this, (int)index, (int)length, (int)depth, (TokenType)type);
+			//return new Token(this, (int)index, (int)length, (int)depth, (TokenType)type);
+			return new Token();
 		}
-
-		#region NEW TOKEN FORMAT
 
 		#region Token Bits
 
@@ -229,33 +218,14 @@ namespace Snail
 
 		#region Token Creators
 
-		/// <summary>
-		/// token    = [         64        ]
-		///          = [  30  ][  4  ][ 30 ]
-		///             index   type   @1
-		/// 
-		/// @1(attr) = [  11  ][   9   ][  10  ]
-		///             qname   prefix   value
-		/// 
-		/// @1(node) = [ 22 ][  8  ]
-		///             @2   depth
-		/// 
-		/// @2(decl),
-		/// @2(tag)  = [  11  ][   9   ][  2  ]
-		///             qname   prefix    ?
-		/// 
-		/// @2(proc) = [  9  ][   13   ]
-		///             target  content
-		/// 
-		/// @2(comment),
-		/// @2(cdata),
-		/// @2(text) = [  22  ]
-		///             length
-		/// </summary>
-		
 		private static long CreateTagToken(long index, long qName, long prefix, long depth)
 		{
 			return (index) | ((long)TokenType.OpeningTag << TokenTypeShift) | (qName << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (depth << TokenDataNodeDepthShift);
+		}
+
+		private static long CreateDeclToken(long index, long qName, long depth)
+		{
+			return (index) | ((long)TokenType.Declaration << TokenTypeShift) | (qName << TokenDataNodeQNameShift) | (depth << TokenDataNodeDepthShift);
 		}
 
 		private static long CreateRegionToken(long index, TokenType type, long length, long depth)
@@ -275,9 +245,9 @@ namespace Snail
 
 		#endregion
 
-		#region TEST ADD METHODS
+		#region Add Token Methods
 
-		public void TestAdd(long token)
+		private void Add(long token)
 		{
 			if (m_index == CHUNK_SIZE)
 				CreateChunk();
@@ -286,64 +256,52 @@ namespace Snail
 			++m_index;
 		}
 
-		public void TestAddTag(long index, long qName, long prefix, long depth)
+		public void AddTag(long index, long qName, long prefix, long depth)
 		{
-			TestAdd(CreateTagToken(index, qName, prefix, depth));
+			Add(CreateTagToken(index, qName, prefix, depth));
 		}
 
-		public void TestAddRegion(long index, TokenType type, long length, long depth)
+		public void AddDecl(long index, long qName, long depth)
+		{
+			Add(CreateDeclToken(index, qName, depth));
+		}
+
+		public void AddRegion(long index, TokenType type, long length, long depth)
 		{
 			//// Precondition: INT_MIN <= (x - y) <= INT_MAX
 			//// min(length, TokenDataNodeLengthMax)
 			//// CHAR_BIT => 8
 			//long clippedLength = TokenDataNodeLengthMax + ((length - TokenDataNodeLengthMax) & ((length - TokenDataNodeLengthMax) >> (sizeof(int) * 8 - 1)));
-			//TestAdd(CreateRegionToken(index, type, clippedLength, depth));
-
+			//Add(CreateRegionToken(index, type, clippedLength, depth));
 			//if (length >= TokenDataNodeLengthMax)
 			//{
 			//    // add another tokens
-			//    TestAdd(length);
+			//    Add(length);
 			//}
 
 			if (length >= TokenDataNodeLengthMax)
 			{
 				// add two tokens
-				TestAdd(CreateRegionToken(index, type, TokenDataNodeLengthMax, depth));
-				TestAdd(length);
+				Add(CreateRegionToken(index, type, TokenDataNodeLengthMax, depth));
+				Add(length);
 			}
 			else
 			{
-				TestAdd(CreateRegionToken(index, type, length, depth));
+				Add(CreateRegionToken(index, type, length, depth));
 			}
 		}
 
-		public void TestAddProc(long index, long target, long content, long depth)
+		public void AddProc(long index, long target, long content, long depth)
 		{
-			TestAdd(CreateProcToken(index, target, content, depth));
+			Add(CreateProcToken(index, target, content, depth));
 		}
 
-		public void TestAddAttr(long index, long qName, long prefix, long value)
+		public void AddAttr(long index, long qName, long prefix, long value)
 		{
-			TestAdd(CreateAttrToken(index, qName, prefix, value));
+			Add(CreateAttrToken(index, qName, prefix, value));
 		}
-
-		//public void AddWhitespace()
-		//{
-		//    if (m_index == CHUNK_SIZE)
-		//        CreateChunk();
-
-		//    m_current[m_index] = 0;
-		//    ++m_index;
-		//}
 
 		#endregion
-
-		#endregion
-
-		private static long CreateToken(long index, long length, long depth, TokenType type)
-		{
-			return (index) | (length << BITS_INDEX) | (depth << (BITS_INDEX + BITS_LENGTH)) | ((long)type << (BITS_INDEX + BITS_LENGTH + BITS_DEPTH));
-		}
 
 		public List<int> Analyze()
 		{
@@ -368,63 +326,14 @@ namespace Snail
 			return chunkRanges;
 		}
 
-		public void Add(long index, long length, long depth, TokenType type)
-		{
-			if (m_index == CHUNK_SIZE)
-				CreateChunk();
-
-			if (length > MAX_LENGTH)
-			{
-				m_current[m_index] = CreateToken(index, MAX_LENGTH, depth, type);
-				++m_index;
-				AddLength(length);
-			}
-			else
-			{
-				m_current[m_index] = CreateToken(index, length, depth, type);
-				++m_index;
-			}
-		}
-
-		public void AddTag(long index, long length, long depth)
-		{
-			Add(index, length, depth, TokenType.OpeningTag);
-		}
-
-		public void AddAttribute(long index, long length, long depth)
-		{
-			
-		}
-
-		public void AddText(long index, long length, long depth)
-		{
-			Add(index, length, depth, TokenType.Text);
-		}
-
-		private void AddLength(long length)
-		{
-			if (m_index == CHUNK_SIZE)
-				CreateChunk();
-
-			m_current[m_index] = length;
-			++m_index;
-		}
-
-		public void AddWhitespace()
-		{
-			if (m_index == CHUNK_SIZE)
-				CreateChunk();
-
-			m_current[m_index] = 0;
-			++m_index;
-		}
-
 		private void CreateChunk()
 		{
 			m_chunks.Add(m_current);
 			m_current = new long[m_index];
 			m_index = 0;
 		}
+
+		#region IEnumerable Members
 
 		public IEnumerator<long> GetEnumerator()
 		{
@@ -443,5 +352,7 @@ namespace Snail
 		{
 			return GetEnumerator();
 		}
+
+		#endregion
 	}
 }
