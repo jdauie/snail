@@ -279,20 +279,11 @@ namespace Snail
 
 		public void TestAdd(long token)
 		{
-			//if (m_index == CHUNK_SIZE)
-			//    CreateChunk();
+			if (m_index == CHUNK_SIZE)
+				CreateChunk();
 
-			//if (length > MAX_LENGTH)
-			//{
-			//    m_current[m_index] = CreateToken(index, MAX_LENGTH, depth, type);
-			//    ++m_index;
-			//    AddLength(length);
-			//}
-			//else
-			//{
-			//    m_current[m_index] = CreateToken(index, length, depth, type);
-			//    ++m_index;
-			//}
+			m_current[m_index] = token;
+			++m_index;
 		}
 
 		public void TestAddTag(long index, long qName, long prefix, long depth)
@@ -302,8 +293,17 @@ namespace Snail
 
 		public void TestAddRegion(long index, TokenType type, long length, long depth)
 		{
-			//// Can I speed this up with bitwise operations?
-			//TestAdd(CreateRegionToken(index, type, (length & TokenDataNodeLengthMax), depth));
+			//// Precondition: INT_MIN <= (x - y) <= INT_MAX
+			//// min(length, TokenDataNodeLengthMax)
+			//// CHAR_BIT => 8
+			//long clippedLength = TokenDataNodeLengthMax + ((length - TokenDataNodeLengthMax) & ((length - TokenDataNodeLengthMax) >> (sizeof(int) * 8 - 1)));
+			//TestAdd(CreateRegionToken(index, type, clippedLength, depth));
+
+			//if (length >= TokenDataNodeLengthMax)
+			//{
+			//    // add another tokens
+			//    TestAdd(length);
+			//}
 
 			if (length >= TokenDataNodeLengthMax)
 			{
@@ -326,15 +326,6 @@ namespace Snail
 		{
 			TestAdd(CreateAttrToken(index, qName, prefix, value));
 		}
-
-		//private void AddLength(long length)
-		//{
-		//    if (m_index == CHUNK_SIZE)
-		//        CreateChunk();
-
-		//    m_current[m_index] = length;
-		//    ++m_index;
-		//}
 
 		//public void AddWhitespace()
 		//{
