@@ -50,7 +50,7 @@ namespace Snail
 						while (p != pEnd && *p != '<')
 							++p;
 
-						tokens.AddRegion(pStart - pText, TokenType.Text, p - pStart, depth);
+						tokens.AddRegion(pStart - pText, TokenType.TextNormal, p - pStart, depth);
 					}
 					//else if (p != pStart)
 					//{
@@ -195,72 +195,72 @@ namespace Snail
 		public static unsafe DocumentNode BuildTree(string text, IEnumerable<long> tags)
 		{
 			var root = new DocumentNode();
-			ElementNode current = root;
-			fixed (char* pText = text)
-			{
-				foreach (var tag in tags)
-				{
-					// whitespace
-					if (tag == 0)
-						continue;
+			//ElementNode current = root;
+			//fixed (char* pText = text)
+			//{
+			//    foreach (var tag in tags)
+			//    {
+			//        // whitespace
+			//        if (tag == 0)
+			//            continue;
 
-					int index;
-					int length;
-					TokenType type;
-					ReadTagIndex(tag, out index, out length, out type);
+			//        int index;
+			//        int length;
+			//        TokenType type;
+			//        ReadTagIndex(tag, out index, out length, out type);
 
-					if (type == TokenType.Text)
-					{
-						var node = new TextNode(text.Substring(index, length));
-						current.AppendChild(node);
-					}
-					else if (type == TokenType.ClosingTag)
-					{
-						current = current.Parent;
-					}
-					else if (type == TokenType.OpeningTag)
-					{
-						bool isSelfClosingTag = (text[index + length - 2] == '/');
+			//        if (type == TokenType.Text)
+			//        {
+			//            var node = new TextNode(text.Substring(index, length));
+			//            current.AppendChild(node);
+			//        }
+			//        else if (type == TokenType.ClosingTag)
+			//        {
+			//            current = current.Parent;
+			//        }
+			//        else if (type == TokenType.OpeningTag)
+			//        {
+			//            bool isSelfClosingTag = (text[index + length - 2] == '/');
 
-						char* p = pText + index + 1;
-						char* pEnd = p + length - 2;
-						while (p != pEnd && !char.IsWhiteSpace(*p))
-							++p;
+			//            char* p = pText + index + 1;
+			//            char* pEnd = p + length - 2;
+			//            while (p != pEnd && !char.IsWhiteSpace(*p))
+			//                ++p;
 
-						int tagNameLength = (int)(p - (pText + index + 1));
-						string tagName = text.Substring(index + 1, tagNameLength);
-						var node = new ElementNode(tagName, isSelfClosingTag);
+			//            int tagNameLength = (int)(p - (pText + index + 1));
+			//            string tagName = text.Substring(index + 1, tagNameLength);
+			//            var node = new ElementNode(tagName, isSelfClosingTag);
 
-						int attributeStart = index + tagNameLength + 1;
-						ParseAttributesFromWellFormedXml(node, text, attributeStart, length - (attributeStart - index) - 1);
+			//            int attributeStart = index + tagNameLength + 1;
+			//            ParseAttributesFromWellFormedXml(node, text, attributeStart, length - (attributeStart - index) - 1);
 
-						current.AppendChild(node);
-						if (!isSelfClosingTag)
-						{
-							current = node;
-						}
-					}
-					else if (type == TokenType.Comment)
-					{
-						var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
-						current.AppendChild(node);
-					}
-					else if (type == TokenType.CDATA)
-					{
-						var node = new CDATASectionNode(text.SubstringTrim(index + 9, length - 12));
-						current.AppendChild(node);
-					}
-					else if (type == TokenType.Declaration)
-					{
-						//
-					}
-					else if (type == TokenType.Processing)
-					{
-						var node = new ProcessingInstructionNode(text.Substring(index, length));
-						current.AppendChild(node);
-					}
-				}
-			}
+			//            current.AppendChild(node);
+			//            if (!isSelfClosingTag)
+			//            {
+			//                current = node;
+			//            }
+			//        }
+			//        else if (type == TokenType.Comment)
+			//        {
+			//            var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
+			//            current.AppendChild(node);
+			//        }
+			//        else if (type == TokenType.CDATA)
+			//        {
+			//            var node = new CDATASectionNode(text.SubstringTrim(index + 9, length - 12));
+			//            current.AppendChild(node);
+			//        }
+			//        else if (type == TokenType.Declaration)
+			//        {
+			//            //
+			//        }
+			//        else if (type == TokenType.Processing)
+			//        {
+			//            var node = new ProcessingInstructionNode(text.Substring(index, length));
+			//            current.AppendChild(node);
+			//        }
+			//    }
+			//}
 
 			return root;
 		}

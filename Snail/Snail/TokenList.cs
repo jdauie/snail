@@ -6,39 +6,6 @@ using System.Text;
 
 namespace Snail
 {
-	public enum TokenType : byte
-	{
-		Text        = 0,
-		OpeningTag  = 1,
-		ClosingTag  = 2,
-
-		// special blocks
-		Comment     = 3,
-		CDATA       = 4,
-		Declaration = 5,
-		Processing  = 6, // currently, this includes "<?xml ...>"
-
-		Attr        = 7,
-		AttrNS      = 8,
-
-		Reserved09 = 9,
-		Reserved10 = 10,
-		Reserved11 = 11,
-		Reserved12 = 12,
-		Reserved13 = 13,
-		Reserved14 = 14,
-		Reserved15 = 15
-	}
-
-	//public const int TOKEN_PI_NAME = 7;
-	//public const int TOKEN_PI_VAL = 8;
-
-	//public const int TOKEN_DEC_ATTR_NAME = 9;
-	//public const int TOKEN_DEC_ATTR_VAL = 10;
-
-	//public const int TOKEN_DTD_VAL = 12;
-	//public const int TOKEN_DOCUMENT = 13;
-
 	/// <summary>
 	/// This can be better for massive files.
 	/// </summary>
@@ -103,17 +70,6 @@ namespace Snail
 
 				throw new ArgumentException("chunk out of range");
 			}
-		}
-
-		public Token CreateToken(long token)
-		{
-			//long index  = (token & MAX_INDEX);
-			//long length = ((token >> (BITS_INDEX)) & MAX_LENGTH);
-			//long depth  = ((token >> (BITS_INDEX + BITS_LENGTH)) & MAX_DEPTH);
-			//long type   = ((token >> (BITS_INDEX + BITS_LENGTH + BITS_DEPTH)) & MAX_TYPE);
-
-			//return new Token(this, (int)index, (int)length, (int)depth, (TokenType)type);
-			return new Token();
 		}
 
 		#region Token Bits
@@ -218,6 +174,32 @@ namespace Snail
 
 		#region Token Creators
 
+		public Token2 ConvertToken(long token)
+		{
+			long index = (token & TokenIndexMax);
+			var type = ((token >> TokenTypeShift) & TokenTypeMax);
+			var typeBasic = (TokenBasicType)(type & 3);
+
+			if (typeBasic == TokenBasicType.Text)
+			{
+
+			}
+			else if (typeBasic == TokenBasicType.Tag)
+			{
+
+			}
+			else if (typeBasic == TokenBasicType.Special)
+			{
+
+			}
+			else if (typeBasic == TokenBasicType.Attribute)
+			{
+
+			}
+
+			return new Token2();
+		}
+
 		private static long CreateTagToken(long index, long qName, long prefix, long depth)
 		{
 			return (index) | ((long)TokenType.OpeningTag << TokenTypeShift) | (qName << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (depth << TokenDataNodeDepthShift);
@@ -299,28 +281,28 @@ namespace Snail
 
 		#endregion
 
-		public List<int> Analyze()
-		{
-			var chunks = new List<long[]>(m_chunks);
-			if (m_index != 0)
-			{
-				var currentSlice = new long[m_index];
-				Array.Copy(m_current, currentSlice, m_index);
-				chunks.Add(currentSlice);
-			}
+		//public List<int> Analyze()
+		//{
+		//    var chunks = new List<long[]>(m_chunks);
+		//    if (m_index != 0)
+		//    {
+		//        var currentSlice = new long[m_index];
+		//        Array.Copy(m_current, currentSlice, m_index);
+		//        chunks.Add(currentSlice);
+		//    }
 
-			var chunkRanges = new List<int>();
+		//    var chunkRanges = new List<int>();
 
-			foreach (var chunk in chunks)
-			{
-				var firstToken = CreateToken(chunk[0]);
-				var lastToken = CreateToken(chunk[chunk.Length - 1]);
+		//    foreach (var chunk in chunks)
+		//    {
+		//        var firstToken = CreateToken(chunk[0]);
+		//        var lastToken = CreateToken(chunk[chunk.Length - 1]);
 
-				chunkRanges.Add(lastToken.Index - firstToken.Index);
-			}
+		//        chunkRanges.Add(lastToken.Index - firstToken.Index);
+		//    }
 
-			return chunkRanges;
-		}
+		//    return chunkRanges;
+		//}
 
 		private void CreateChunk()
 		{
