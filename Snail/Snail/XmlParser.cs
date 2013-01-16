@@ -160,7 +160,6 @@ namespace Snail
 			p = FindEndProcessing(p, pEnd);
 
 			tokens.AddProc(pStart - pText, 0, p - pStart + 1, depth);
-			//tokens.Add(pStart - pText, p - pStart + 1, depth, TokenType.Processing);
 
 			return p;
 		}
@@ -190,106 +189,6 @@ namespace Snail
 				++p;
 			p += 1;
 			return p;
-		}
-
-		public static unsafe DocumentNode BuildTree(string text, IEnumerable<long> tags)
-		{
-			var root = new DocumentNode();
-			//ElementNode current = root;
-			//fixed (char* pText = text)
-			//{
-			//    foreach (var tag in tags)
-			//    {
-			//        // whitespace
-			//        if (tag == 0)
-			//            continue;
-
-			//        int index;
-			//        int length;
-			//        TokenType type;
-			//        ReadTagIndex(tag, out index, out length, out type);
-
-			//        if (type == TokenType.Text)
-			//        {
-			//            var node = new TextNode(text.Substring(index, length));
-			//            current.AppendChild(node);
-			//        }
-			//        else if (type == TokenType.ClosingTag)
-			//        {
-			//            current = current.Parent;
-			//        }
-			//        else if (type == TokenType.OpeningTag)
-			//        {
-			//            bool isSelfClosingTag = (text[index + length - 2] == '/');
-
-			//            char* p = pText + index + 1;
-			//            char* pEnd = p + length - 2;
-			//            while (p != pEnd && !char.IsWhiteSpace(*p))
-			//                ++p;
-
-			//            int tagNameLength = (int)(p - (pText + index + 1));
-			//            string tagName = text.Substring(index + 1, tagNameLength);
-			//            var node = new ElementNode(tagName, isSelfClosingTag);
-
-			//            int attributeStart = index + tagNameLength + 1;
-			//            ParseAttributesFromWellFormedXml(node, text, attributeStart, length - (attributeStart - index) - 1);
-
-			//            current.AppendChild(node);
-			//            if (!isSelfClosingTag)
-			//            {
-			//                current = node;
-			//            }
-			//        }
-			//        else if (type == TokenType.Comment)
-			//        {
-			//            var node = new CommentNode(text.SubstringTrim(index + 4, length - 7));
-			//            current.AppendChild(node);
-			//        }
-			//        else if (type == TokenType.CDATA)
-			//        {
-			//            var node = new CDATASectionNode(text.SubstringTrim(index + 9, length - 12));
-			//            current.AppendChild(node);
-			//        }
-			//        else if (type == TokenType.Declaration)
-			//        {
-			//            //
-			//        }
-			//        else if (type == TokenType.Processing)
-			//        {
-			//            var node = new ProcessingInstructionNode(text.Substring(index, length));
-			//            current.AppendChild(node);
-			//        }
-			//    }
-			//}
-
-			return root;
-		}
-
-		private static void ParseAttributesFromWellFormedXml(ElementNode node, string text, int index, int length)
-		{
-			if (length <= 0)
-				return;
-
-			// THIS IS NOT FAST...IT'S JUST TO GET SOMETHING WORKING
-			int endIndex = index + length;
-			while (index < endIndex)
-			{
-				// get name before '='
-				int indexOfEquals = text.IndexOf('=', index, endIndex - index);
-				if (indexOfEquals == -1)
-					break;
-
-				string name = text.SubstringTrim(index, indexOfEquals - index);
-				index = indexOfEquals + 1;
-
-				// get value between quotes
-				int indexOfQuote1 = text.IndexOf('"', index);
-				int indexOfQuote2 = text.IndexOf('"', indexOfQuote1 + 1);
-				string value = text.Substring(indexOfQuote1 + 1, indexOfQuote2 - indexOfQuote1 - 1);
-				index = indexOfQuote2 + 1;
-
-				node.Attributes.Add(name, value);
-			}
 		}
 	}
 }
