@@ -31,10 +31,10 @@ namespace Snail.Cmd
 			var sw = (Stopwatch)obj[0];
 			var tokens = (TokenList)obj[1];
 
-			//var tokenList = new List<Token>();
+			//var tokenList = new List<TokenBase>();
 			//foreach (var token in tokens)
 			//{
-			//    tokenList.Add(tokens.CreateToken(token));
+			//    tokenList.Add(tokens.ConvertToken(token));
 			//}
 			//var result = tokens.Analyze();
 			//result.Add(0);
