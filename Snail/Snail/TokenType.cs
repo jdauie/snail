@@ -12,8 +12,8 @@ namespace Snail
 
 	public enum TokenTextType : byte
 	{
-		Normal     = 0,
-		WhiteSpace = 1,
+		WhiteSpace = 0,
+		Normal     = 1,
 	}
 
 	public enum TokenSpecialType : byte
@@ -26,13 +26,13 @@ namespace Snail
 
 	public enum TokenType : byte
 	{
-		TextNormal     = TokenBasicType.Text & (TokenTextType.Normal << 2),
 		TextWhiteSpace = TokenBasicType.Text & (TokenTextType.WhiteSpace << 2),
+		TextNormal     = TokenBasicType.Text & (TokenTextType.Normal << 2),
 		OpeningTag     = TokenBasicType.Tag,
 		Comment        = TokenBasicType.Special & (TokenSpecialType.Comment << 2),
 		CDATA          = TokenBasicType.Special & (TokenSpecialType.CDATA << 2),
 		Declaration    = TokenBasicType.Special & (TokenSpecialType.Declaration << 2),
 		Processing     = TokenBasicType.Special & (TokenSpecialType.Processing << 2),
-		Attr           = TokenBasicType.Attribute,
+		Attribute      = TokenBasicType.Attribute,
 	}
 }
