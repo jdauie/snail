@@ -271,7 +271,7 @@ namespace Snail
 			//// Precondition: INT_MIN <= (x - y) <= INT_MAX
 			//// min(length, TokenDataNodeLengthMax)
 			//// CHAR_BIT => 8
-			//long clippedLength = TokenDataNodeLengthMax + ((length - TokenDataNodeLengthMax) & ((length - TokenDataNodeLengthMax) >> (sizeof(int) * 8 - 1)));
+			//long clippedLength = TokenDataNodeLengthMax + ((length - TokenDataNodeLengthMax) & ((length - TokenDataNodeLengthMax) >> 63));
 			//Add(CreateRegionToken(index, type, clippedLength, depth));
 			//if (length >= TokenDataNodeLengthMax)
 			//{
