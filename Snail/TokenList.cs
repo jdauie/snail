@@ -174,30 +174,40 @@ namespace Snail
 
 		#region Token Creators
 
-		public Token2 ConvertToken(long token)
+		public TokenBase ConvertToken(long token)
 		{
-			long index = (token & TokenIndexMax);
+			var index = (token & TokenIndexMax);
 			var type = ((token >> TokenTypeShift) & TokenTypeMax);
 			var typeBasic = (TokenBasicType)(type & 3);
 
 			if (typeBasic == TokenBasicType.Text)
 			{
-
+				var length = ((token >> TokenDataNodeLengthShift) & TokenDataNodeLengthMax);
+				var depth = ((token >> TokenDataNodeDepthShift) & TokenDataNodeDepthMax);
+				return new TokenRegion(this, (int)index, (TokenType)type, (int)length, (byte)depth);
 			}
 			else if (typeBasic == TokenBasicType.Tag)
 			{
-
+				var qName = ((token >> TokenDataNodeQNameShift) & TokenDataNodeQNameMax);
+				var prefix = ((token >> TokenDataNodePrefixShift) & TokenDataNodePrefixMax);
+				var depth = ((token >> TokenDataNodeDepthShift) & TokenDataNodeDepthMax);
+				return new TokenTag(this, (int)index, (int)qName, (int)prefix, (byte)depth);
 			}
 			else if (typeBasic == TokenBasicType.Special)
 			{
+				// decl:   long index, long qName, long depth
 
+				// region: long index, TokenType type, long length, long depth
+				//         (comment, cdata)
+
+				// proc:   long index, long target, long content, long depth
 			}
 			else if (typeBasic == TokenBasicType.Attribute)
 			{
-
+				//long index, long qname, long prefix, long value
 			}
 
-			return new Token2();
+			return null;
 		}
 
 		private static long CreateTagToken(long index, long qName, long prefix, long depth)
@@ -222,7 +232,7 @@ namespace Snail
 
 		private static long CreateAttrToken(long index, long qname, long prefix, long value)
 		{
-			return (index) | ((long)TokenType.Attr << TokenTypeShift) | (qname << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (value << TokenDataAttrValueShift);
+			return (index) | ((long)TokenType.Attribute << TokenTypeShift) | (qname << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (value << TokenDataAttrValueShift);
 		}
 
 		#endregion

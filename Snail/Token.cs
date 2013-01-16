@@ -4,11 +4,6 @@ using System.Text;
 
 namespace Snail
 {
-	public interface IToken
-	{
-		int Index { get; }
-	}
-
 	/// <summary>
 	/// token    = [         64        ]
 	///          = [  30  ][  4  ][ 30 ]
@@ -32,22 +27,72 @@ namespace Snail
 	/// @2(text) = [  22  ]
 	///             length
 	/// </summary>
-	public struct Token2 : IToken
+	public interface IToken
+	{
+		int Index { get; }
+	}
+
+	public abstract class TokenBase : IToken
 	{
 		private readonly TokenList m_list;
 		private readonly int m_index;
 		private readonly TokenType m_type;
 
-		public Token2(TokenList list, int index, TokenType type)
+		protected TokenBase(TokenList list, int index, TokenType type)
 		{
 			m_list = list;
 			m_index = index;
 			m_type = type;
 		}
 
+		protected TokenList TokenList
+		{
+			get { return m_list; }
+		}
+
 		public int Index
 		{
 			get { return m_index; }
+		}
+
+		public abstract override string ToString();
+	}
+
+	public class TokenTag : TokenBase
+	{
+		private readonly int m_qName;
+		private readonly int m_prefix;
+		private readonly byte m_depth;
+
+		public TokenTag(TokenList list, int index, int qName, int prefix, byte depth)
+			: base(list, index, TokenType.OpeningTag)
+		{
+			m_qName = qName;
+			m_prefix = prefix;
+			m_depth = depth;
+		}
+
+		public override string ToString()
+		{
+			return TokenList.Text.SubstringTrim(Index + 1, m_qName);
+		}
+	}
+
+	public class TokenRegion : TokenBase
+	{
+		private readonly int m_length;
+		private readonly byte m_depth;
+
+		public TokenRegion(TokenList list, int index, TokenType type, int length, byte depth)
+			: base(list, index, type)
+		{
+			m_length = length;
+			m_depth = depth;
+		}
+
+		public override string ToString()
+		{
+			return TokenList.Text.SubstringTrim(Index, m_length);
 		}
 	}
 
