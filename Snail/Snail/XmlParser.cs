@@ -87,7 +87,7 @@ namespace Snail
 							else
 							{
 								//long length = (p - pStart + 1);
-								//tags.Add(pStart - pText, length, depth, TokenType.OpeningTag);
+								//tokens.AddTag(pStart - pText, length, 0, depth);
 
 
 								// QName format
@@ -95,23 +95,18 @@ namespace Snail
 
 								char* pFirstSymbol = pStart + 1;
 								char* pTmp = pFirstSymbol;
+								long namePrefixLength = 0;
+
 								while (pTmp != p && (*pTmp != ' ' && *pTmp != '\t' && *pTmp != '\r' && *pTmp != '\n'))
+								{
+									if (*pTmp == ':' && namePrefixLength == 0)
+										namePrefixLength = (pTmp - pFirstSymbol);
+
 									++pTmp;
-								char* pNameEnd = pTmp;
-
+								}
 								long length = pTmp - pFirstSymbol;
-								//long namePrefixLength = 0;
 
-								//pTmp = pStart + 1;
-								//while (pTmp != pNameEnd && *pTmp != ':')
-								//    ++pTmp;
-								//if (pTmp != pNameEnd)
-								//{
-								//    // prefix:qname
-								//    namePrefixLength = pTmp - (pStart + 1);
-								//}
-
-								tokens.AddTag(pFirstSymbol - pText, length, 0, depth);
+								tokens.AddTag(pFirstSymbol - pText, length, namePrefixLength, depth);
 
 								// check for self-closing
 								if ((*(p - 1) != '/'))
