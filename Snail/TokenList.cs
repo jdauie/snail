@@ -28,7 +28,7 @@ namespace Snail
 			m_index = 0;
 
 			// should this be lazy?
-			//m_depthIndex = new List<List<int>>(MAX_DEPTH);
+			//m_depthIndex = new List<List<int>>(TokenDataNodeDepthMax);
 			//for (int i = 0; i < MAX_DEPTH; i++)
 			//    m_depthIndex.Add(new List<int>());
 		}
@@ -271,6 +271,8 @@ namespace Snail
 			{
 				// add two tokens
 				Add(CreateRegionToken(index, type, TokenDataNodeLengthMax, depth));
+				// how common will this be?
+				// would it be better to use a seperate lookup table for the few massive regions?
 				Add(length);
 			}
 			else
