@@ -204,7 +204,10 @@ namespace Snail
 			}
 			else if (typeBasic == TokenBasicType.Attribute)
 			{
-				//long index, long qname, long prefix, long value
+				var qName = ((token >> TokenDataNodeQNameShift) & TokenDataNodeQNameMax);
+				var prefix = ((token >> TokenDataNodePrefixShift) & TokenDataNodePrefixMax);
+				var value = ((token >> TokenDataAttrValueShift) & TokenDataAttrValueMax);
+				return new TokenAttr(this, (int)index, (int)qName, (int)prefix, (int)value);
 			}
 
 			return null;

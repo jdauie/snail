@@ -95,4 +95,25 @@ namespace Snail
 			return TokenList.Text.SubstringTrim(Index, m_length);
 		}
 	}
+
+	public class TokenAttr : TokenBase
+	{
+		private readonly int m_qName;
+		private readonly int m_prefix;
+		private readonly int m_value;
+
+		public TokenAttr(TokenList list, int index, int qName, int prefix, int value)
+			: base(list, index, TokenType.Attribute)
+		{
+			m_qName = qName;
+			m_prefix = prefix;
+			m_value = value;
+		}
+
+		public override string ToString()
+		{
+			// currently, does not include value index
+			return TokenList.Text.SubstringTrim(Index, m_qName);
+		}
+	}
 }
