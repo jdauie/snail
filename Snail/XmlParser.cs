@@ -111,6 +111,41 @@ namespace Snail
 								// check for self-closing
 								if ((*(p - 1) != '/'))
 									++depth;
+
+								// attributes
+								while (pTmp != p)
+								{
+									// skip whitespace
+									while (pTmp != p && (*pTmp == ' ' || *pTmp == '\t' || *pTmp == '\r' || *pTmp == '\n'))
+										++pTmp;
+									
+									// (find the best way to avoid the end of self-closing tags)
+									if (pTmp != p && *pTmp != '/')
+									{
+										char* attrNameStart = pTmp;
+
+										// read until "="
+										while (*pTmp != '=')
+											++pTmp;
+										long attrNameLength = pTmp - attrNameStart;
+
+										// find quote
+										while (*pTmp != '"' && *pTmp != '\'')
+											++pTmp;
+										char quote = *pTmp;
+										++pTmp;
+										char* attrValStart = pTmp;
+
+										// find matching quote
+										while (*pTmp != quote)
+											++pTmp;
+										long attrValLength = pTmp - attrValStart;
+
+										tokens.AddAttr(attrNameStart - pText, attrNameLength, 0, attrValLength);
+									}
+
+									++pTmp;
+								}
 							}
 						}
 					}
