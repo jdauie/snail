@@ -5,19 +5,43 @@ using System.Text;
 namespace Snail
 {
 	/// <summary>
-	/// [ 30 ][ 4 ][ 22 ][ 8 ]
-	///   \     \    \     \_ _ depth
-	///    \     \    \ _ _ _ _ 
-	///     \     \ _ _ _ _ _ _ type
-	///      \_ _ _ _ _ _ _ _ _ index
-	/// </summary>
-	
-	/// <summary>
-	///          [ 30 ][ 4 ][ 22 ][ 8 ]
-	/// {index} _ /     /    /     /
-	/// { type} _ _ _ _/    /     /
-	/// {     } _ _ _ _ _ _/     /
-	/// {depth} _ _ _ _ _ _ _ _ /
+	/// Tag (opening tag only)
+	/// *2 bits reserved for possible namespace flag
+	/// 
+	///             [ 30 ][ 4 ][ 11 ][ 9 ][ 2 ][ 8 ]
+	/// { index   } __/    /     /    /    /    /
+	/// { type    } ______/     /    /    /    /
+	/// { qname   } ___________/    /    /    /
+	/// { prefix  } _______________/    /    /
+	/// { ?       } ___________________/    /
+	/// { depth   } _______________________/
+	///
+	/// Declaration (DOCTYPE, ELEMENT, ENTITY, ATTLIST)
+	/// *Inline (nested) DTD parsing not yet supported.
+	/// 
+	///             [ 30 ][ 4 ][ 9 ][ 13 ][ 8 ]
+	/// { index   } __/    /    /     /    /
+	/// { type    } ______/    /     /    /
+	/// { name    } __________/     /    /
+	/// { length  } _______________/    /
+	/// { depth   } ___________________/
+	///
+	/// Processing Instruction
+	/// 
+	///             [ 30 ][ 4 ][ 9 ][ 13 ][ 8 ]
+	/// { index   } __/    /    /     /    /
+	/// { type    } ______/    /     /    /
+	/// { target  } __________/     /    /
+	/// { content } _______________/    /
+	/// { depth   } ___________________/
+	///
+	/// Comment, CDATA, Text
+	/// 
+	///             [ 30 ][ 4 ][ 22 ][ 8 ]
+	/// { index   } __/    /     /    /
+	/// { type    } ______/     /    /
+	/// { length  } ___________/    /
+	/// { depth   } _______________/
 	/// </summary>
 
 	/// <summary>
