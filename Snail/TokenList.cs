@@ -76,11 +76,11 @@ namespace Snail
 
 		/// <summary>
 		/// token    = [         64        ]
-		///          = [  30  ][  4  ][ 30 ]
-		///             index   type   @1
+		///          = [  4  ][  30  ][ 30 ]
+		///             type   index   @1
 		/// </summary>
-		public const int TokenIndexBits           = 30;
 		public const int TokenTypeBits            = 4;
+		public const int TokenIndexBits           = 30;
 		public const int TokenDataBits            = 30;
 
 		/// <summary>
@@ -149,9 +149,9 @@ namespace Snail
 		#endregion
 
 		#region Token Shifts
-
-		public const int TokenIndexShift           = 0; // NOT NECESSARY
-		public const int TokenTypeShift            = TokenIndexShift + TokenIndexBits;
+		
+		public const int TokenTypeShift            = 0; // NOT NECESSARY
+		public const int TokenIndexShift           = TokenTypeShift + TokenTypeBits;
 		public const int TokenDataShift            = TokenTypeShift + TokenTypeBits;
 
 		public const int TokenDataAttrQNameShift   = TokenDataShift;
@@ -176,10 +176,12 @@ namespace Snail
 
 		public TokenBase ConvertToken(long token)
 		{
-			var index = (token & TokenIndexMax);
 			var type = ((token >> TokenTypeShift) & TokenTypeMax);
 			var typeBasic = (TokenBasicType)(type & 3);
 
+			// not valid for attributes
+			var index = (token >> TokenIndexShift & TokenIndexMax);
+			
 			if (typeBasic == TokenBasicType.Text)
 			{
 				var length = ((token >> TokenDataNodeLengthShift) & TokenDataNodeLengthMax);

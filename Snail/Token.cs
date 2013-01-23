@@ -8,9 +8,9 @@ namespace Snail
 	/// Tag (opening tag only)
 	/// *2 bits reserved for possible namespace flag
 	/// 
-	///             [ 30 ][ 4 ][ 11 ][ 9 ][ 2 ][ 8 ]
-	/// { index   } __/    /     /    /    /    /
-	/// { type    } ______/     /    /    /    /
+	///             [ 4 ][ 30 ][ 11 ][ 9 ][ 2 ][ 8 ]
+	/// { type    } _/     /     /    /    /    /
+	/// { index   } ______/     /    /    /    /
 	/// { qname   } ___________/    /    /    /
 	/// { prefix  } _______________/    /    /
 	/// { ?       } ___________________/    /
@@ -19,27 +19,27 @@ namespace Snail
 	/// Declaration (DOCTYPE, ELEMENT, ENTITY, ATTLIST)
 	/// *Inline (nested) DTD parsing not yet supported.
 	/// 
-	///             [ 30 ][ 4 ][ 9 ][ 13 ][ 8 ]
-	/// { index   } __/    /    /     /    /
-	/// { type    } ______/    /     /    /
+	///             [ 4 ][ 30 ][ 9 ][ 13 ][ 8 ]
+	/// { type    } _/     /    /     /    /
+	/// { index   } ______/    /     /    /
 	/// { name    } __________/     /    /
 	/// { length  } _______________/    /
 	/// { depth   } ___________________/
 	///
 	/// Processing Instruction
 	/// 
-	///             [ 30 ][ 4 ][ 9 ][ 13 ][ 8 ]
-	/// { index   } __/    /    /     /    /
-	/// { type    } ______/    /     /    /
+	///             [ 4 ][ 30 ][ 9 ][ 13 ][ 8 ]
+	/// { type    } _/     /    /     /    /
+	/// { index   } ______/    /     /    /
 	/// { target  } __________/     /    /
 	/// { content } _______________/    /
 	/// { depth   } ___________________/
 	///
 	/// Comment, CDATA, Text
 	/// 
-	///             [ 30 ][ 4 ][ 22 ][ 8 ]
-	/// { index   } __/    /     /    /
-	/// { type    } ______/     /    /
+	///             [ 4 ][ 30 ][ 22 ][ 8 ]
+	/// { type    } _/     /     /    /
+	/// { index   } ______/     /    /
 	/// { length  } ___________/    /
 	/// { depth   } _______________/
 	/// </summary>
