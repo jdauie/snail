@@ -1,10 +1,19 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 
 namespace Snail
 {
 	/// <summary>
+	/// Attribute
+	/// *Offset is from tag start.
+	/// 
+	///             [ 4 ][ 14 ][ 11 ][ 9 ][ 10 ][ 16 ]
+	/// { type    } _/     /     /    /     /     /
+	/// { offset  } ______/     /    /     /     /
+	/// { qname   } ___________/    /     /     /
+	/// { prefix  } _______________/     /     /
+	/// { val_jmp } ____________________/     /
+	/// { val_len } _________________________/
+	/// 
 	/// Tag (opening tag only)
 	/// *2 bits reserved for possible namespace flag
 	/// 
@@ -49,6 +58,7 @@ namespace Snail
 	///          = [  30  ][  4  ][ 30 ]
 	///             index   type   @1
 	/// 
+	/// **OBSOLETE**
 	/// @1(attr) = [  11  ][   9   ][  10  ]
 	///             qname   prefix   value
 	/// 
