@@ -5,6 +5,14 @@ using System.Text;
 namespace Snail
 {
 	/// <summary>
+	/// [ 30 ][ 4 ][ 22 ][ 8 ]
+	///   \     \    \     \_ _ depth
+	///    \     \    \ _ _ _ _ 
+	///     \     \ _ _ _ _ _ _ type
+	///      \_ _ _ _ _ _ _ _ _ index
+	/// </summary>
+	
+	/// <summary>
 	/// token    = [         64        ]
 	///          = [  30  ][  4  ][ 30 ]
 	///             index   type   @1
