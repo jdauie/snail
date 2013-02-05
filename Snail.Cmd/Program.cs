@@ -31,7 +31,7 @@ namespace Snail.Cmd
 			var sw = (Stopwatch)obj[0];
 			var tokens = (TokenList)obj[1];
 
-			//var tokenList = tokens.ToList();
+			var tokenList = tokens.ToList();
 			//var result = tokens.Analyze();
 			//result.Add(0);
 

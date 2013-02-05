@@ -131,7 +131,7 @@ namespace Snail
 		public const int TokenIndexShift           = TokenTypeShift + TokenTypeBits;
 		public const int TokenDataShift            = TokenIndexShift + TokenIndexBits;
 
-		public const int TokenAttrOffsetShift      = TokenTypeShift;
+		public const int TokenAttrOffsetShift      = TokenTypeShift + TokenTypeBits;
 		public const int TokenAttrQNameShift       = TokenAttrOffsetShift + TokenAttrOffsetBits;
 		public const int TokenAttrPrefixShift      = TokenAttrQNameShift + TokenAttrQNameBits;
 		public const int TokenAttrValueOffsetShift = TokenAttrPrefixShift + TokenAttrPrefixBits;
@@ -153,7 +153,7 @@ namespace Snail
 
 		#region Token Creators
 
-		public TokenBase ConvertToken(long token)
+		private TokenBase ConvertToken(long token, long indexOffset = 0)
 		{
 			var type = ((token >> TokenTypeShift) & TokenTypeMax);
 			var typeBasic = (TokenBasicType)(type & 3);
@@ -188,14 +188,12 @@ namespace Snail
 			
 			if (typeBasic == TokenBasicType.Attribute)
 			{
-				return null;
-#warning offset is from index of last tag
 				var offset = ((token >> TokenAttrOffsetShift) & TokenAttrOffsetMax);
 				var qName  = ((token >> TokenAttrQNameShift) & TokenAttrQNameMax);
 				var prefix = ((token >> TokenAttrPrefixShift) & TokenAttrPrefixMax);
 				var valJmp = ((token >> TokenAttrValueOffsetShift) & TokenAttrValueOffsetMax);
 				var valLen = ((token >> TokenAttrValueLengthShift) & TokenAttrValueLengthMax);
-				return new TokenAttr(this, (int)offset, (int)qName, (int)prefix, (int)valJmp, (int)valLen);
+				return new TokenAttr(this, (int)(indexOffset + offset), (int)qName, (int)prefix, (int)valJmp, (int)valLen);
 			}
 
 			return null;
@@ -350,11 +348,23 @@ namespace Snail
 
 		public IEnumerator<TokenBase> GetEnumerator()
 		{
+			long lastTagIndex = 0;
 			foreach (var token in GetEnumeratorInternal())
 			{
 				var t = ConvertToken(token);
 				if (t != null)
-					yield return ConvertToken(token);
+				{
+					var attr = t as TokenAttr;
+					if (attr != null)
+					{
+						t = ConvertToken(token, lastTagIndex);
+					}
+					else if (t is TokenTag)
+					{
+						lastTagIndex = t.Index;
+					}
+					yield return t;
+				}
 			}
 		}
 
