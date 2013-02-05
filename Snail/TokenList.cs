@@ -9,7 +9,7 @@ namespace Snail
 	/// <summary>
 	/// This can be better for massive files.
 	/// </summary>
-	public class TokenList : IEnumerable<long>
+	public class TokenList : IEnumerable<TokenBase> // : IEnumerable<long>
 	{
 		private const int CHUNK_SIZE = (1 << 20) / sizeof(long);
 
@@ -129,7 +129,7 @@ namespace Snail
 		
 		public const int TokenTypeShift            = 0; // NOT NECESSARY
 		public const int TokenIndexShift           = TokenTypeShift + TokenTypeBits;
-		public const int TokenDataShift            = TokenTypeShift + TokenTypeBits;
+		public const int TokenDataShift            = TokenIndexShift + TokenIndexBits;
 
 		public const int TokenAttrOffsetShift      = TokenTypeShift;
 		public const int TokenAttrQNameShift       = TokenAttrOffsetShift + TokenAttrOffsetBits;
@@ -160,7 +160,7 @@ namespace Snail
 			
 			if (typeBasic == TokenBasicType.Text)
 			{
-				var index  = (token >> TokenIndexShift & TokenIndexMax);
+				var index  = ((token >> TokenIndexShift) & TokenIndexMax);
 				var length = ((token >> TokenDataNodeLengthShift) & TokenDataNodeLengthMax);
 				var depth  = ((token >> TokenDataNodeDepthShift) & TokenDataNodeDepthMax);
 				return new TokenRegion(this, (int)index, (TokenType)type, (int)length, (byte)depth);
@@ -168,7 +168,7 @@ namespace Snail
 			
 			if (typeBasic == TokenBasicType.Tag)
 			{
-				var index  = (token >> TokenIndexShift & TokenIndexMax);
+				var index  = ((token >> TokenIndexShift) & TokenIndexMax);
 				var qName  = ((token >> TokenDataNodeQNameShift) & TokenDataNodeQNameMax);
 				var prefix = ((token >> TokenDataNodePrefixShift) & TokenDataNodePrefixMax);
 				var depth  = ((token >> TokenDataNodeDepthShift) & TokenDataNodeDepthMax);
@@ -188,12 +188,14 @@ namespace Snail
 			
 			if (typeBasic == TokenBasicType.Attribute)
 			{
+				return null;
+#warning offset is from index of last tag
 				var offset = ((token >> TokenAttrOffsetShift) & TokenAttrOffsetMax);
 				var qName  = ((token >> TokenAttrQNameShift) & TokenAttrQNameMax);
 				var prefix = ((token >> TokenAttrPrefixShift) & TokenAttrPrefixMax);
 				var valJmp = ((token >> TokenAttrValueOffsetShift) & TokenAttrValueOffsetMax);
 				var valLen = ((token >> TokenAttrValueLengthShift) & TokenAttrValueLengthMax);
-				return new TokenAttr(this, (int)0, (int)qName, (int)prefix, (int)valJmp, (int)valLen);
+				return new TokenAttr(this, (int)offset, (int)qName, (int)prefix, (int)valJmp, (int)valLen);
 			}
 
 			return null;
@@ -331,9 +333,7 @@ namespace Snail
 			m_index = 0;
 		}
 
-		#region IEnumerable Members
-
-		public IEnumerator<long> GetEnumerator()
+		private IEnumerable<long> GetEnumeratorInternal()
 		{
 			foreach (var chunk in m_chunks)
 				foreach (var tag in chunk)
@@ -343,6 +343,18 @@ namespace Snail
 			{
 				for (int i = 0; i < m_index; i++)
 					yield return m_current[i];
+			}
+		}
+
+		#region IEnumerable Members
+
+		public IEnumerator<TokenBase> GetEnumerator()
+		{
+			foreach (var token in GetEnumeratorInternal())
+			{
+				var t = ConvertToken(token);
+				if (t != null)
+					yield return ConvertToken(token);
 			}
 		}
 
