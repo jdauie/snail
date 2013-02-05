@@ -113,39 +113,7 @@ namespace Snail
 									++depth;
 
 								// attributes
-								while (pTmp != p)
-								{
-									// skip whitespace
-									while (pTmp != p && (*pTmp == ' ' || *pTmp == '\t' || *pTmp == '\r' || *pTmp == '\n'))
-										++pTmp;
-									
-									// (find the best way to avoid the end of self-closing tags)
-									if (pTmp != p && *pTmp != '/')
-									{
-										char* attrNameStart = pTmp;
-
-										// read until "="
-										while (*pTmp != '=')
-											++pTmp;
-										long attrNameLength = pTmp - attrNameStart;
-
-										// find quote
-										while (*pTmp != '"' && *pTmp != '\'')
-											++pTmp;
-										char quote = *pTmp;
-										++pTmp;
-										char* attrValStart = pTmp;
-
-										// find matching quote
-										while (*pTmp != quote)
-											++pTmp;
-										long attrValLength = pTmp - attrValStart;
-
-										tokens.AddAttr(attrNameStart - pText, attrNameLength, 0, attrValLength);
-									}
-
-									++pTmp;
-								}
+								ParseAttributes(pText, pTmp, p, tokens);
 							}
 						}
 					}
@@ -158,6 +126,43 @@ namespace Snail
 				throw new Exception("bad depth");
 
 			return tokens;
+		}
+
+		private static unsafe void ParseAttributes(char* pText, char* p, char* pEnd, TokenList tokens)
+		{
+			while (p != pEnd)
+			{
+				// skip whitespace
+				while (p != pEnd && (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n'))
+					++p;
+
+				// (find the best way to avoid the end of self-closing tags)
+				if (p != pEnd && *p != '/')
+				{
+					char* attrNameStart = p;
+
+					// read until "="
+					while (*p != '=')
+						++p;
+					long attrNameLength = p - attrNameStart;
+
+					// find quote
+					while (*p != '"' && *p != '\'')
+						++p;
+					char quote = *p;
+					++p;
+					char* attrValStart = p;
+
+					// find matching quote
+					while (*p != quote)
+						++p;
+					long attrValLength = p - attrValStart;
+
+					tokens.AddAttr(attrNameStart - pText, attrNameLength, 0, attrValLength);
+				}
+
+				++p;
+			}
 		}
 
 		private static unsafe char* HandleExclamationPoint(char* pText, char* pStart, char* pEnd, long depth, TokenList tokens)
