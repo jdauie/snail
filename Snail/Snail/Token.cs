@@ -165,7 +165,7 @@ namespace Snail
 		public override string ToString()
 		{
 			// currently, does not include value index
-			return TokenList.Text.SubstringTrim(Index, m_qName);
+			return string.Format("{0}=\"{1}\"", TokenList.Text.SubstringTrim(Index, m_qName), TokenList.Text.SubstringTrim(Index + m_valueOffset, m_valueLength));
 		}
 	}
 }
