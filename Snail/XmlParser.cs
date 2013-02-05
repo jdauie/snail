@@ -113,7 +113,7 @@ namespace Snail
 									++depth;
 
 								// attributes
-								ParseAttributes(pText, pTmp, p, tokens);
+								ParseAttributes(pFirstSymbol, pTmp, p, tokens);
 							}
 						}
 					}
@@ -128,16 +128,19 @@ namespace Snail
 			return tokens;
 		}
 
-		private static unsafe void ParseAttributes(char* pText, char* p, char* pEnd, TokenList tokens)
+		private static unsafe void ParseAttributes(char* pFirstSymbol, char* p, char* pEnd, TokenList tokens)
 		{
+			// avoid the end of self-closing tags
+			if (*(pEnd - 1) == '/')
+				--pEnd;
+
 			while (p != pEnd)
 			{
 				// skip whitespace
 				while (p != pEnd && (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n'))
 					++p;
 
-				// (find the best way to avoid the end of self-closing tags)
-				if (p != pEnd && *p != '/')
+				if (p != pEnd)
 				{
 					char* attrNameStart = p;
 
@@ -158,10 +161,10 @@ namespace Snail
 						++p;
 					long attrValLength = p - attrValStart;
 
-					tokens.AddAttr(attrNameStart - pText, attrNameLength, 0, attrValLength);
-				}
+					tokens.AddAttr(attrNameStart - pFirstSymbol, attrNameLength, 0, attrValStart - attrNameStart, attrValLength);
 
-				++p;
+					++p;
+				}
 			}
 		}
 

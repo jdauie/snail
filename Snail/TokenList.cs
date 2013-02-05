@@ -74,65 +74,42 @@ namespace Snail
 
 		#region Token Bits
 
-		/// <summary>
-		/// token    = [         64        ]
-		///          = [  4  ][  30  ][ 30 ]
-		///             type   index   @1
-		/// </summary>
+		/// <summary>Type is common to all token formats, including attributes.</summary>
 		public const int TokenTypeBits            = 4;
 		public const int TokenIndexBits           = 30;
 		public const int TokenDataBits            = 30;
 
-		/// <summary>
-		/// @1(attr) = [  11  ][   9   ][  10  ]
-		///             qname   prefix   value
-		/// </summary>
-		public const int TokenDataAttrQNameBits   = 11;
-		public const int TokenDataAttrPrefixBits  = 9;
-		public const int TokenDataAttrValueBits   = 10;
+		public const int TokenAttrOffsetBits      = 14;
+		public const int TokenAttrQNameBits       = 11;
+		public const int TokenAttrPrefixBits      = 9;
+		public const int TokenAttrValueOffsetBits = 10;
+		public const int TokenAttrValueLengthBits = 16;
 
-		/// <summary>
-		/// @1(node) = [ 22 ][  8  ]
-		///             @2   depth
-		/// </summary>
 		public const int TokenDataNodeBits        = 22;
 		public const int TokenDataNodeDepthBits   = 8;
 
-		/// <summary>
-		/// @2(decl),
-		/// @2(tag)  = [  11  ][   9   ][  2  ]
-		///             qname   prefix    ?
-		/// </summary>
 		public const int TokenDataNodeQNameBits   = 11;
 		public const int TokenDataNodePrefixBits  = 9;
 		public const int TokenDataNodeOtherBits   = 2;
 
-		/// <summary>
-		/// @2(proc) = [  9  ][   13   ]
-		///             target  content
-		/// </summary>
 		public const int TokenDataNodeTargetBits  = 9;
 		public const int TokenDataNodeContentBits = 13;
 
-		/// <summary>
-		/// @2(comment),
-		/// @2(cdata),
-		/// @2(text) = [  22  ]
-		///             length
-		/// </summary>
 		public const int TokenDataNodeLengthBits  = 22;
 
 		#endregion
 
 		#region Token Max Values (post-shift masks)
-
-		public const int TokenIndexMax           = (1 << TokenIndexBits) - 1;
+		
 		public const int TokenTypeMax            = (1 << TokenTypeBits) - 1;
+		public const int TokenIndexMax           = (1 << TokenIndexBits) - 1;
 		public const int TokenDataMax            = (1 << TokenDataBits) - 1;
 
-		public const int TokenDataAttrQNameMax   = (1 << TokenDataAttrQNameBits) - 1;
-		public const int TokenDataAttrPrefixMax  = (1 << TokenDataAttrPrefixBits) - 1;
-		public const int TokenDataAttrValueMax   = (1 << TokenDataAttrValueBits) - 1;
+		public const int TokenAttrOffsetMax      = (1 << TokenAttrOffsetBits) - 1;
+		public const int TokenAttrQNameMax       = (1 << TokenAttrQNameBits) - 1;
+		public const int TokenAttrPrefixMax      = (1 << TokenAttrPrefixBits) - 1;
+		public const int TokenAttrValueOffsetMax = (1 << TokenAttrValueOffsetBits) - 1;
+		public const int TokenAttrValueLengthMax = (1 << TokenAttrValueLengthBits) - 1;
 
 		public const int TokenDataNodeMax        = (1 << TokenDataNodeBits) - 1;
 		public const int TokenDataNodeDepthMax   = (1 << TokenDataNodeDepthBits) - 1;
@@ -154,9 +131,11 @@ namespace Snail
 		public const int TokenIndexShift           = TokenTypeShift + TokenTypeBits;
 		public const int TokenDataShift            = TokenTypeShift + TokenTypeBits;
 
-		public const int TokenDataAttrQNameShift   = TokenDataShift;
-		public const int TokenDataAttrPrefixShift  = TokenDataAttrQNameShift + TokenDataAttrQNameBits;
-		public const int TokenDataAttrValueShift   = TokenDataAttrPrefixShift + TokenDataAttrPrefixBits;
+		public const int TokenAttrOffsetShift      = TokenTypeShift;
+		public const int TokenAttrQNameShift       = TokenAttrOffsetShift + TokenAttrOffsetBits;
+		public const int TokenAttrPrefixShift      = TokenAttrQNameShift + TokenAttrQNameBits;
+		public const int TokenAttrValueOffsetShift = TokenAttrPrefixShift + TokenAttrPrefixBits;
+		public const int TokenAttrValueLengthShift = TokenAttrValueOffsetShift + TokenAttrValueOffsetBits;
 
 		public const int TokenDataNodeShift        = TokenDataShift;
 		public const int TokenDataNodeDepthShift   = TokenDataNodeShift + TokenDataNodeBits;
@@ -178,24 +157,25 @@ namespace Snail
 		{
 			var type = ((token >> TokenTypeShift) & TokenTypeMax);
 			var typeBasic = (TokenBasicType)(type & 3);
-
-			// not valid for attributes
-			var index = (token >> TokenIndexShift & TokenIndexMax);
 			
 			if (typeBasic == TokenBasicType.Text)
 			{
+				var index  = (token >> TokenIndexShift & TokenIndexMax);
 				var length = ((token >> TokenDataNodeLengthShift) & TokenDataNodeLengthMax);
-				var depth = ((token >> TokenDataNodeDepthShift) & TokenDataNodeDepthMax);
+				var depth  = ((token >> TokenDataNodeDepthShift) & TokenDataNodeDepthMax);
 				return new TokenRegion(this, (int)index, (TokenType)type, (int)length, (byte)depth);
 			}
-			else if (typeBasic == TokenBasicType.Tag)
+			
+			if (typeBasic == TokenBasicType.Tag)
 			{
-				var qName = ((token >> TokenDataNodeQNameShift) & TokenDataNodeQNameMax);
+				var index  = (token >> TokenIndexShift & TokenIndexMax);
+				var qName  = ((token >> TokenDataNodeQNameShift) & TokenDataNodeQNameMax);
 				var prefix = ((token >> TokenDataNodePrefixShift) & TokenDataNodePrefixMax);
-				var depth = ((token >> TokenDataNodeDepthShift) & TokenDataNodeDepthMax);
+				var depth  = ((token >> TokenDataNodeDepthShift) & TokenDataNodeDepthMax);
 				return new TokenTag(this, (int)index, (int)qName, (int)prefix, (byte)depth);
 			}
-			else if (typeBasic == TokenBasicType.Special)
+			
+			if (typeBasic == TokenBasicType.Special)
 			{
 				// decl:   long index, long qName, long depth
 
@@ -203,13 +183,17 @@ namespace Snail
 				//         (comment, cdata)
 
 				// proc:   long index, long target, long content, long depth
+				return null;
 			}
-			else if (typeBasic == TokenBasicType.Attribute)
+			
+			if (typeBasic == TokenBasicType.Attribute)
 			{
-				var qName = ((token >> TokenDataNodeQNameShift) & TokenDataNodeQNameMax);
-				var prefix = ((token >> TokenDataNodePrefixShift) & TokenDataNodePrefixMax);
-				var value = ((token >> TokenDataAttrValueShift) & TokenDataAttrValueMax);
-				return new TokenAttr(this, (int)index, (int)qName, (int)prefix, (int)value);
+				var offset = ((token >> TokenAttrOffsetShift) & TokenAttrOffsetMax);
+				var qName  = ((token >> TokenAttrQNameShift) & TokenAttrQNameMax);
+				var prefix = ((token >> TokenAttrPrefixShift) & TokenAttrPrefixMax);
+				var valJmp = ((token >> TokenAttrValueOffsetShift) & TokenAttrValueOffsetMax);
+				var valLen = ((token >> TokenAttrValueLengthShift) & TokenAttrValueLengthMax);
+				return new TokenAttr(this, (int)0, (int)qName, (int)prefix, (int)valJmp, (int)valLen);
 			}
 
 			return null;
@@ -217,27 +201,46 @@ namespace Snail
 
 		private static long CreateTagToken(long index, long qName, long prefix, long depth)
 		{
-			return (index) | ((long)TokenType.OpeningTag << TokenTypeShift) | (qName << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (depth << TokenDataNodeDepthShift);
+			return ((long)TokenType.OpeningTag) |
+				(index   << TokenIndexShift) |
+				(qName   << TokenDataNodeQNameShift) |
+				(prefix  << TokenDataNodePrefixShift) |
+				(depth   << TokenDataNodeDepthShift);
 		}
 
 		private static long CreateDeclToken(long index, long qName, long depth)
 		{
-			return (index) | ((long)TokenType.Declaration << TokenTypeShift) | (qName << TokenDataNodeQNameShift) | (depth << TokenDataNodeDepthShift);
+			return ((long)TokenType.Declaration) |
+				(index   << TokenIndexShift) |
+				(qName   << TokenDataNodeQNameShift) |
+				(depth   << TokenDataNodeDepthShift);
 		}
 
 		private static long CreateRegionToken(long index, TokenType type, long length, long depth)
 		{
-			return (index) | ((long)type << TokenTypeShift) | (length << TokenDataNodeLengthShift) | (depth << TokenDataNodeDepthShift);
+			return ((long)type << TokenTypeShift) |
+				(index   << TokenIndexShift) |
+				(length  << TokenDataNodeLengthShift) |
+				(depth   << TokenDataNodeDepthShift);
 		}
 
 		private static long CreateProcToken(long index, long target, long content, long depth)
 		{
-			return (index) | ((long)TokenType.Processing << TokenTypeShift) | (target << TokenDataNodeTargetShift) | (content | TokenDataNodeContentShift) | (depth << TokenDataNodeDepthShift);
+			return ((long)TokenType.Processing) |
+				(index   << TokenIndexShift) |
+				(target  << TokenDataNodeTargetShift) |
+				(content << TokenDataNodeContentShift) |
+				(depth   << TokenDataNodeDepthShift);
 		}
 
-		private static long CreateAttrToken(long index, long qname, long prefix, long value)
+		private static long CreateAttrToken(long offset, long qname, long prefix, long valJmp, long valLen)
 		{
-			return (index) | ((long)TokenType.Attribute << TokenTypeShift) | (qname << TokenDataNodeQNameShift) | (prefix << TokenDataNodePrefixShift) | (value << TokenDataAttrValueShift);
+			return ((long)TokenType.Attribute) |
+				(offset  << TokenAttrOffsetShift) |
+				(qname   << TokenAttrQNameShift) |
+				(prefix  << TokenAttrPrefixShift) |
+				(valJmp  << TokenAttrValueOffsetShift) |
+				(valLen  << TokenAttrValueLengthShift);
 		}
 
 		#endregion
@@ -291,9 +294,9 @@ namespace Snail
 			Add(CreateProcToken(index, target, content, depth));
 		}
 
-		public void AddAttr(long index, long qName, long prefix, long value)
+		public void AddAttr(long index, long qName, long prefix, long valueOffset, long valueLength)
 		{
-			Add(CreateAttrToken(index, qName, prefix, value));
+			Add(CreateAttrToken(index, qName, prefix, valueOffset, valueLength));
 		}
 
 		#endregion

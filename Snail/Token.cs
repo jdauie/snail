@@ -150,14 +150,16 @@ namespace Snail
 	{
 		private readonly int m_qName;
 		private readonly int m_prefix;
-		private readonly int m_value;
+		private readonly int m_valueOffset;
+		private readonly int m_valueLength;
 
-		public TokenAttr(TokenList list, int index, int qName, int prefix, int value)
+		public TokenAttr(TokenList list, int index, int qName, int prefix, int valueOffset, int valueLength)
 			: base(list, index, TokenType.Attribute)
 		{
 			m_qName = qName;
 			m_prefix = prefix;
-			m_value = value;
+			m_valueOffset = valueOffset;
+			m_valueLength = valueLength;
 		}
 
 		public override string ToString()
