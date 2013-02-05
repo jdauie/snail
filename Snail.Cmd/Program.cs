@@ -17,7 +17,7 @@ namespace Snail.Cmd
 			//testFile = @"..\Snail.Test\xmark\standard.xml";
 			//testFile = @"..\Snail.Test\pugixml-benchmark-data\house.dae";
 			//testFile = @"..\Snail.Test\pugixml-benchmark-data\terrover.xml";
-			//testFile = @"..\Snail.Test\afe\Precompaction_Lrn.shp.afe";
+			//testFile = @"..\Snail.Test\afe\Postcompaction_Lrn.shp.afe";
 
 			string text = File.ReadAllText(testFile);
 
@@ -28,20 +28,18 @@ namespace Snail.Cmd
 			GC.Collect();
 
 			var obj = ParseTime(text);
-			var sw = (Stopwatch)obj[0];
-			var tokens = (TokenList)obj[1];
+			var sw = obj[0] as Stopwatch;
+			var tokens = obj[1] as TokenList;
 
 			//var tokenList = tokens.ToList();
 			//var result = tokens.Analyze();
 			//result.Add(0);
 
 			status += string.Format("parse\t: {0:.00} ms\n", sw.Elapsed.TotalMilliseconds);
-			status += string.Format("tokens\t: {0:#,#} ({1:f} MB)\n", tokens.Count, (tokens.Count * ((double)sizeof(long) / (1 << 20))));
-
-			//var status = "";
-			//status += string.Format("parse:\t{0} ms\n", sw.Elapsed.TotalMilliseconds);
-			//status += string.Format("chars:\t{0:#,#}\n", text.Length);
-			//status += string.Format("tags:\t{0:#,#} ({1:#,#,,.00} MB)\n", tags.Count, ((long)tags.Count * sizeof(long)));
+			if (tokens != null)
+			{
+				status += string.Format("tokens\t: {0:#,#} ({1:f} MB)\n", tokens.Count, (tokens.Count*((double)sizeof (long)/(1 << 20))));
+			}
 
 			Console.Write(status);
 		}
