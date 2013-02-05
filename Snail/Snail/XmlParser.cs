@@ -143,10 +143,16 @@ namespace Snail
 				if (p != pEnd)
 				{
 					char* attrNameStart = p;
+					long namePrefixLength = 0;
 
 					// read until "="
 					while (*p != '=')
+					{
+						if (*p == ':' && namePrefixLength == 0)
+							namePrefixLength = (p - attrNameStart);
+
 						++p;
+					}
 					long attrNameLength = p - attrNameStart;
 
 					// find quote
@@ -161,7 +167,7 @@ namespace Snail
 						++p;
 					long attrValLength = p - attrValStart;
 
-					tokens.AddAttr(attrNameStart - pFirstSymbol, attrNameLength, 0, attrValStart - attrNameStart, attrValLength);
+					tokens.AddAttr(attrNameStart - pFirstSymbol, attrNameLength, namePrefixLength, attrValStart - attrNameStart, attrValLength);
 
 					++p;
 				}

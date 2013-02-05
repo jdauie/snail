@@ -125,6 +125,13 @@ namespace Snail
 		public override string ToString()
 		{
 			return TokenList.Text.SubstringTrim(Index, m_qName);
+
+			//if (m_prefix == 0)
+			//    return TokenList.Text.SubstringTrim(Index, m_qName);
+
+			//var prefix = TokenList.Text.SubstringTrim(Index, m_prefix);
+			//var name = TokenList.Text.SubstringTrim(Index + m_prefix + 1, m_qName - (m_prefix + 1));
+			//return string.Format("[{0}]{1}", prefix, name);
 		}
 	}
 
@@ -164,8 +171,16 @@ namespace Snail
 
 		public override string ToString()
 		{
-			// currently, does not include value index
-			return string.Format("{0}=\"{1}\"", TokenList.Text.SubstringTrim(Index, m_qName), TokenList.Text.SubstringTrim(Index + m_valueOffset, m_valueLength));
+			var value = TokenList.Text.SubstringTrim(Index + m_valueOffset, m_valueLength);
+
+			return string.Format("{0}=\"{1}\"", TokenList.Text.SubstringTrim(Index, m_qName), value);
+
+			//if (m_prefix == 0)
+			//    return string.Format("{0}=\"{1}\"", TokenList.Text.SubstringTrim(Index, m_qName), value);
+
+			//var prefix = TokenList.Text.SubstringTrim(Index, m_prefix);
+			//var name = TokenList.Text.SubstringTrim(Index + m_prefix + 1, m_qName - (m_prefix + 1));
+			//return string.Format("[{0}]{1}=\"{2}\"", prefix, name, value);
 		}
 	}
 }
