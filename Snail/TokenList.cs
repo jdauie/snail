@@ -5,25 +5,6 @@ using System.Linq;
 
 namespace Snail
 {
-	public class DepthIndex
-	{
-		private readonly List<long>[] m_depths;
-
-		private int m_maxActivatedDepth;
- 
-		public DepthIndex(int maxDepth)
-		{
-			m_depths = new List<long>[maxDepth];
-			m_depths[0] = new List<long>();
-			m_maxActivatedDepth = 0;
-		}
-
-		public void Add(long index, long depth)
-		{
-
-		}
-	}
-
 	/// <summary>
 	/// This can be better for massive files.
 	/// </summary>
@@ -32,17 +13,14 @@ namespace Snail
 		private readonly string m_text;
 		private readonly ChunkList<long> m_list;
 
-		//private readonly List<List<int>> m_depthIndex;
+		private readonly DepthIndex m_depthIndex;
 
 		public TokenList(string text)
 		{
 			m_text = text;
 			m_list = new ChunkList<long>();
 
-			// should this be lazy?
-			//m_depthIndex = new List<List<int>>(TokenDataNodeDepthMax);
-			//for (int i = 0; i < TokenDataNodeDepthMax; i++)
-			//    m_depthIndex.Add(new List<int>());
+			m_depthIndex = new DepthIndex(TokenDataNodeDepthMax);
 		}
 
 		public string Text
@@ -233,11 +211,13 @@ namespace Snail
 		public void AddTag(long index, long qName, long prefix, long depth)
 		{
 			m_list.Add(CreateTagToken(index, qName, prefix, depth));
+			m_depthIndex.Add(depth);
 		}
 
 		public void AddDecl(long index, long qName, long depth)
 		{
 			m_list.Add(CreateDeclToken(index, qName, depth));
+			m_depthIndex.Add(depth);
 		}
 
 		public void AddRegion(long index, TokenType type, long length, long depth)
@@ -256,16 +236,19 @@ namespace Snail
 			//}
 
 			m_list.Add(CreateRegionToken(index, type, length, depth));
+			m_depthIndex.Add(depth);
 		}
 
 		public void AddProc(long index, long target, long content, long depth)
 		{
 			m_list.Add(CreateProcToken(index, target, content, depth));
+			m_depthIndex.Add(depth);
 		}
 
 		public void AddAttr(long index, long qName, long prefix, long valueOffset, long valueLength)
 		{
 			m_list.Add(CreateAttrToken(index, qName, prefix, valueOffset, valueLength));
+			m_depthIndex.Add();
 		}
 
 		#endregion

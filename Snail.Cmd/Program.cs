@@ -38,7 +38,7 @@ namespace Snail.Cmd
 			status += string.Format("parse\t: {0:.00} ms\n", sw.Elapsed.TotalMilliseconds);
 			if (tokens != null)
 			{
-				status += string.Format("tokens\t: {0:#,#} ({1:f} MB)\n", tokens.Count, (tokens.Count*((double)sizeof (long)/(1 << 20))));
+				status += string.Format("tokens\t: {0:#,#} ({1:f} MB)\n", tokens.Count, (tokens.Count*((double)sizeof(long)/(1 << 20))));
 			}
 
 			Console.Write(status);
