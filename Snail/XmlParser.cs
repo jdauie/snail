@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-
-using Snail.Nodes;
 
 namespace Snail
 {
@@ -17,13 +9,6 @@ namespace Snail
 			var tags = ParseTokens(text);
 
 			return tags;
-		}
-
-		private static void ReadTagIndex(long tag, out int index, out int length, out TokenType type)
-		{
-			index = (int)tag;
-			length = (int)((tag << 4) >> (32 + 4));
-			type = (TokenType)(tag >> (32 + 28));
 		}
 
 		public static unsafe TokenList ParseTokens(string text)
@@ -86,13 +71,8 @@ namespace Snail
 							}
 							else
 							{
-								//long length = (p - pStart + 1);
-								//tokens.AddTag(pStart - pText, length, 0, depth);
-
-
 								// QName format
 								// [prefix:]local
-
 								char* pFirstSymbol = pStart + 1;
 								char* pTmp = pFirstSymbol;
 								long namePrefixLength = 0;
