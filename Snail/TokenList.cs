@@ -2,10 +2,79 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Snail
 {
+	public class ChunkList<T> where T : struct
+	{
+		private const int CHUNK_SIZE = (1 << 20);
+
+		private readonly int m_chunkCount;
+		private readonly List<T[]> m_chunks;
+		private T[] m_current;
+		private int m_index;
+
+		public ChunkList()
+		{
+			m_chunkCount = CHUNK_SIZE / Marshal.SizeOf(default(T));
+			m_chunks = new List<T[]>();
+			m_current = new T[m_chunkCount];
+			m_index = 0;
+		}
+
+		public int Count
+		{
+			get { return (m_chunks.Count * CHUNK_SIZE) + m_index; }
+		}
+
+		public int Capacity
+		{
+			get { return ((m_chunks.Count + 1) * CHUNK_SIZE); }
+		}
+
+		public T this[int index]
+		{
+			get
+			{
+				int chunkIndex = index / CHUNK_SIZE;
+				int localIndex = index % CHUNK_SIZE;
+
+				if (chunkIndex < m_chunks.Count)
+				{
+					return m_chunks[chunkIndex][localIndex];
+				}
+
+				if (chunkIndex == m_chunks.Count)
+				{
+					if (localIndex > m_index)
+						throw new ArgumentException("index out of range");
+
+					return m_current[localIndex];
+				}
+
+				throw new ArgumentException("chunk out of range");
+			}
+		}
+
+		public void Add(T token)
+		{
+			if (m_index == CHUNK_SIZE)
+				CreateChunk();
+
+			m_current[m_index] = token;
+			++m_index;
+		}
+
+		private void CreateChunk()
+		{
+			m_chunks.Add(m_current);
+			m_current = new T[m_index];
+			m_index = 0;
+		}
+	}
+
 	/// <summary>
 	/// This can be better for massive files.
 	/// </summary>
