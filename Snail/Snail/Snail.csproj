@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChunkList.cs" />
     <Compile Include="Extensions\LongToSizeExtension.cs" />
     <Compile Include="HtmlParser.cs" />
     <Compile Include="LazySubstring.cs" />
