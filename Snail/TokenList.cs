@@ -11,7 +11,7 @@ namespace Snail
 	public class TokenList : IEnumerable<TokenBase>
 	{
 		private readonly string m_text;
-		private readonly ChunkList<long> m_list; 
+		private readonly ChunkList<long> m_list;
 
 		//private readonly List<List<int>> m_depthIndex;
 
@@ -22,7 +22,7 @@ namespace Snail
 
 			// should this be lazy?
 			//m_depthIndex = new List<List<int>>(TokenDataNodeDepthMax);
-			//for (int i = 0; i < MAX_DEPTH; i++)
+			//for (int i = 0; i < TokenDataNodeDepthMax; i++)
 			//    m_depthIndex.Add(new List<int>());
 		}
 
@@ -228,13 +228,6 @@ namespace Snail
 
 		public void AddRegion(long index, TokenType type, long length, long depth)
 		{
-			//// Precondition: MIN <= (x - y) <= MAX
-			//// min(length, TokenDataNodeLengthMax)
-			//long clippedLength = TokenDataNodeLengthMax + ((length - TokenDataNodeLengthMax) & ((length - TokenDataNodeLengthMax) >> 63));
-			//Add(CreateRegionToken(index, type, clippedLength, depth));
-			//if (clippedLength == TokenDataNodeLengthMax)
-			//    Add(length);
-
 			if (length >= TokenDataNodeLengthMax)
 			{
 				// add two tokens
