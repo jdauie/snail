@@ -7,39 +7,39 @@ using System.Text;
 
 namespace Snail
 {
-	public class ChunkList<T> where T : struct
+	public class ChunkList<T> : IEnumerable<T> where T : struct
 	{
-		private const int CHUNK_SIZE = (1 << 20);
+		private const int CHUNK_SIZE_BYTES = (1 << 20);
 
-		private readonly int m_chunkCount;
+		private readonly int m_chunkLength;
 		private readonly List<T[]> m_chunks;
 		private T[] m_current;
 		private int m_index;
 
 		public ChunkList()
 		{
-			m_chunkCount = CHUNK_SIZE / Marshal.SizeOf(default(T));
+			m_chunkLength = CHUNK_SIZE_BYTES / Marshal.SizeOf(default(T));
 			m_chunks = new List<T[]>();
-			m_current = new T[m_chunkCount];
+			m_current = new T[m_chunkLength];
 			m_index = 0;
 		}
 
 		public int Count
 		{
-			get { return (m_chunks.Count * CHUNK_SIZE) + m_index; }
+			get { return (m_chunks.Count * m_chunkLength) + m_index; }
 		}
 
 		public int Capacity
 		{
-			get { return ((m_chunks.Count + 1) * CHUNK_SIZE); }
+			get { return ((m_chunks.Count + 1) * m_chunkLength); }
 		}
 
 		public T this[int index]
 		{
 			get
 			{
-				int chunkIndex = index / CHUNK_SIZE;
-				int localIndex = index % CHUNK_SIZE;
+				int chunkIndex = index / m_chunkLength;
+				int localIndex = index % m_chunkLength;
 
 				if (chunkIndex < m_chunks.Count)
 				{
@@ -60,7 +60,7 @@ namespace Snail
 
 		public void Add(T token)
 		{
-			if (m_index == CHUNK_SIZE)
+			if (m_index == m_chunkLength)
 				CreateChunk();
 
 			m_current[m_index] = token;
@@ -73,28 +73,44 @@ namespace Snail
 			m_current = new T[m_index];
 			m_index = 0;
 		}
+
+		#region IEnumerable Members
+
+		public IEnumerator<T> GetEnumerator()
+		{
+			foreach (var chunk in m_chunks)
+				foreach (var tag in chunk)
+					yield return tag;
+
+			if (m_index > 0)
+			{
+				for (int i = 0; i < m_index; i++)
+					yield return m_current[i];
+			}
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		#endregion
 	}
 
 	/// <summary>
 	/// This can be better for massive files.
 	/// </summary>
-	public class TokenList : IEnumerable<TokenBase> // : IEnumerable<long>
+	public class TokenList : IEnumerable<TokenBase>
 	{
-		private const int CHUNK_SIZE = (1 << 20) / sizeof(long);
-
 		private readonly string m_text;
-		private readonly List<long[]> m_chunks;
-		private long[] m_current;
-		private int m_index;
+		private readonly ChunkList<long> m_list; 
 
 		//private readonly List<List<int>> m_depthIndex;
 
 		public TokenList(string text)
 		{
 			m_text = text;
-			m_chunks = new List<long[]>();
-			m_current = new long[CHUNK_SIZE];
-			m_index = 0;
+			m_list = new ChunkList<long>();
 
 			// should this be lazy?
 			//m_depthIndex = new List<List<int>>(TokenDataNodeDepthMax);
@@ -109,36 +125,12 @@ namespace Snail
 
 		public int Count
 		{
-			get { return (m_chunks.Count * CHUNK_SIZE) + m_index; }
-		}
-
-		public int Capacity
-		{
-			get { return ((m_chunks.Count + 1) * CHUNK_SIZE); }
+			get { return m_list.Count; }
 		}
 
 		public long this[int index]
 		{
-			get
-			{
-				int chunkIndex = index / CHUNK_SIZE;
-				int localIndex = index % CHUNK_SIZE;
-
-				if (chunkIndex < m_chunks.Count)
-				{
-					return m_chunks[chunkIndex][localIndex];
-				}
-
-				if (chunkIndex == m_chunks.Count)
-				{
-					if(localIndex > m_index)
-						throw new ArgumentException("index out of range");
-
-					return m_current[localIndex];
-				}
-
-				throw new ArgumentException("chunk out of range");
-			}
+			get { return m_list[index]; }
 		}
 
 		#region Token Bits
@@ -316,23 +308,14 @@ namespace Snail
 
 		#region Add Token Methods
 
-		private void Add(long token)
-		{
-			if (m_index == CHUNK_SIZE)
-				CreateChunk();
-
-			m_current[m_index] = token;
-			++m_index;
-		}
-
 		public void AddTag(long index, long qName, long prefix, long depth)
 		{
-			Add(CreateTagToken(index, qName, prefix, depth));
+			m_list.Add(CreateTagToken(index, qName, prefix, depth));
 		}
 
 		public void AddDecl(long index, long qName, long depth)
 		{
-			Add(CreateDeclToken(index, qName, depth));
+			m_list.Add(CreateDeclToken(index, qName, depth));
 		}
 
 		public void AddRegion(long index, TokenType type, long length, long depth)
@@ -347,78 +330,35 @@ namespace Snail
 			if (length >= TokenDataNodeLengthMax)
 			{
 				// add two tokens
-				Add(CreateRegionToken(index, type, TokenDataNodeLengthMax, depth));
+				m_list.Add(CreateRegionToken(index, type, TokenDataNodeLengthMax, depth));
 				// how common will this be?
 				// would it be better to use a seperate lookup table for the few massive regions?
-				Add(length);
+				m_list.Add(length);
 			}
 			else
 			{
-				Add(CreateRegionToken(index, type, length, depth));
+				m_list.Add(CreateRegionToken(index, type, length, depth));
 			}
 		}
 
 		public void AddProc(long index, long target, long content, long depth)
 		{
-			Add(CreateProcToken(index, target, content, depth));
+			m_list.Add(CreateProcToken(index, target, content, depth));
 		}
 
 		public void AddAttr(long index, long qName, long prefix, long valueOffset, long valueLength)
 		{
-			Add(CreateAttrToken(index, qName, prefix, valueOffset, valueLength));
+			m_list.Add(CreateAttrToken(index, qName, prefix, valueOffset, valueLength));
 		}
 
 		#endregion
-
-		//public List<int> Analyze()
-		//{
-		//    var chunks = new List<long[]>(m_chunks);
-		//    if (m_index != 0)
-		//    {
-		//        var currentSlice = new long[m_index];
-		//        Array.Copy(m_current, currentSlice, m_index);
-		//        chunks.Add(currentSlice);
-		//    }
-
-		//    var chunkRanges = new List<int>();
-
-		//    foreach (var chunk in chunks)
-		//    {
-		//        var firstToken = CreateToken(chunk[0]);
-		//        var lastToken = CreateToken(chunk[chunk.Length - 1]);
-
-		//        chunkRanges.Add(lastToken.Index - firstToken.Index);
-		//    }
-
-		//    return chunkRanges;
-		//}
-
-		private void CreateChunk()
-		{
-			m_chunks.Add(m_current);
-			m_current = new long[m_index];
-			m_index = 0;
-		}
-
-		private IEnumerable<long> GetEnumeratorInternal()
-		{
-			foreach (var chunk in m_chunks)
-				foreach (var tag in chunk)
-					yield return tag;
-
-			if (m_index > 0)
-			{
-				for (int i = 0; i < m_index; i++)
-					yield return m_current[i];
-			}
-		}
 
 		#region IEnumerable Members
 
 		public IEnumerator<TokenBase> GetEnumerator()
 		{
 			long lastTagIndex = 0;
-			foreach (var token in GetEnumeratorInternal())
+			foreach (var token in m_list)
 			{
 				var t = ConvertToken(token);
 				if (t != null)
