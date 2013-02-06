@@ -9,16 +9,16 @@ namespace Snail
 	{
 		#region Depth Index Format
 
-		public const int TokenIndexBits = 30;
-		public const int TokenFirstChildBits = 30;
-		public const int TokenIsLastChildBits = 4;
+		public const int TokenIndexBits        = 30;
+		public const int TokenFirstChildBits   = 30;
+		public const int TokenIsLastChildBits  = 4;
 
-		public const int TokenIndexMax = (1 << TokenIndexBits) - 1;
-		public const int TokenFirstChildMax = (1 << TokenFirstChildBits) - 1;
-		public const int TokenIsLastChildMax = (1 << TokenIsLastChildBits) - 1;
+		public const int TokenIndexMax         = (1 << TokenIndexBits) - 1;
+		public const int TokenFirstChildMax    = (1 << TokenFirstChildBits) - 1;
+		public const int TokenIsLastChildMax   = (1 << TokenIsLastChildBits) - 1;
 
-		public const int TokenIndexShift = 0;
-		public const int TokenFirstChildShift = TokenIndexShift + TokenIndexBits;
+		public const int TokenIndexShift       = 0;
+		public const int TokenFirstChildShift  = TokenIndexShift + TokenIndexBits;
 		public const int TokenIsLastChildShift = TokenFirstChildShift + TokenFirstChildBits;
 
 		#endregion
