@@ -53,9 +53,6 @@ namespace Snail
 				m_depths[m_maxActivatedDepth] = new List<long>();
 			}
 
-			// if depth increased, then this is a first child.
-			// if depth decreased, then the last entry was a last child.
-
 			if (depth > m_currentDepth)
 			{
 				SetFirstChildForCurrent();
@@ -71,10 +68,10 @@ namespace Snail
 
 		private void SetCurrentAsLastChild(long depth)
 		{
+			// this also needs to be done in "finalization", to deal with the last nodes
 			while (m_currentDepth != depth)
 			{
 				// mark current as last child
-				// this also needs to be done in "finalization", to deal with the last nodes
 				var c = m_depths[m_currentDepth];
 				c[c.Count - 1] |= (1 << TokenIsLastChildShift);
 				--m_currentDepth;
@@ -83,12 +80,11 @@ namespace Snail
 
 		private void SetFirstChildForCurrent()
 		{
-			// save ref to first child
+			// save ref to first child (which will be added after this call)
 			var current = m_depths[m_currentDepth];
 			++m_currentDepth;
 			var next = m_depths[m_currentDepth];
 			current[current.Count - 1] |= (next.Count << TokenFirstChildShift);
-
 		}
 	}
 }
