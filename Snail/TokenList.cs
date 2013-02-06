@@ -33,6 +33,11 @@ namespace Snail
 			get { return m_list.Count; }
 		}
 
+		public long[] Pack()
+		{
+			return m_list.Pack();
+		}
+
 		#region Token Bits
 
 		/// <summary>Type is common to all token formats, including attributes.</summary>

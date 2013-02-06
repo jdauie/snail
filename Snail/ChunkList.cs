@@ -10,8 +10,8 @@ namespace Snail
 	{
 		private const int CHUNK_SIZE_BYTES = (1 << 20);
 
-		private readonly int m_chunkLength;
 		private readonly List<T[]> m_chunks;
+		private int m_chunkLength;
 		private T[] m_current;
 		private int m_index;
 
@@ -55,6 +55,21 @@ namespace Snail
 
 				throw new ArgumentException("chunk out of range");
 			}
+		}
+
+		public T[] Pack()
+		{
+			var count = Count;
+			var consolidated = new T[count];
+
+			int offset = 0;
+			foreach (var chunk in m_chunks)
+			{
+				Array.Copy(chunk, 0, consolidated, offset, chunk.Length);
+				offset += chunk.Length;
+			}
+
+			return consolidated;
 		}
 
 		public void Add(T token)
