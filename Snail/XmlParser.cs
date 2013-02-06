@@ -55,7 +55,7 @@ namespace Snail
 					//else if (p != pStart)
 					//{
 					//    // remember that this is whitespace, but no more details
-					//    tokens.AddWhitespace();
+					//    tokens.AddRegion(pStart - pText, TokenType.TextNormal, 0, depth);
 					//}
 
 					// identify tag region
