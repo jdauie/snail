@@ -69,6 +69,9 @@ namespace Snail
 				offset += chunk.Length;
 			}
 
+			if (m_index > 0)
+				Array.Copy(m_current, 0, consolidated, offset, m_index);
+
 			return consolidated;
 		}
 
