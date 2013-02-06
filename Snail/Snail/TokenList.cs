@@ -5,6 +5,25 @@ using System.Linq;
 
 namespace Snail
 {
+	public class DepthIndex
+	{
+		private readonly List<long>[] m_depths;
+
+		private int m_maxActivatedDepth;
+ 
+		public DepthIndex(int maxDepth)
+		{
+			m_depths = new List<long>[maxDepth];
+			m_depths[0] = new List<long>();
+			m_maxActivatedDepth = 0;
+		}
+
+		public void Add(long index, long depth)
+		{
+
+		}
+	}
+
 	/// <summary>
 	/// This can be better for massive files.
 	/// </summary>
@@ -34,11 +53,6 @@ namespace Snail
 		public int Count
 		{
 			get { return m_list.Count; }
-		}
-
-		public long this[int index]
-		{
-			get { return m_list[index]; }
 		}
 
 		#region Token Bits
@@ -228,18 +242,20 @@ namespace Snail
 
 		public void AddRegion(long index, TokenType type, long length, long depth)
 		{
-			if (length >= TokenDataNodeLengthMax)
-			{
-				// add two tokens
-				m_list.Add(CreateRegionToken(index, type, TokenDataNodeLengthMax, depth));
-				// how common will this be?
-				// would it be better to use a seperate lookup table for the few massive regions?
-				m_list.Add(length);
-			}
-			else
-			{
-				m_list.Add(CreateRegionToken(index, type, length, depth));
-			}
+			//if (length >= TokenDataNodeLengthMax)
+			//{
+			//    // add two tokens
+			//    m_list.Add(CreateRegionToken(index, type, TokenDataNodeLengthMax, depth));
+			//    // how common will this be?
+			//    // would it be better to use a seperate lookup table for the few massive regions?
+			//    m_list.Add(length);
+			//}
+			//else
+			//{
+			//    m_list.Add(CreateRegionToken(index, type, length, depth));
+			//}
+
+			m_list.Add(CreateRegionToken(index, type, length, depth));
 		}
 
 		public void AddProc(long index, long target, long content, long depth)
